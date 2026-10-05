@@ -52,10 +52,12 @@ data class SetupStatus(
     val defaultLauncher: Boolean,
     val usageAccess: Boolean,
     val timerService: Boolean,
+    /** Left out of battery optimisation: killed for memory last, like a launcher should be, instead of first. */
+    val batteryExempt: Boolean,
     val notifications: Boolean,
     val calendar: Boolean,
 ) {
-    /** The three that matter for the core experience. */
+    /** The three that matter for the core experience. Battery exemption is recommended, not required: Focus works without it. */
     val done: Int get() = listOf(defaultLauncher, usageAccess, timerService).count { it }
     val complete: Boolean get() = done == 3
 
@@ -64,6 +66,7 @@ data class SetupStatus(
             defaultLauncher = Perms.isDefaultLauncher(context),
             usageAccess = Perms.hasUsageAccess(),
             timerService = Perms.isTimerServiceEnabled(context),
+            batteryExempt = Perms.isBatteryExempt(context),
             notifications = Perms.canPostNotifications(context),
             calendar = CalendarRepository.hasAccess(context),
         )
