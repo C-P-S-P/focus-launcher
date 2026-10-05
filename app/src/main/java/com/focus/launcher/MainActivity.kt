@@ -38,6 +38,7 @@ import com.focus.launcher.service.WeeklyReview
 import com.focus.launcher.ui.drawer.AppMenu
 import com.focus.launcher.ui.drawer.DrawerScreen
 import com.focus.launcher.ui.home.HomeScreen
+import com.focus.launcher.ui.home.homeDragging
 import com.focus.launcher.ui.launchApp
 import com.focus.launcher.ui.openWebSearch
 import com.focus.launcher.ui.theme.FocusTheme
@@ -165,9 +166,11 @@ private fun Launcher(settings: Settings, homePresses: Flow<Unit>) {
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                 if (pager.currentPage != 0 || pager.isScrollInProgress) return@awaitEachGesture
+                if (homeDragging.value) return@awaitEachGesture
                 while (true) {
                     val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == down.id } ?: break
                     if (!change.pressed) break
+                    if (homeDragging.value) break // a fast app is being dragged: no web search from a sideways wobble
                     val moved = change.position - down.position
                     if (moved.x > threshold && moved.x > abs(moved.y) * 2) {
                         openWebSearch(context)
@@ -178,6 +181,7 @@ private fun Launcher(settings: Settings, homePresses: Flow<Unit>) {
             }
         },
         beyondViewportPageCount = 1,
+        userScrollEnabled = !homeDragging.value,
         key = { it },
     ) { page ->
         // The page being left fades and sinks back a touch while the other one arrives. Done in

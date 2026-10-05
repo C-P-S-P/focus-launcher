@@ -1,5 +1,17 @@
 package com.focus.launcher.ui.home
 
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.zIndex
 import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -157,11 +169,17 @@ fun HomeScreen(
     val musicVisible = settings.showMusic && (!settings.musicAutoHide || music.playing || music.lingering)
 
     var editingShortcut by remember { mutableStateOf<Boolean?>(null) } // true = left, false = right
+    // Arranging the fast apps in place: which one is lifted, where its top was, how far it has been dragged.
+    val rowTops = remember { mutableStateMapOf<String, Float>() }
+    var draggingKey by remember { mutableStateOf<String?>(null) }
+    var dragStartTop by remember { mutableFloatStateOf(0f) }
+    var dragOffset by remember { mutableFloatStateOf(0f) }
     var choosingClockTap by remember { mutableStateOf(false) }
     val tip by Graph.state.tip.collectAsStateWithLifecycle()
     // A tip about something that is not on the screen teaches nothing: pass over it.
-    LaunchedEffect(tip, settings.showMusic, settings.showNote, settings.showShortcuts) {
-        val absent = (tip == Tip.SECTION_APPS && !settings.showMusic && !settings.showNote) || (tip == Tip.CORNERS && !settings.showShortcuts)
+    LaunchedEffect(tip, settings.showMusic, settings.showNote, settings.showShortcuts, settings.favorites.size) {
+        val absent = (tip == Tip.SECTION_APPS && !settings.showMusic && !settings.showNote) || (tip == Tip.CORNERS && !settings.showShortcuts) ||
+            (tip == Tip.FAST_APPS && settings.favorites.size < 2)
         if (absent) Graph.state.nextTip()
     }
     var editingNote by remember { mutableStateOf(false) }
@@ -423,10 +441,65 @@ fun HomeScreen(
                     size = 15.sp, color = c.dim, align = settings.homeAlign.text(), lineHeight = 23.sp,
                 )
             } else {
-                for (app in favorites) {
+                for (app in favorites) key(app.key) {
+                    val lifted = draggingKey == app.key
                     Row(
                         Modifier
-                            .press(onLongClick = { onAppMenu(app) }) { onLaunch(app) }
+                            .zIndex(if (lifted) 1f else 0f)
+                            .onPlaced { rowTops[app.key] = it.positionInParent().y }
+                            // The lifted row follows the finger however the list reflows under it.
+                            // Read while drawing: a drag recomposes nothing.
+                            .graphicsLayer {
+                                if (lifted) {
+                                    translationY = dragStartTop + dragOffset - (rowTops[app.key] ?: dragStartTop)
+                                    alpha = 0.85f
+                                }
+                            }
+                            // Hold an app: lift it and drag it into place, like on any home screen.
+                            // Let go without moving and the app's menu opens instead.
+                            .pointerInput(app.key) {
+                                awaitEachGesture {
+                                    val down = awaitFirstDown(requireUnconsumed = false)
+                                    val held = awaitLongPressOrCancellation(down.id) ?: return@awaitEachGesture
+                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    dragStartTop = rowTops[app.key] ?: 0f
+                                    dragOffset = 0f
+                                    draggingKey = app.key
+                                    homeDragging.value = true
+                                    var moved = 0f
+                                    try {
+                                        while (true) {
+                                            val change = awaitPointerEvent(PointerEventPass.Initial).changes.firstOrNull { it.id == held.id } ?: break
+                                            val released = !change.pressed
+                                            dragOffset += change.positionChange().y
+                                            moved = maxOf(moved, kotlin.math.abs(dragOffset))
+                                            change.consume()
+                                            if (released) break
+                                            // Changes places with the neighbour whose middle the lifted row's middle has passed.
+                                            val order = Graph.settings.value.favorites
+                                            val at = order.indexOf(app.key)
+                                            val rowH = size.height.toFloat()
+                                            val middle = dragStartTop + dragOffset + rowH / 2
+                                            val above = order.getOrNull(at - 1)?.let { rowTops[it] }
+                                            val below = order.getOrNull(at + 1)?.let { rowTops[it] }
+                                            val to = when {
+                                                above != null && middle < above + rowH / 2 -> at - 1
+                                                below != null && middle > below + rowH / 2 -> at + 1
+                                                else -> at
+                                            }
+                                            if (to != at) {
+                                                Graph.settings.update { it.copy(favorites = it.favorites.toMutableList().apply { add(to, removeAt(at)) }) }
+                                                Graph.state.did(Tip.FAST_APPS)
+                                            }
+                                        }
+                                    } finally {
+                                        draggingKey = null
+                                        homeDragging.value = false
+                                    }
+                                    if (moved < viewConfiguration.touchSlop) onAppMenu(app)
+                                }
+                            }
+                            .press { onLaunch(app) }
                             .padding(vertical = favoritePadding, horizontal = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -632,6 +705,9 @@ private fun openLink(context: Context, link: String, packageName: String): Boole
         options = launchOptions(context),
     )
 }
+
+/** True while a fast app is lifted. The pager and the web-search swipe stand still meanwhile: a drag is up or down only. */
+internal val homeDragging = mutableStateOf(false)
 
 private fun openCalendarApp(context: Context) {
     Perms.start(
