@@ -88,6 +88,21 @@ internal fun SetupPage(status: SetupStatus, onBack: () -> Unit, refresh: () -> U
             ) { Perms.openAppDetails(context) }
         }
 
+        Section("Recommended")
+        SettingRow(
+            "Keep Focus running",
+            subtitle = "Some phones clear the home screen from memory several times a day, and show their own " +
+                "launcher for the second Focus takes to come back. This tells the phone to leave Focus be: on the " +
+                "page that opens, choose “Unrestricted”. Nothing runs in the background either way.",
+            value = if (status.batteryExempt) "Done" else "Allow",
+            onClick = { if (status.batteryExempt) Perms.openBatteryOptimizationList(context) else Perms.requestBatteryExemption(context) },
+        )
+        if (Perms.hasVendorBackgroundScreen()) {
+            Note(
+                (if (status.batteryExempt) "Still being replaced by the phone's own launcher? " else "This phone also has its own list. ") +
+                    "Open it and allow Focus to run in the background or to auto-start.  Open  →",
+            ) { if (!Perms.openVendorBackgroundScreen(context)) Perms.openAppDetails(context) }
+        }
         Section("Optional")
         SettingRow(
             "Notifications",
