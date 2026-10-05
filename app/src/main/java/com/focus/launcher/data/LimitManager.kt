@@ -25,6 +25,23 @@ data class LimitStats(
 }
 
 /**
+ * Pure limit decision, split out of [LimitManager.limitFor] so it can be unit-tested without a
+ * Context. [category] is evaluated only when the app has no limit of its own, matching the original
+ * short-circuit (classifying an app can be real work on the resume path).
+ */
+internal fun resolveLimit(pkg: String, s: Settings, canLimit: Boolean, category: () -> AppCategory): AppLimit? {
+    if (!s.timersEnabled || !canLimit) return null
+    s.appLimits[pkg]?.let { own -> return if (own > 0) AppLimit(own, LimitSource.APP) else null }
+    return when (category()) {
+        AppCategory.SOCIAL -> s.socialDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.SOCIAL_DEFAULT) }
+        AppCategory.GAME -> s.gameDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.GAME_DEFAULT) }
+        AppCategory.VIDEO -> s.videoDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.VIDEO_DEFAULT) }
+        // Communication tools and apps Focus is unsure about are never limited on its own initiative.
+        AppCategory.COMMUNICATION, AppCategory.UNSURE, AppCategory.OTHER -> null
+    }
+}
+
+/**
  * Decides which apps are limited and remembers the short-lived exceptions the user grants from the
  * wall: "continue for N minutes" and "ignore the limit today". Also keeps a small per-day tally of
  * those decisions for the weekly review.
@@ -38,17 +55,8 @@ class LimitManager(
     private val log = context.getSharedPreferences("focus_limit_log", Context.MODE_PRIVATE)
 
     /** The limit that applies to [pkg] right now, or null when the app is free to use. */
-    fun limitFor(pkg: String, s: Settings = settings.value): AppLimit? {
-        if (!s.timersEnabled || !apps.canLimit(pkg)) return null
-        s.appLimits[pkg]?.let { own -> return if (own > 0) AppLimit(own, LimitSource.APP) else null }
-        return when (apps.categoryOf(pkg)) {
-            AppCategory.SOCIAL -> s.socialDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.SOCIAL_DEFAULT) }
-            AppCategory.GAME -> s.gameDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.GAME_DEFAULT) }
-            AppCategory.VIDEO -> s.videoDefaultMin.takeIf { it > 0 }?.let { AppLimit(it, LimitSource.VIDEO_DEFAULT) }
-            // Communication tools and apps Focus is unsure about are never limited on its own initiative.
-            AppCategory.COMMUNICATION, AppCategory.UNSURE, AppCategory.OTHER -> null
-        }
-    }
+    fun limitFor(pkg: String, s: Settings = settings.value): AppLimit? =
+        resolveLimit(pkg, s, apps.canLimit(pkg)) { apps.categoryOf(pkg) }
 
     /** The limit [pkg] would fall back to if its own setting were cleared. */
     fun categoryDefaultFor(pkg: String, s: Settings = settings.value): AppLimit? =
