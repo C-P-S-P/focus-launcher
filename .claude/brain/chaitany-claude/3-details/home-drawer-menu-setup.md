@@ -161,6 +161,21 @@ Title = the app's name; the subtitle shows the system name if renamed, today's t
 5. **Rename**: inside Focus only; empty restores the system label.
 6. **Hide app** / Unhide app.
 
+## Setup: "Keep Focus running" (recommended, not required)
+Under its own "Recommended" heading, **not** counted in `SetupStatus.done` and not behind the
+"Finish setting up Focus →" notice: Focus works without it, and the notice nagged the tester all
+day while vivo's battery page had not actually registered the choice. Android's own
+battery-optimisation dialog is what the row opens (permission `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`,
+`@SuppressLint("BatteryLife")` with the reason beside it); once Focus is exempt, the row opens the
+system's list instead of asking again. On vivo the dialog hands over to the app's battery page,
+where "Unrestricted" is the choice that counts. On vivo / iQOO,
+Xiaomi, Oppo / OnePlus, Huawei and Samsung a note under it opens the vendor's own allow-list
+screen (`Perms.vendorBackgroundScreens()`, known component names, tried in order, app-info as
+the fallback). This is how Nova and Niagara handle the same kills. **It does not keep a process
+alive**: a killed launcher restarts in 0.6 s with a black first frame; the point is to be killed
+last, like a home app should be, instead of with the cached apps. Added by a contributor after
+the kills above; whether the vivo list actually stops them is being measured by kills per day.
+
 ## Setup page (Settings → Setup; also the "finish setup" notice)
 "Three switches make Focus work", each row opens the right system screen and shows its state on
 return:

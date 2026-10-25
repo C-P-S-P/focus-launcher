@@ -817,3 +817,82 @@ td, th, figcaption, h2, summary`, the facts and the footer outside `.phone`:
 **Lesson kept:** he stopped a tool call that was only waiting for CI. Do not block a turn on a
 CI run he did not ask to wait for; start what he asked for and check CI afterwards.
 
+
+## 2026-10-05 · Codebase walkthrough (read-only)
+
+**Asked:** understand the repo / explain how it works (came in via a misfired `/obsidian-init`;
+there is no Obsidian vault here, so treated it as a request to explain the codebase).
+**Done:** read Tier 1 and Tier 2 `app.md`; summarised architecture, features, the two timer layers,
+and the known traps back to the owner. No code or site change.
+**Noticed (open):** `2-overview/app.md` line 42 carries a stale `<<<<<<< HEAD` conflict marker with
+no `=======`/`>>>>>>>` to close it — leftover from the PR #10 merge. Harmless to the app, wrong in
+the brain. Not fixed yet; offered to.
+
+## 2026-10-05 · Code-quality assessment (read-only, advisory)
+
+**Asked:** how is the codebase, what can we optimise, what benchmarks can we run.
+**Read:** Tier 3 `performance.md`; scanned file sizes, `UsageRepository`, `LimitManager`,
+`HomeWidgets` structure. **Finding:** code is clean (0 TODO/FIXME, disciplined coroutines, perf
+already measured and tuned — low-hanging perf fruit is gone). The real gaps are not performance:
+  1. **No unit tests on the stateful core.** The 4 test files cover only pure helpers. `LimitManager`
+     (consent/bypass/extension/weekly stats — the core feature), `UsageRepository.DayAccumulator`
+     (event→time math + cache version), and `WeekSummary` have none. `LimitManager` is already
+     written for testing (injectable `s`/`now` params) — highest-value, device-free add.
+  2. `ui/home/HomeWidgets.kt` is 899 lines (clock + battery + screen-time + media + note) — split
+     candidate, maintainability only.
+  3. **No benchmark module.** Cold-start/jank are measured by hand via adb probes; a Jetpack
+     `:macrobenchmark` module (StartupTimingMetric, FrameTimingMetric, BaselineProfileGenerator)
+     would make those numbers repeatable and CI-trackable, and auto-generate the baseline profile
+     now shipped by hand. Also: assert APK size in CI (tracked by hand at 1,366,083 bytes).
+**Done:** nothing changed; offered to write LimitManager/DayAccumulator tests, scaffold the
+macrobenchmark module, or split HomeWidgets. Awaiting owner's pick.
+
+## 2026-10-05 · "Keep Focus running": the launcher was being killed for memory (a contributor)
+
+**Asked:** the phone "sometimes reverts to the default launcher and randomly switches back";
+fix it in the app, not with steps users must find themselves; new branch, no PR.
+**Found:** see `mistakes-and-lessons.md` → Android platform: 15 LOW_MEMORY kills in two days,
+zero crashes, HOME role unchanged. Also "Focus Settings" is always first under Sort → Recent:
+usage is per package and the home screen is that package; fix pending (exclude Focus's own entry).
+**Done** (branch `keep-running`): Setup row "Keep Focus running" under a Recommended heading,
+not counted in `SetupStatus.done` and not behind the home notice (it was, for an hour, and nagged
+while vivo had not registered the choice); vendor allow-list note; README permission row. 33 unit tests, lint 0 errors, release build,
+installed for user 0. **Not seen** on the device (locked). **Measure:** kills per day in
+`exit-info` before (≈7) and after the user allows it.
+
+
+## 2026-10-05 · Tests for the stateful core + split of HomeWidgets (A + C)
+
+**Asked:** (A) write LimitManager and DayAccumulator tests; (C) split the 899-line HomeWidgets.kt.
+No mocking framework is on the test path (junit + org.json only), so:
+
+**A — pure extractions + tests (behaviour-preserving, no app change).**
+- `UsageRepository`: pulled the hour-bucketing loop out of the private `DayAccumulator.add` into a
+  top-level pure `addForegroundMillis(target, pkg, start, end, dayStart, dayEnd, plainDay, zone)`;
+  `add` now just guards `ignored` and calls it.
+- `LimitManager`: pulled `limitFor`'s decision into a top-level pure
+  `resolveLimit(pkg, s, canLimit, category: () -> AppCategory)`; `category` stays a lambda so
+  classification is still lazy (not run when the app has its own limit). `limitFor` delegates.
+- New tests: `DayUsageTest` (5: hour cap, totals, topApps floor/order, JSON round-trip, version
+  reject), `UsageBucketingTest` (5: in-hour, boundary split, clamp, outside, plainDay==calendar),
+  `LimitManagerLogicTest` (8: timers off, protected, app-limit wins + skips classify, app 0 blocks
+  category, category defaults, default 0, comms/unsure/other, LimitStats.plus).
+
+**C — HomeWidgets split by concern, same package `ui/home` (no behaviour change).**
+- `HomeMusic.kt` (411): NowPlaying/Progress/MusicState/rememberMusicState, media metadata readers,
+  ProgressText, MusicSection, NoteSection, MediaButton/Glyph/MediaGlyph, openPlayer, MusicAppPicker.
+- `HomeCalendar.kt` (99): CalendarWidget + WeekStrip.
+- `HomeWidgets.kt` now 445 (clock/battery/screen-time/DayBar/HourScale + the split-clock halves).
+  `eventWhen` kept here, widened `private`→`internal` (shared by SplitCalendar and CalendarWidget).
+- Trimmed 35 now-dead imports from HomeWidgets; the two new files had none.
+
+**Verified:** `:app:compileDebugKotlin :app:testDebugUnitTest :app:lintDebug` → BUILD SUCCESSFUL,
+**51 tests, 0 failures, lint 0 errors**, on a machine with JDK 17 (Gradle 8.14.3 / AGP 8.13 build
+fine on it; `JAVA_HOME` must be exported for gradlew to launch at all, `-Dorg.gradle.java.home`
+alone is not enough, and `ANDROID_HOME` must be set when there is no `local.properties`).
+
+**Review (PR #25):** `DayAccumulator.add` had kept its own copy of the hour-splitting loop, so
+`UsageBucketingTest` tested a copy; it now calls `addForegroundMillis`. The "files this task never
+touched" were the Keep-Focus-running work of a parallel session in the same checkout, and the two
+went out in one commit; split into two on the reviewer's request. Benchmarks (a `:macrobenchmark`
+module) not started.

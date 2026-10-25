@@ -18,6 +18,10 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <!-- Swipe down on the home screen to open notifications. -->
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <!-- Setup → "Keep Focus running": lets the app ask, once, to be left out of battery optimisation.
+         Some phones kill the home screen for memory several times a day; the system then shows
+         its own launcher for the second Focus takes to come back. Nothing runs in the background. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".FocusApp"
