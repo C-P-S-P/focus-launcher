@@ -134,7 +134,7 @@ fun SettingsRoot(settings: Settings, startRoute: String?, onExit: () -> Unit) {
             Routes.APPEARANCE -> AppearancePage(settings, back)
             Routes.GESTURES -> GesturesPage(settings, status, back, go)
             Routes.ABOUT -> AboutPage(back, go)
-            Routes.WELCOME -> WelcomePage { toSetup ->
+            Routes.WELCOME -> WelcomePage(settings) { toSetup ->
                 Graph.state.tutorialSeen = true
                 Graph.state.restartTips() // also how "again" works, from About
                 stack.remove(Routes.WELCOME)

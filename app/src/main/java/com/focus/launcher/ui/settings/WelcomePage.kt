@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.focus.launcher.data.Settings
 import com.focus.launcher.ui.components.FocusButton
 import com.focus.launcher.ui.components.T
 import com.focus.launcher.ui.components.VSpace
@@ -22,10 +23,11 @@ import com.focus.launcher.ui.theme.LocalFocusColors
  * no more: a many-page tour was written first and thrown out as far too much to read. What Focus
  * can do is taught afterwards, on the home screen, one line at a time ([com.focus.launcher.data.Tip]).
  * It is shown on the first start only, never on the way to the home screen after that: a launcher
- * is opened dozens of times a day. [onDone] is told whether to go on to Setup.
+ * is opened dozens of times a day. The one choice asked here is the app a swipe right opens (the web
+ * search); it can be changed later in Settings → Gestures. [onDone] is told whether to go on to Setup.
  */
 @Composable
-internal fun WelcomePage(onDone: (toSetup: Boolean) -> Unit) {
+internal fun WelcomePage(settings: Settings, onDone: (toSetup: Boolean) -> Unit) {
     val c = LocalFocusColors.current
     Column(Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal = 28.dp, vertical = 24.dp)) {
         VSpace(96.dp)
@@ -34,7 +36,10 @@ internal fun WelcomePage(onDone: (toSetup: Boolean) -> Unit) {
         T("Reclaim your time.\nSpend it touching some grass.", size = 20.sp, lineHeight = 28.sp)
         VSpace(22.dp)
         T("No icons. No colour. No feed.\nTips on the home screen show you around.", size = 15.sp, color = c.dim, lineHeight = 23.sp)
-        VSpace(72.dp)
+        VSpace(36.dp)
+        T("Swipe right opens. Which app?", size = 15.sp, color = c.dim, lineHeight = 23.sp)
+        SwipeRightRow(settings)
+        VSpace(36.dp)
         FocusButton("Start", Modifier.fillMaxWidth(), primary = true) { onDone(false) }
         VSpace(12.dp)
         FocusButton("Set up Focus first", Modifier.fillMaxWidth()) { onDone(true) }

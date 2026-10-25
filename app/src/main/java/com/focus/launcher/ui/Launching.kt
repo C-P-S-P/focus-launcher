@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
+import androidx.core.net.toUri
 import com.focus.launcher.BlockActivity
 import com.focus.launcher.Graph
 import com.focus.launcher.data.AppEntry
@@ -97,15 +98,18 @@ fun launchApp(context: Context, scope: CoroutineScope, entry: AppEntry) {
     }
 }
 
-/** The phone's web search box (the Google app where there is one), as the page left of home. */
+/**
+ * The phone's web search box (the Google app where there is one). Used when swipe right is set to
+ * the web search. If no search app opens, the Google page opens in whichever browser handles links.
+ */
 fun openWebSearch(context: Context) {
-    val ok = Perms.start(
-        context,
-        Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH).setPackage("com.google.android.googlequicksearchbox"),
-        Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH),
-        Intent(Intent.ACTION_WEB_SEARCH).putExtra(SearchManager.QUERY, ""),
-        options = launchOptions(context),
-    )
+    val candidates = buildList {
+        add(Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH).setPackage("com.google.android.googlequicksearchbox"))
+        add(Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH))
+        add(Intent(Intent.ACTION_WEB_SEARCH).putExtra(SearchManager.QUERY, ""))
+        add(Intent(Intent.ACTION_VIEW, "https://www.google.com/".toUri()))
+    }
+    val ok = Perms.start(context, *candidates.toTypedArray(), options = launchOptions(context))
     if (!ok) Toast.makeText(context, "No search app found", Toast.LENGTH_SHORT).show()
 }
 

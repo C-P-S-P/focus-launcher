@@ -153,13 +153,15 @@ private fun Launcher(settings: Settings, homePresses: Flow<Unit>) {
     }
 
     val launch: (AppEntry) -> Unit = { entry -> launchApp(context, scope, entry) }
+    // The app swipe right opens, if the user chose one; null means the web search.
+    val swipeRightEntry = remember(apps, settings.swipeRightApp) { apps.firstOrNull { it.key == settings.swipeRightApp } }
 
     HorizontalPager(
         state = pager,
         // There is no page to the left of home, so the pager ignores that swipe. Watch it on the
         // way down (Initial pass, nothing consumed) and open the web search instead, the way the
         // page left of a stock home screen does.
-        modifier = Modifier.fillMaxSize().pointerInput(settings.swipeRightSearch) {
+        modifier = Modifier.fillMaxSize().pointerInput(settings.swipeRightSearch, swipeRightEntry) {
             if (!settings.swipeRightSearch) return@pointerInput
             val threshold = 72.dp.toPx()
             awaitEachGesture {
@@ -170,7 +172,8 @@ private fun Launcher(settings: Settings, homePresses: Flow<Unit>) {
                     if (!change.pressed) break
                     val moved = change.position - down.position
                     if (moved.x > threshold && moved.x > abs(moved.y) * 2) {
-                        openWebSearch(context)
+                        val entry = swipeRightEntry
+                        if (entry != null) launch(entry) else openWebSearch(context)
                         Graph.state.did(Tip.SWIPE_RIGHT)
                         break
                     }

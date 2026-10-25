@@ -128,6 +128,8 @@ data class Settings(
     val swipeUpSearch: Boolean = true,
     /** Swipe towards the page left of home (finger moves right): the phone's web search. */
     val swipeRightSearch: Boolean = true,
+    /** [AppEntry.key] of the app that swipe right opens. "" = the web search. */
+    val swipeRightApp: String = "",
     val doubleTapLock: Boolean = true,
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
@@ -187,6 +189,7 @@ data class Settings(
         put("swipeDownNotifications", swipeDownNotifications)
         put("swipeUpSearch", swipeUpSearch)
         put("swipeRightSearch", swipeRightSearch)
+        put("swipeRightApp", swipeRightApp)
         put("doubleTapLock", doubleTapLock)
     }
 
@@ -264,6 +267,7 @@ data class Settings(
                 swipeDownNotifications = o.optBoolean("swipeDownNotifications", d.swipeDownNotifications),
                 swipeUpSearch = o.optBoolean("swipeUpSearch", d.swipeUpSearch),
                 swipeRightSearch = o.optBoolean("swipeRightSearch", d.swipeRightSearch),
+                swipeRightApp = o.optString("swipeRightApp", d.swipeRightApp),
                 doubleTapLock = o.optBoolean("doubleTapLock", d.doubleTapLock),
             )
         }

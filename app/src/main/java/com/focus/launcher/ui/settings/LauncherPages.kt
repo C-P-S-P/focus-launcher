@@ -49,6 +49,7 @@ import com.focus.launcher.ui.home.clockTapLabel
 import com.focus.launcher.ui.home.shortcutLabel
 import com.focus.launcher.ui.launchApp
 import com.focus.launcher.ui.theme.LocalFocusColors
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 private fun update(transform: (Settings) -> Settings) = Graph.settings.update(transform)
 
@@ -359,10 +360,31 @@ internal fun GesturesPage(settings: Settings, status: SetupStatus, onBack: () ->
         ToggleRow("Swipe up to search", settings.swipeUpSearch, subtitle = "Jumps to the drawer with the keyboard open.") { v -> update { it.copy(swipeUpSearch = v) } }
         // Also under App drawer. It is looked for here too: it is what swiping to the drawer does.
         ToggleRow("Keyboard opens with the drawer", settings.autoKeyboard, subtitle = "Start typing the moment you swipe to your apps.") { v -> update { it.copy(autoKeyboard = v) } }
-        ToggleRow("Swipe right for web search", settings.swipeRightSearch, subtitle = "Opens the Google search box, like the page left of a stock home screen.") { v -> update { it.copy(swipeRightSearch = v) } }
+        ToggleRow("Swipe right", settings.swipeRightSearch, subtitle = "Opens the app below, or the web search, like the page left of a stock home screen.") { v -> update { it.copy(swipeRightSearch = v) } }
+        if (settings.swipeRightSearch) {
+            SwipeRightRow(settings)
+        }
         ToggleRow("Double tap to lock", settings.doubleTapLock, subtitle = "Turns the screen off. Uses the Focus timer service.") { v -> update { it.copy(doubleTapLock = v) } }
         if (settings.doubleTapLock && !status.timerService) {
             Note("The Focus timer service is off, so double tap cannot lock yet.  Open setup  →") { go(Routes.SETUP) }
         }
+    }
+}
+
+/** Which app swipe right opens: any app, or the web search. Shared by Settings → Gestures and the welcome screen. */
+@Composable
+internal fun SwipeRightRow(settings: Settings) {
+    val apps by Graph.apps.apps.collectAsStateWithLifecycle()
+    var picking by remember { mutableStateOf(false) }
+    val current = apps.firstOrNull { it.key == settings.swipeRightApp }?.label ?: "Web search"
+    SettingRow("Swipe right opens", subtitle = "Any app, or the web search.", value = current, onClick = { picking = true })
+    if (picking) {
+        AppPickerDialog(
+            title = "Swipe right opens",
+            apps = apps.filter { it.key !in settings.hidden },
+            onDismiss = { picking = false },
+            leading = listOf("Web search" to { update { it.copy(swipeRightApp = "") } }),
+            onPick = { app -> update { it.copy(swipeRightApp = app.key) } },
+        )
     }
 }
