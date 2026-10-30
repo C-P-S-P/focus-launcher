@@ -118,6 +118,8 @@ fun HomeScreen(
     val c = LocalFocusColors.current
     val context = LocalContext.current
     val haptics = LocalHapticFeedback.current
+    // Resolved here, in composition: the double-tap handler below runs outside it.
+    val doubleTapLockHint = stringResource(R.string.home_toast_double_tap_lock)
     val now by rememberNow()
     // The gesture detectors below outlive recompositions, so they must call the latest callbacks.
     val openDrawer by rememberUpdatedState(onOpenDrawer)
@@ -223,7 +225,7 @@ fun HomeScreen(
                         {
                             Graph.state.did(Tip.DOUBLE_TAP)
                             if (!FocusAccessibilityService.lockScreen()) {
-                                Toast.makeText(context, context.getString(R.string.home_toast_double_tap_lock), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, doubleTapLockHint, Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else null,
