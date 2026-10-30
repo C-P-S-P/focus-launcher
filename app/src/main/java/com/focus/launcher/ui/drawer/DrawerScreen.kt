@@ -174,6 +174,8 @@ fun DrawerScreen(
         } else {
             focusManager.clearFocus()
             keyboard?.hide()
+            // Back to the top while nobody is looking, so the next visit starts at A, not where the last one ended.
+            listState.scrollToItem(0)
         }
     }
     // stats is a key too: when it arrives the list reorders, and a keyed list would follow the old top row.
