@@ -53,12 +53,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.data.CalEvent
 import com.focus.launcher.data.CalendarInfo
@@ -221,7 +223,7 @@ fun HomeScreen(
                         {
                             Graph.state.did(Tip.DOUBLE_TAP)
                             if (!FocusAccessibilityService.lockScreen()) {
-                                Toast.makeText(context, "Turn on the Focus timer service to lock with a double tap", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.home_toast_double_tap_lock), Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else null,
@@ -353,10 +355,10 @@ fun HomeScreen(
             if (setupIncomplete || pendingReview != null || tip != null) {
                 VSpace(14.dp)
                 if (pendingReview != null) {
-                    Notice("Your weekly review is ready  →", strong = true) { onOpenReview(pendingReview) }
+                    Notice(stringResource(R.string.home_notice_review_ready), strong = true) { onOpenReview(pendingReview) }
                 }
                 if (setupIncomplete) {
-                    Notice("Finish setting up Focus  →", strong = false) { onOpenSettings("setup") }
+                    Notice(stringResource(R.string.home_notice_finish_setup), strong = false) { onOpenSettings("setup") }
                 }
                 // One thing a new user could not guess, until they have done it once. A tap moves on.
                 tip?.let { current ->
@@ -418,7 +420,7 @@ fun HomeScreen(
             // Fast apps
             if (favorites.isEmpty()) {
                 T(
-                    "Swipe left for your apps.\nLong-press one to pin it here.",
+                    stringResource(R.string.home_favorites_empty),
                     Modifier.fillMaxWidth().clickable { onOpenDrawer(false) }.padding(horizontal = 12.dp, vertical = 8.dp),
                     size = 15.sp, color = c.dim, align = settings.homeAlign.text(), lineHeight = 23.sp,
                 )
@@ -474,7 +476,7 @@ fun HomeScreen(
     if (choosingMusicApp) {
         MusicAppPicker(
             apps = visibleApps,
-            subtitle = "Opens when you tap the music section and nothing is playing. Long-press the section to change it.",
+            subtitle = stringResource(R.string.home_music_app_subtitle),
             onDismiss = { choosingMusicApp = false },
             onPick = { app ->
                 Graph.settings.update { it.copy(musicApp = app.key) }
@@ -484,22 +486,22 @@ fun HomeScreen(
     }
     if (choosingNoteApp) {
         AppPickerDialog(
-            title = "Notes app",
-            subtitle = "Shown as a word next to the note's title; a tap on it opens the app. Your own lines stay where they are.",
+            title = stringResource(R.string.home_notes_app),
+            subtitle = stringResource(R.string.home_notes_app_subtitle),
             apps = visibleApps,
             onDismiss = { choosingNoteApp = false },
-            leading = listOf("None" to { Graph.settings.update { it.copy(noteApp = "", noteLink = "") } }),
+            leading = listOf(stringResource(R.string.home_notes_app_none) to { Graph.settings.update { it.copy(noteApp = "", noteLink = "") } }),
             onPick = { app -> Graph.settings.update { it.copy(noteApp = app.key, noteLink = "") } },
         )
     }
     if (noteMenu) {
-        FocusDialog({ noteMenu = false }, title = "Note") {
-            MenuRow("Notes app", detail = noteApp?.label ?: "none") {
+        FocusDialog({ noteMenu = false }, title = stringResource(R.string.home_note_title)) {
+            MenuRow(stringResource(R.string.home_notes_app), detail = noteApp?.label ?: stringResource(R.string.home_notes_app_detail_none)) {
                 noteMenu = false
                 choosingNoteApp = true
             }
             if (noteApp != null) {
-                MenuRow("Open one page instead of the app", detail = if (settings.noteLink.isBlank()) null else "set") {
+                MenuRow(stringResource(R.string.home_note_open_page), detail = if (settings.noteLink.isBlank()) null else stringResource(R.string.home_note_link_detail_set)) {
                     noteMenu = false
                     editingNoteLink = true
                 }
@@ -509,27 +511,27 @@ fun HomeScreen(
 
     if (editingNoteLink) {
         TextInputDialog(
-            title = "Link to the page",
+            title = stringResource(R.string.home_note_link_title),
             initial = settings.noteLink,
             placeholder = "https://…",
-            subtitle = "In ${noteApp?.label ?: "your notes app"}, open the page, choose Share or Copy link, and paste it here. Leave it empty to open the app itself.",
+            subtitle = noteApp?.label?.let { stringResource(R.string.home_note_link_subtitle, it) } ?: stringResource(R.string.home_note_link_subtitle_generic),
             onDismiss = { editingNoteLink = false },
         ) { link -> Graph.settings.update { it.copy(noteLink = link) } }
     }
 
     if (editingNote) {
         TextInputDialog(
-            title = "Note",
+            title = stringResource(R.string.home_note_title),
             initial = settings.note,
-            placeholder = "Write something",
+            placeholder = stringResource(R.string.home_note_placeholder),
             onDismiss = { editingNote = false },
             multiline = true,
         ) { text -> Graph.settings.update { it.copy(note = text) } }
     }
     if (choosingSplitSide) {
         ChoiceDialog(
-            "Next to the clock",
-            SplitSide.entries.map { it to it.label },
+            stringResource(R.string.home_next_to_clock),
+            SplitSide.entries.map { it to stringResource(it.labelRes) },
             if (sideCalendar) SplitSide.CALENDAR else SplitSide.SCREEN_TIME,
             { choosingSplitSide = false },
         ) { side ->
@@ -542,13 +544,13 @@ fun HomeScreen(
     editingShortcut?.let { left ->
         val visible = remember(apps, settings.hidden) { apps.filter { it.key !in settings.hidden } }
         AppPickerDialog(
-            title = if (left) "Left shortcut" else "Right shortcut",
-            subtitle = "Opens from the bottom corner of the home screen.",
+            title = stringResource(if (left) R.string.home_shortcut_left else R.string.home_shortcut_right),
+            subtitle = stringResource(R.string.home_shortcut_subtitle),
             apps = visible,
             onDismiss = { editingShortcut = null },
             leading = listOf(
-                "Phone" to { setShortcut(left, SHORTCUT_PHONE) },
-                "Camera" to { setShortcut(left, SHORTCUT_CAMERA) },
+                stringResource(R.string.home_shortcut_phone) to { setShortcut(left, SHORTCUT_PHONE) },
+                stringResource(R.string.home_shortcut_camera) to { setShortcut(left, SHORTCUT_CAMERA) },
             ),
             onPick = { setShortcut(left, it.key) },
         )
@@ -571,15 +573,15 @@ private fun TipLine(tip: Tip, onClick: () -> Unit) {
             .padding(horizontal = 12.dp, vertical = 9.dp),
     ) {
         T(
-            "TIP ${tip.ordinal + 1} / ${Tip.entries.size}",
+            stringResource(R.string.home_tip_counter, tip.ordinal + 1, Tip.entries.size),
             Modifier.background(c.fg).padding(horizontal = 6.dp, vertical = 1.dp),
             size = 10.sp, color = c.bg, weight = FontWeight.Medium, letterSpacing = 1.2.sp, maxLines = 1,
         )
         VSpace(5.dp)
         Row(verticalAlignment = Alignment.Top) {
-            T(tip.gesture, size = 16.sp, weight = FontWeight.Medium, maxLines = 1)
+            T(stringResource(tip.gestureRes), size = 16.sp, weight = FontWeight.Medium, maxLines = 1)
             T("  →  ", size = 16.sp, color = c.dim, maxLines = 1)
-            T(tip.result, Modifier.weight(1f, fill = false), size = 16.sp, color = c.dim)
+            T(stringResource(tip.resultRes), Modifier.weight(1f, fill = false), size = 16.sp, color = c.dim)
         }
     }
 }
@@ -602,10 +604,11 @@ private fun setShortcut(left: Boolean, spec: String) {
     Graph.settings.update { if (left) it.copy(leftShortcut = spec) else it.copy(rightShortcut = spec) }
 }
 
+@Composable
 fun shortcutLabel(spec: String, apps: List<AppEntry>): String = when (spec) {
-    SHORTCUT_PHONE -> "Phone"
-    SHORTCUT_CAMERA -> "Camera"
-    else -> apps.firstOrNull { it.key == spec }?.label ?: "Not set"
+    SHORTCUT_PHONE -> stringResource(R.string.home_shortcut_phone)
+    SHORTCUT_CAMERA -> stringResource(R.string.home_shortcut_camera)
+    else -> apps.firstOrNull { it.key == spec }?.label ?: stringResource(R.string.home_not_set)
 }
 
 private fun launchShortcut(context: Context, spec: String, apps: List<AppEntry>, onLaunch: (AppEntry) -> Unit) {
@@ -644,13 +647,14 @@ private fun openCalendarApp(context: Context) {
 }
 
 /** Name of a clock tap action, for settings. */
+@Composable
 fun clockTapLabel(spec: String, apps: List<AppEntry>): String = when (spec) {
-    TAP_ALARMS -> "Alarms"
-    TAP_CALENDAR -> "Calendar"
-    TAP_SCREEN_TIME -> "Screen time"
-    TAP_BATTERY -> "Battery"
-    TAP_NOTHING -> "Nothing"
-    else -> apps.firstOrNull { it.key == spec }?.label ?: "Not set"
+    TAP_ALARMS -> stringResource(R.string.home_clock_tap_alarms)
+    TAP_CALENDAR -> stringResource(R.string.home_clock_tap_calendar)
+    TAP_SCREEN_TIME -> stringResource(R.string.home_clock_tap_screen_time)
+    TAP_BATTERY -> stringResource(R.string.home_clock_tap_battery)
+    TAP_NOTHING -> stringResource(R.string.home_clock_tap_nothing)
+    else -> apps.firstOrNull { it.key == spec }?.label ?: stringResource(R.string.home_not_set)
 }
 
 private fun performClockTap(

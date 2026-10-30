@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.UserManager
 import android.provider.CalendarContract
+import com.focus.launcher.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -134,7 +135,9 @@ object CalendarRepository {
             )?.use { c ->
                 while (c.moveToNext()) {
                     val primary = c.getInt(1) != 0
-                    out += CalendarInfo(c.getLong(0), if (primary) "Work calendar" else "Work calendar ${out.size + 1}", "Work profile", primary, work = true)
+                    val name = if (primary) context.getString(R.string.calendar_work)
+                    else context.getString(R.string.calendar_work_numbered, out.size + 1)
+                    out += CalendarInfo(c.getLong(0), name, context.getString(R.string.calendar_work_profile), primary, work = true)
                 }
             }
         } catch (_: Exception) {
@@ -223,7 +226,7 @@ object CalendarRepository {
                     val today = LocalDate.now()
                     while (c.moveToNext() && out.size < max) {
                         val event = CalEvent(
-                            title = stripEmoji(c.getString(0).orEmpty()).ifEmpty { "(No title)" },
+                            title = stripEmoji(c.getString(0).orEmpty()).ifEmpty { context.getString(R.string.calendar_no_title) },
                             begin = c.getLong(1),
                             end = c.getLong(2),
                             allDay = c.getInt(3) != 0,

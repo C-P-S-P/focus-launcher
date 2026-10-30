@@ -67,7 +67,7 @@ class BlockActivity : ComponentActivity() {
                         },
                         onRestoreLimit = {
                             Graph.limits.clearPasses(current.packageName)
-                            Toast.makeText(this, "The limit for ${current.label} is back on", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.toast_limit_back_on, current.label), Toast.LENGTH_SHORT).show()
                             goHome()
                         },
                     )
@@ -108,7 +108,7 @@ class BlockActivity : ComponentActivity() {
         val preview = intent.getBooleanExtra(EXTRA_PREVIEW, false)
         return BlockRequest(
             packageName = pkg,
-            label = if (preview) "Example app" else Graph.apps.labelForPackage(pkg),
+            label = if (preview) getString(R.string.preview_app_label) else Graph.apps.labelForPackage(pkg),
             usedMs = intent.getLongExtra(EXTRA_USED, 0L),
             limitMinutes = intent.getIntExtra(EXTRA_LIMIT, 0),
             midSession = intent.getBooleanExtra(EXTRA_MID_SESSION, false),

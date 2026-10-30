@@ -81,9 +81,9 @@ object WeeklyReview {
         val days = Graph.usage.loadDays(weekStart, weekStart.plusDays(6))
         val total = days.values.sumOf { it.total }
         val text = if (total > 0) {
-            "${formatDuration(total)} on your phone this week. Take a minute to look at where it went."
+            context.getString(R.string.weekly_notification_text, formatDuration(context.resources, total))
         } else {
-            "Take a minute to look at where your time went."
+            context.getString(R.string.weekly_notification_text_empty)
         }
         val open = PendingIntent.getActivity(
             context, 0, ReviewActivity.intent(context, weekStart),
@@ -91,7 +91,7 @@ object WeeklyReview {
         )
         val notification = Notification.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_focus)
-            .setContentTitle("Your week in review")
+            .setContentTitle(context.getString(R.string.weekly_notification_title))
             .setContentText(text)
             .setStyle(Notification.BigTextStyle().bigText(text))
             .setContentIntent(open)
