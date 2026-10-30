@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">Anuluj</string>
+    <string name="common_done">Gotowe</string>
+    <string name="common_save">Zapisz</string>
+    <string name="common_search">Szukaj</string>
+    <string name="common_default_choice">domyślnie</string>
+    <string name="common_work_app">służbowa</string>
+    <string name="common_work_profile_badge">Profil służbowy</string>
+
+    <string name="review_title">Czas przed ekranem</string>
+    <string name="review_tab_today">Dziś</string>
+    <string name="review_tab_week">Tydzień</string>
+    <string name="review_usage_access_needed">Focus potrzebuje dostępu do danych o użyciu, żeby pokazać, na co idzie twój czas.</string>
+    <string name="review_usage_access_private">Liczby są obliczane na tym telefonie i nigdy go nie opuszczają.</string>
+    <string name="review_allow_usage_access">Włącz dostęp</string>
+
+    <plurals name="review_today_summary">
+        <item quantity="one">"z 24 h  ·  %1$s%% dnia  ·  %2$d odblokowanie"</item>
+        <item quantity="few">"z 24 h  ·  %1$s%% dnia  ·  %2$d odblokowania"</item>
+        <item quantity="many">"z 24 h  ·  %1$s%% dnia  ·  %2$d odblokowań"</item>
+        <item quantity="other">"z 24 h  ·  %1$s%% dnia  ·  %2$d odblokowania"</item>
+    </plurals>
+    <string name="review_apps_today">Aplikacje dziś</string>
+    <string name="review_today_empty">Jeszcze nic. Ciesz się tym.</string>
+    <string name="review_used_of_limit">%1$s / %2$s</string>
+
+    <string name="review_this_week">Ten tydzień</string>
+    <string name="review_last_week">Zeszły tydzień</string>
+    <string name="review_week_loading">Podliczam twój tydzień…</string>
+    <string name="review_week_no_data">Brak danych o czasie przed ekranem z tego tygodnia.</string>
+    <string name="review_week_no_data_detail">Android przechowuje szczegółowe dane o użyciu tylko przez około tydzień. Od teraz Focus zapisuje każdy dzień, więc kolejne tygodnie pozostaną dostępne.</string>
+
+    <string name="review_daily_average">%1$s dziennie</string>
+    <string name="review_waking_share">To %1$d%% czasu, kiedy nie śpisz.</string>
+
+    <string name="review_day_by_day">Dzień po dniu</string>
+    <string name="review_bar_minutes">%1$d min</string>
+    <string name="review_bar_hours">%1$s h</string>
+    <string name="review_busiest_day">Najwięcej: %1$s (%2$s).</string>
+    <string name="review_busiest_and_lightest_day">Najwięcej: %1$s (%2$s), najmniej: %3$s (%4$s).</string>
+
+    <string name="review_time_of_day">Kiedy telefon był w użyciu</string>
+    <string name="review_period_morning">Poranek</string>
+    <string name="review_period_afternoon">Popołudnie</string>
+    <string name="review_period_evening">Wieczór</string>
+    <string name="review_period_night">Noc</string>
+    <string name="review_time_and_share">"%1$s  ·  %2$d%%"</string>
+    <string name="review_busiest_hour">Godzina szczytu: %1$s – %2$s.</string>
+
+    <string name="review_where_it_went">Na co poszedł czas</string>
+    <string name="review_mostly_morning">głównie rano</string>
+    <string name="review_mostly_afternoon">głównie po południu</string>
+    <string name="review_mostly_evening">głównie wieczorem</string>
+    <string name="review_mostly_night">głównie w nocy</string>
+    <plurals name="review_days_used">
+        <item quantity="one">%1$d z %2$d dnia</item>
+        <item quantity="few">%1$d z %2$d dni</item>
+        <item quantity="many">%1$d z %2$d dni</item>
+        <item quantity="other">%1$d z %2$d dnia</item>
+    </plurals>
+    <string name="review_past_limit">ponad limit %1$d×</string>
+
+    <string name="review_limits_title">Limity i odblokowania</string>
+    <string name="review_no_limit_hit">W tym tygodniu żadna aplikacja nie wyczerpała dziennego limitu.</string>
+    <string name="review_limits_summary">Czas minął %1$s. Kontynuowano %2$s, a limit na dziś pominięto %3$s.</string>
+    <string name="review_limits_summary_extra">Czas minął %1$s. Kontynuowano %2$s (+%3$s), a limit na dziś pominięto %4$s.</string>
+    <plurals name="review_times">
+        <item quantity="one">raz</item>
+        <item quantity="few">%1$d razy</item>
+        <item quantity="many">%1$d razy</item>
+        <item quantity="other">%1$d razy</item>
+    </plurals>
+    <string name="review_times_two">dwa razy</string>
+    <plurals name="review_unlocks">
+        <item quantity="one">Telefon odblokowano %1$d raz, średnio %2$d dziennie.</item>
+        <item quantity="few">Telefon odblokowano %1$d razy, średnio %2$d dziennie.</item>
+        <item quantity="many">Telefon odblokowano %1$d razy, średnio %2$d dziennie.</item>
+        <item quantity="other">Telefon odblokowano %1$d razy, średnio %2$d dziennie.</item>
+    </plurals>
+
+    <string name="review_reflect">Refleksja</string>
+    <string name="review_reflect_question">Czy tak miał wyglądać twój tydzień?</string>
+    <string name="review_previous_intention">Postanowienie sprzed tygodnia:</string>
+    <string name="review_quoted">„%1$s”</string>
+    <string name="review_write_intention">Zaplanuj zmianę na przyszły tydzień</string>
+    <string name="review_next_week">W przyszłym tygodniu:</string>
+    <string name="review_intention_title">Jedna rzecz do zmiany</string>
+    <string name="review_intention_subtitle">Niech to będzie coś małego i konkretnego. Zobaczysz to znowu w podsumowaniu za tydzień.</string>
+    <string name="review_intention_placeholder">Bez telefonu w łóżku</string>
+</resources>

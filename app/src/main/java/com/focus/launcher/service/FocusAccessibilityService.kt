@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.focus.launcher.BlockActivity
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppLimit
 import com.focus.launcher.util.formatMinutes
 import kotlinx.coroutines.Dispatchers
@@ -183,8 +184,8 @@ class FocusAccessibilityService : AccessibilityService() {
             val label = Graph.apps.labelForPackage(pkg)
             val r = Runnable {
                 if (currentPkg == pkg) {
-                    val left = formatMinutes(Graph.settings.value.warnMinutes)
-                    Toast.makeText(this, "$left left on $label today", Toast.LENGTH_LONG).show()
+                    val left = formatMinutes(resources, Graph.settings.value.warnMinutes)
+                    Toast.makeText(this, getString(R.string.toast_time_left_today, left, label), Toast.LENGTH_LONG).show()
                 }
             }
             warn = r

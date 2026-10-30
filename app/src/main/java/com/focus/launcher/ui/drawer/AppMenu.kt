@@ -13,10 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.data.DayUsage
 import com.focus.launcher.data.LimitSource
@@ -46,6 +49,7 @@ fun AppMenu(
     onOpenSetup: () -> Unit,
 ) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var sub by remember { mutableStateOf(Sub.NONE) }
 
     val installed by Graph.apps.apps.collectAsStateWithLifecycle()
@@ -59,23 +63,23 @@ fun AppMenu(
         Sub.NONE -> {
             val status = buildList {
                 if (app.isRenamed) add(app.systemLabel)
-                if (used != null && used > 0) add("${formatDuration(used)} today")
-                if (limit != null) add("limit ${formatMinutes(limit.minutes)}")
+                if (used != null && used > 0) add(stringResource(R.string.menu_status_used_today, formatDuration(res, used)))
+                if (limit != null) add(stringResource(R.string.menu_status_limit, formatMinutes(res, limit.minutes)))
             }.joinToString("  ·  ").ifEmpty { null }
 
             FocusDialog(onDismiss, title = app.label, subtitle = status) {
                 if (!app.isSystem) {
-                    MenuRow("Uninstall") {
+                    MenuRow(stringResource(R.string.menu_uninstall)) {
                         Graph.apps.uninstall(app)
                         onDismiss()
                     }
                 }
-                MenuRow("App info") {
+                MenuRow(stringResource(R.string.menu_app_info)) {
                     Graph.apps.openAppInfo(app)
                     onDismiss()
                 }
                 MenuRow(
-                    if (isFavorite) "Remove from fast apps" else "Move to fast apps",
+                    stringResource(if (isFavorite) R.string.menu_fast_apps_remove else R.string.menu_fast_apps_add),
                     detail = "${favorites.size} / $MAX_FAVORITES",
                 ) {
                     when {
@@ -86,19 +90,22 @@ fun AppMenu(
                         favorites.size >= MAX_FAVORITES -> sub = Sub.REPLACE
                         else -> {
                             Graph.settings.update { it.copy(favorites = favorites + app.key) }
-                            Toast.makeText(context, "${app.label} is on your home screen", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, res.getString(R.string.menu_toast_on_home_screen, app.label), Toast.LENGTH_SHORT).show()
                             onDismiss()
                         }
                     }
                 }
                 if (Graph.apps.canLimit(app.packageName)) {
-                    MenuRow("App timer", detail = limit?.let { formatMinutes(it.minutes) + " a day" } ?: "Off") { sub = Sub.TIMER }
+                    MenuRow(
+                        stringResource(R.string.menu_app_timer),
+                        detail = limit?.let { stringResource(R.string.menu_timer_per_day, formatMinutes(res, it.minutes)) } ?: stringResource(R.string.menu_timer_off),
+                    ) { sub = Sub.TIMER }
                 }
-                MenuRow("Rename") { sub = Sub.RENAME }
-                MenuRow(if (isHidden) "Unhide app" else "Hide app") {
+                MenuRow(stringResource(R.string.menu_rename)) { sub = Sub.RENAME }
+                MenuRow(stringResource(if (isHidden) R.string.menu_unhide else R.string.menu_hide)) {
                     Graph.settings.update { s -> s.copy(hidden = if (isHidden) s.hidden - app.key else s.hidden + app.key) }
                     if (!isHidden) {
-                        Toast.makeText(context, "Hidden. Bring it back from Settings → App drawer", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, res.getString(R.string.menu_toast_hidden), Toast.LENGTH_LONG).show()
                     }
                     onDismiss()
                 }
@@ -108,8 +115,8 @@ fun AppMenu(
         Sub.TIMER -> TimerDialog(app.packageName, app.label, settings, used, onDismiss, onOpenSetup)
 
         Sub.RENAME -> TextInputDialog(
-            title = "Rename",
-            subtitle = "Only changes the name inside Focus. Leave empty to restore “${app.systemLabel}”.",
+            title = stringResource(R.string.menu_rename),
+            subtitle = stringResource(R.string.menu_rename_subtitle, app.systemLabel),
             initial = app.label,
             placeholder = app.systemLabel,
             onDismiss = onDismiss,
@@ -120,8 +127,8 @@ fun AppMenu(
         }
 
         Sub.REPLACE -> ChoiceDialog(
-            title = "Fast apps are full",
-            subtitle = "Choose the one ${app.label} should replace.",
+            title = stringResource(R.string.menu_fast_apps_full),
+            subtitle = stringResource(R.string.menu_fast_apps_replace, app.label),
             options = favorites.map { key -> key to (installed.firstOrNull { it.key == key }?.label ?: key) },
             selected = null,
             onDismiss = onDismiss,
@@ -145,6 +152,7 @@ fun TimerDialog(
 ) {
     val c = LocalFocusColors.current
     val context = LocalContext.current
+    val res = LocalResources.current
     var custom by remember { mutableStateOf(false) }
 
     val own = settings.appLimits[packageName]
@@ -163,44 +171,46 @@ fun TimerDialog(
 
     if (custom) {
         TextInputDialog(
-            title = "Custom limit",
-            subtitle = "Minutes per day for $label.",
+            title = stringResource(R.string.menu_timer_custom_title),
+            subtitle = stringResource(R.string.menu_timer_custom_subtitle, label),
             initial = own?.takeIf { it > 0 }?.toString().orEmpty(),
-            placeholder = "Minutes",
+            placeholder = stringResource(R.string.menu_timer_custom_hint),
             numeric = true,
-            confirmLabel = "Set",
+            confirmLabel = stringResource(R.string.menu_timer_custom_set),
             onDismiss = onDismiss,
         ) { text -> text.toIntOrNull()?.takeIf { it in 1..1440 }?.let { apply(it) } }
         return
     }
 
-    val subtitle = buildString {
-        if (usedToday != null) append("Used ${formatDuration(usedToday)} today. ")
-        append(Graph.apps.describeCategory(packageName))
+    val category = stringResource(Graph.apps.describeCategoryRes(packageName))
+    val subtitle = if (usedToday != null) {
+        stringResource(R.string.menu_timer_subtitle_used_today, formatDuration(res, usedToday), category)
+    } else {
+        category
     }
-    FocusDialog(onDismiss, title = "Timer · $label", subtitle = subtitle) {
+    FocusDialog(onDismiss, title = stringResource(R.string.menu_timer_title, label), subtitle = subtitle) {
         Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
             if (fallback != null) {
                 val kind = when (fallback.source) {
-                    LimitSource.GAME_DEFAULT -> "games"
-                    LimitSource.VIDEO_DEFAULT -> "video apps"
-                    else -> "social media"
+                    LimitSource.GAME_DEFAULT -> R.string.menu_timer_default_games
+                    LimitSource.VIDEO_DEFAULT -> R.string.menu_timer_default_video
+                    else -> R.string.menu_timer_default_social
                 }
-                MenuRow("Default for $kind", detail = formatMinutes(fallback.minutes), selected = own == null) { apply(null) }
+                MenuRow(stringResource(kind), detail = formatMinutes(res, fallback.minutes), selected = own == null) { apply(null) }
             }
-            MenuRow("No limit", selected = own == 0 || (own == null && fallback == null)) {
+            MenuRow(stringResource(R.string.menu_timer_no_limit), selected = own == 0 || (own == null && fallback == null)) {
                 apply(if (fallback != null) 0 else null)
             }
             for (minutes in PRESETS) {
-                MenuRow(formatMinutes(minutes), selected = own == minutes) { apply(minutes) }
+                MenuRow(formatMinutes(res, minutes), selected = own == minutes) { apply(minutes) }
             }
             val isCustom = own != null && own > 0 && own !in PRESETS
-            MenuRow("Custom…", detail = if (isCustom) formatMinutes(own) else null, selected = isCustom) { custom = true }
+            MenuRow(stringResource(R.string.menu_timer_custom), detail = if (isCustom) formatMinutes(res, own) else null, selected = isCustom) { custom = true }
         }
         if (!ready) {
             Hairline()
             T(
-                "Timers only lock apps once usage access and the Focus timer service are on.  Finish setup  →",
+                stringResource(R.string.menu_timer_setup_needed),
                 Modifier.clickable {
                     onDismiss()
                     onOpenSetup()

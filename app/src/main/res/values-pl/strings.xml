@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="resources_locale">pl</string>
+    <string name="settings_label">Ustawienia Focus</string>
+
+    <string name="accessibility_label">Minutniki aplikacji Focus</string>
+    <string name="accessibility_summary">Pilnuje dziennych limitów czasu aplikacji ustawionych w Focus.</string>
+    <string name="accessibility_description">Focus używa tej usługi, żeby wiedzieć, która aplikacja jest na pierwszym planie, i zablokować ją, gdy wyczerpie się jej dzienny limit czasu. Dzięki niej gesty na ekranie głównym mogą też otwierać powiadomienia albo blokować ekran.\n\nUsługa dostaje tylko nazwę aplikacji widocznej na ekranie. Nie może odczytać tego, co jest na ekranie, a żadne dane nie opuszczają urządzenia.</string>
+
+    <string name="media_listener_label">Sekcja muzyki Focus</string>
+
+    <string name="channel_weekly">Podsumowanie tygodnia</string>
+    <string name="channel_weekly_desc">Przypomnienie, gdy podsumowanie czasu przed ekranem z całego tygodnia jest gotowe.</string>
+
+    <string name="weekly_notification_title">Podsumowanie twojego tygodnia</string>
+    <string name="weekly_notification_text">W tym tygodniu: %1$s przy telefonie. Poświęć chwilę, żeby sprawdzić, na co poszedł ten czas.</string>
+    <string name="weekly_notification_text_empty">Poświęć chwilę, żeby sprawdzić, na co poszedł twój czas.</string>
+
+    <string name="toast_time_left_today">%2$s: na dziś zostało %1$s</string>
+    <string name="toast_limit_back_on">Limit dla aplikacji %1$s znowu działa</string>
+    <string name="preview_app_label">Przykładowa aplikacja</string>
+
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours">%1$d h</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+
+    <string name="format_hour_12h">h a</string>
+    <string name="format_month_short">MMM</string>
+    <string name="format_day_month">d MMM</string>
+    <string name="format_week_range">%1$s – %2$s</string>
+    <string name="format_week_range_same_month">%1$d–%2$d %3$s</string>
+
+    <string name="change_same_as_last_week">mniej więcej tyle samo co w zeszłym tygodniu</string>
+    <string name="change_less_than_last_week">o %1$d%% mniej niż w zeszłym tygodniu</string>
+    <string name="change_more_than_last_week">o %1$d%% więcej niż w zeszłym tygodniu</string>
+
+    <string name="tip_hint">"%1$s  →  %2$s"</string>
+    <string name="tip_swipe_left">Przesuń w lewo</string>
+    <string name="tip_swipe_left_result">wszystkie aplikacje</string>
+    <string name="tip_app_menu">Przytrzymaj aplikację</string>
+    <string name="tip_app_menu_result">przypnij, minutnik, ukryj</string>
+    <string name="tip_swipe_up">Przesuń w górę</string>
+    <string name="tip_swipe_up_result">szukaj aplikacji</string>
+    <string name="tip_swipe_right">Przesuń w prawo</string>
+    <string name="tip_swipe_right_result">szukaj w sieci</string>
+    <string name="tip_swipe_down">Przesuń w dół</string>
+    <string name="tip_swipe_down_result">powiadomienia</string>
+    <string name="tip_clock">Przytrzymaj zegar</string>
+    <string name="tip_clock_result">ustaw, co otwiera</string>
+    <string name="tip_screen_time">Kliknij czas przed ekranem</string>
+    <string name="tip_screen_time_result">twój dzień</string>
+    <string name="tip_corners">Przytrzymaj dolny róg</string>
+    <string name="tip_corners_result">zmień skrót</string>
+    <string name="tip_sections">Kliknij tutaj</string>
+    <string name="tip_sections_result">dodaj kalendarz, muzykę, notatkę</string>
+    <string name="tip_section_apps">Przytrzymaj muzykę lub notatkę</string>
+    <string name="tip_section_apps_result">wybierz aplikację</string>
+    <string name="tip_settings">Przytrzymaj puste miejsce</string>
+    <string name="tip_settings_result">ustawienia</string>
+    <string name="tip_double_tap">Kliknij dwukrotnie puste miejsce</string>
+    <string name="tip_double_tap_result">zablokuj</string>
+
+    <string name="font_sans">Bezszeryfowa</string>
+    <string name="font_serif">Szeryfowa</string>
+    <string name="font_mono">Stałej szerokości</string>
+    <string name="clock_style_split">Dzielony</string>
+    <string name="clock_style_ring">Pierścień</string>
+    <string name="clock_style_plain">Zwykły</string>
+    <string name="split_side_calendar">Kalendarz</string>
+    <string name="split_side_screen_time">Czas przed ekranem</string>
+    <string name="ring_mode_battery">Poziom baterii</string>
+    <string name="ring_mode_day">Upływ dnia</string>
+    <string name="launch_animation_fast">Szybkie</string>
+    <string name="launch_animation_system">Domyślne systemowe</string>
+    <string name="align_left">Do lewej</string>
+    <string name="align_center">Do środka</string>
+    <string name="align_right">Do prawej</string>
+    <string name="sort_alpha">A–Z</string>
+    <string name="sort_most_used">Najczęściej używane</string>
+    <string name="sort_recent">Ostatnio używane</string>
+    <string name="time_format_system">Jak w systemie</string>
+    <string name="time_format_24h">24-godzinny</string>
+    <string name="time_format_12h">12-godzinny</string>
+
+    <string name="category_social">media społecznościowe</string>
+    <string name="category_game">gra</string>
+    <string name="category_video">wideo</string>
+    <string name="category_communication">komunikacja</string>
+    <string name="category_unsure">niepewna</string>
+    <string name="category_other">inna</string>
+    <string name="category_explain_social">Focus traktuje to jako media społecznościowe: aplikacja jest na jego liście kanałów, sieci społecznościowych i aplikacji randkowych.</string>
+    <string name="category_explain_game">Focus traktuje to jako grę, bo Sklep Play tak ją klasyfikuje.</string>
+    <string name="category_explain_video">Focus traktuje to jako aplikację wideo.</string>
+    <string name="category_explain_communication">Focus traktuje to jako narzędzie do komunikacji (przeglądarka, poczta, komunikator, połączenia), więc nigdy nie dostaje limitu automatycznie.</string>
+    <string name="category_explain_unsure">Android zalicza to do kategorii „social”, którą nadaje też poczcie i komunikatorom. Focus nie ma pewności, więc aplikacja nie dostaje limitu automatycznie.</string>
+    <string name="category_explain_other">To nie media społecznościowe ani gra, więc limit pojawi się tylko wtedy, gdy go ustawisz.</string>
+
+    <string name="calendar_work">Kalendarz służbowy</string>
+    <string name="calendar_work_numbered">Kalendarz służbowy %1$d</string>
+    <string name="calendar_work_profile">Profil służbowy</string>
+    <string name="calendar_no_title">(Bez tytułu)</string>
+</resources>

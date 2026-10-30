@@ -1,14 +1,16 @@
 package com.focus.launcher.data
 
+import androidx.annotation.StringRes
+import com.focus.launcher.R
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 
-enum class DayPeriod(val label: String, val hours: String) {
-    MORNING("Morning", "5 – 12"),
-    AFTERNOON("Afternoon", "12 – 17"),
-    EVENING("Evening", "17 – 21"),
-    NIGHT("Night", "21 – 5");
+enum class DayPeriod(@StringRes val labelRes: Int, val hours: String) {
+    MORNING(R.string.review_period_morning, "5 – 12"),
+    AFTERNOON(R.string.review_period_afternoon, "12 – 17"),
+    EVENING(R.string.review_period_evening, "17 – 21"),
+    NIGHT(R.string.review_period_night, "21 – 5");
 
     companion object {
         fun ofHour(hour: Int): DayPeriod = when (hour) {

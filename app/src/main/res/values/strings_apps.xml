@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The app list (drawer), the long-press app menu with its timer dialog, the "Time's up" screen
+    and messages shown when an app is started.
+    Strings in double quotes keep their double spaces: without the quotes Android collapses them.
+-->
+<resources>
+    <!-- App list (drawer) -->
+    <string name="drawer_search_hint">Search</string>
+    <string name="drawer_search_clear">Clear</string>
+    <!-- Tabs shown only when there is a work profile. -->
+    <string name="drawer_tab_personal">Personal</string>
+    <string name="drawer_tab_work">Work</string>
+    <!-- Tap target above the list. %1$s is the current order, e.g. "A–Z" or "Most used". -->
+    <string name="drawer_sort_current">Sort: %1$s</string>
+    <string name="drawer_sort_title">Sort apps</string>
+    <!-- Section titles in the list, shown in small capitals. -->
+    <string name="drawer_recent_installs">Installed in the last 24 hours</string>
+    <string name="drawer_all_apps">All apps</string>
+    <string name="drawer_loading">Loading…</string>
+    <!-- %1$s is what the user typed into the search bar. -->
+    <string name="drawer_no_match">No app matches “%1$s”</string>
+    <string name="drawer_no_apps">No apps</string>
+    <!-- Next to an app with a timer: %1$s is the time used today, %2$s the daily limit, e.g. "48m / 1h". -->
+    <string name="drawer_usage_of_limit">%1$s / %2$s</string>
+
+    <!-- Long-press app menu. %1$s in menu_status_used_today is a duration, e.g. "48m". -->
+    <string name="menu_status_used_today">%1$s today</string>
+    <!-- %1$s is the app's daily limit, e.g. "30m". -->
+    <string name="menu_status_limit">limit %1$s</string>
+    <string name="menu_uninstall">Uninstall</string>
+    <string name="menu_app_info">App info</string>
+    <!-- Fast apps: the short list of apps on the home screen. -->
+    <string name="menu_fast_apps_add">Move to fast apps</string>
+    <string name="menu_fast_apps_remove">Remove from fast apps</string>
+    <!-- Toast. %1$s is the app's name. -->
+    <string name="menu_toast_on_home_screen">%1$s is on your home screen</string>
+    <string name="menu_app_timer">App timer</string>
+    <!-- Value next to "App timer". %1$s is the daily limit, e.g. "30m". -->
+    <string name="menu_timer_per_day">%1$s a day</string>
+    <string name="menu_timer_off">Off</string>
+    <!-- Menu item and the title of its dialog. -->
+    <string name="menu_rename">Rename</string>
+    <!-- %1$s is the app's original name. -->
+    <string name="menu_rename_subtitle">Only changes the name inside Focus. Leave empty to restore “%1$s”.</string>
+    <string name="menu_hide">Hide app</string>
+    <string name="menu_unhide">Unhide app</string>
+    <!-- Toast after hiding an app; "Settings → App drawer" is where hidden apps are listed. -->
+    <string name="menu_toast_hidden">Hidden. Bring it back from Settings → App drawer</string>
+    <string name="menu_fast_apps_full">Fast apps are full</string>
+    <!-- The user picks which fast app gives way. %1$s is the name of the app being added. -->
+    <string name="menu_fast_apps_replace">Choose the one %1$s should replace.</string>
+
+    <!-- Timer dialog for one app. %1$s is the app's name. -->
+    <string name="menu_timer_title">Timer · %1$s</string>
+    <!-- %1$s is the time the app was used today, %2$s a sentence on how Focus sorted the app. -->
+    <string name="menu_timer_subtitle_used_today">Used %1$s today. %2$s</string>
+    <!-- Choices: follow the automatic limit of the app's category. The duration is shown beside them. -->
+    <string name="menu_timer_default_social">Default for social media</string>
+    <string name="menu_timer_default_games">Default for games</string>
+    <string name="menu_timer_default_video">Default for video apps</string>
+    <string name="menu_timer_no_limit">No limit</string>
+    <string name="menu_timer_custom">Custom…</string>
+    <string name="menu_timer_setup_needed">"Timers only lock apps once usage access and the Focus timer service are on.  Finish setup  →"</string>
+    <string name="menu_timer_custom_title">Custom limit</string>
+    <!-- %1$s is the app's name. -->
+    <string name="menu_timer_custom_subtitle">Minutes per day for %1$s.</string>
+    <string name="menu_timer_custom_hint">Minutes</string>
+    <string name="menu_timer_custom_set">Set</string>
+
+    <!-- "Time's up" screen, shown over an app once its daily limit is used. Titles in small capitals. -->
+    <string name="block_label_time_up">Time\'s up</string>
+    <!-- The same screen opened from settings to see how it looks. -->
+    <string name="block_label_preview">"Preview  ·  Time\'s up"</string>
+    <!-- The limit was ignored for today; the screen asks before every visit. -->
+    <string name="block_label_over_limit">Over today\'s limit</string>
+    <!-- %1$s is the time used today, %2$s the daily limit, e.g. "31m today  ·  limit 30m". -->
+    <string name="block_usage_today">"%1$s today  ·  limit %2$s"</string>
+    <!-- %1$d is how many times this week the user continued or ignored this limit. -->
+    <plurals name="block_past_limit_this_week">
+        <item quantity="one">You have gone past this limit %1$d time this week.</item>
+        <item quantity="other">You have gone past this limit %1$d times this week.</item>
+    </plurals>
+    <string name="block_consent_note">You chose to ignore this limit for today. Focus still asks before every visit.</string>
+    <string name="block_not_now">Not now</string>
+    <!-- %1$s is the app's name. -->
+    <string name="block_open_anyway">Open %1$s anyway</string>
+    <string name="block_restore_limit">Bring the limit back for today</string>
+    <!-- The main button. %1$s is the app's name. -->
+    <string name="block_close_app">Close %1$s</string>
+    <!-- Title over the "continue" buttons once they unlock. -->
+    <string name="block_or_continue_for">Or continue for</string>
+    <!-- Same title during the short pause. %1$d is the number of seconds left. -->
+    <string name="block_or_continue_in">Or continue in %1$ds</string>
+    <!-- One "continue" button. %1$d is a number of minutes. -->
+    <string name="block_continue_minutes">%1$d min</string>
+    <string name="block_ignore_today">Ignore the limit for today</string>
+    <!-- %1$d is the number of seconds left before it can be tapped. -->
+    <string name="block_ignore_today_countdown">Ignore the limit for today (%1$ds)</string>
+    <string name="block_strict_mode">Strict mode is on: this app is closed until tomorrow.</string>
+
+    <!-- Toasts when an app or the web search cannot be started. %1$s is the app's name. -->
+    <string name="launching_no_search_app">No search app found</string>
+    <string name="launching_cannot_open">Couldn\'t open %1$s</string>
+</resources>
