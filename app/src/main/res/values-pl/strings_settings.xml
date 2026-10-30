@@ -130,7 +130,7 @@
     <string name="settings_fast_apps_note">Aplikacje z twojego ekranu głównego, w tej kolejności. Możesz też dodać aplikację z listy aplikacji: przytrzymaj ją i wybierz „Dodaj do szybkich aplikacji”.</string>
     <string name="settings_remove">Usuń</string>
     <string name="settings_add_app">Dodaj aplikację</string>
-    <string name="settings_fast_apps_full">To maksimum. Pięć w zupełności wystarczy.</string>
+    <string name="settings_fast_apps_full">To maksimum. %1$d w zupełności wystarczy.</string>
     <string name="settings_add_fast_app">Dodaj szybką aplikację</string>
 
     <!-- Lista aplikacji -->

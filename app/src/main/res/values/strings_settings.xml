@@ -123,7 +123,7 @@
     <string name="settings_notes_app">Notes app</string>
     <string name="settings_notes_app_summary">A word next to the note\'s title that opens it. Your own lines stay on the home screen either way.</string>
     <string name="settings_fast_apps">Fast apps</string>
-    <!-- %1$d is the most fast apps the home screen holds (5). -->
+    <!-- %1$d is the most fast apps the home screen holds (MAX_FAVORITES). -->
     <plurals name="settings_fast_apps_summary">
         <item quantity="one">Up to %1$d app, one tap from the home screen.</item>
         <item quantity="other">Up to %1$d apps, one tap from the home screen.</item>
@@ -145,7 +145,8 @@
     <string name="settings_fast_apps_note">The apps listed on your home screen, in this order. You can also add one from the app drawer: long-press it, then “Move to fast apps”.</string>
     <string name="settings_remove">Remove</string>
     <string name="settings_add_app">Add an app</string>
-    <string name="settings_fast_apps_full">That\'s the maximum. Five is plenty.</string>
+    <!-- %1$d is the most fast apps the home screen holds. -->
+    <string name="settings_fast_apps_full">That\'s the maximum. %1$d is plenty.</string>
     <string name="settings_add_fast_app">Add a fast app</string>
 
     <!-- App drawer -->

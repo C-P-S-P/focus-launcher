@@ -50,7 +50,10 @@ enum class FavoriteSize(@StringRes val labelRes: Int, val scale: Float) {
     LARGE(R.string.favorite_size_large, 1f),
 }
 
-const val MAX_FAVORITES = 5
+const val MAX_FAVORITES = 10
+
+/** Up to this many fast apps stand in one column on the home screen; more are split into two. */
+const val FAVORITES_PER_COLUMN = 5
 
 /** Corner shortcuts that resolve to whatever the phone's default dialer / camera is. */
 const val SHORTCUT_PHONE = "auto:phone"

@@ -56,6 +56,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -67,6 +68,7 @@ import com.focus.launcher.data.CalendarInfo
 import com.focus.launcher.data.CalendarRepository
 import com.focus.launcher.data.ClockStyle
 import com.focus.launcher.data.DayUsage
+import com.focus.launcher.data.FAVORITES_PER_COLUMN
 import com.focus.launcher.data.FontChoice
 import com.focus.launcher.data.SHORTCUT_CAMERA
 import com.focus.launcher.data.SHORTCUT_PHONE
@@ -241,7 +243,8 @@ fun HomeScreen(
         val available = (maxHeight - bars.calculateTopPadding() - bars.calculateBottomPadding()).value
         val textScale = LocalDensity.current.fontScale * settings.textScale
         val notices = (if (setupIncomplete) 1 else 0) + (if (pendingReview != null) 1 else 0) + (if (tip != null) 3 else 0) // a framed tip is about three notice lines tall
-        val rowCount = favorites.size.coerceAtLeast(2) // the empty-state hint is two lines tall
+        val favoriteColumns = if (favorites.size > FAVORITES_PER_COLUMN) 2 else 1
+        val rowCount = ((favorites.size + favoriteColumns - 1) / favoriteColumns).coerceAtLeast(2) // the empty-state hint is two lines tall
         val eventCount = events.size
         val preferredRing = (maxHeight * if (settings.showCalendar) 0.25f else 0.29f).coerceIn(140.dp, 236.dp)
 
@@ -427,24 +430,20 @@ fun HomeScreen(
                     Modifier.fillMaxWidth().clickable { onOpenDrawer(false) }.padding(horizontal = 12.dp, vertical = 8.dp),
                     size = 15.sp, color = c.dim, align = settings.homeAlign.text(), lineHeight = 23.sp,
                 )
-            } else {
+            } else if (favoriteColumns == 1) {
                 for (app in favorites) {
-                    Row(
-                        Modifier
-                            .press(onLongClick = { onAppMenu(app) }) { onLaunch(app) }
-                            .padding(vertical = favoritePadding, horizontal = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        T(
-                            app.label,
-                            Modifier.weight(1f, fill = false).then(if (hasColourGlyphs(app.label)) Modifier.monochrome() else Modifier),
-                            size = favoriteSize,
-                            color = if (app.key in spent) c.faint else c.fg,
-                            weight = FontWeight.Normal,
-                            maxLines = 1,
-                        )
-                        // Same marker as in the drawer, sized with the name next to it.
-                        if (app.isWorkProfile) WorkBadge(Modifier.padding(start = 10.dp), side = (favoriteSize.value * 0.62f).dp)
+                    FavoriteRow(app, favoriteSize, favoritePadding, dimmed = app.key in spent, onLaunch, onAppMenu)
+                }
+            } else {
+                // Filled top to bottom: the first half on the left, the rest on the right, so the
+                // order chosen in settings still reads down the first column and then the second.
+                Row(Modifier.fillMaxWidth()) {
+                    for (column in favorites.chunked((favorites.size + 1) / 2)) {
+                        Column(Modifier.weight(1f), horizontalAlignment = settings.homeAlign.horizontal()) {
+                            for (app in column) {
+                                FavoriteRow(app, favoriteSize, favoritePadding, dimmed = app.key in spent, onLaunch, onAppMenu)
+                            }
+                        }
                     }
                 }
             }
@@ -612,6 +611,36 @@ fun shortcutLabel(spec: String, apps: List<AppEntry>): String = when (spec) {
     SHORTCUT_PHONE -> stringResource(R.string.home_shortcut_phone)
     SHORTCUT_CAMERA -> stringResource(R.string.home_shortcut_camera)
     else -> apps.firstOrNull { it.key == spec }?.label ?: stringResource(R.string.home_not_set)
+}
+
+/** One fast app on the home screen. Faint once its time for today is spent. */
+@Composable
+private fun FavoriteRow(
+    app: AppEntry,
+    size: TextUnit,
+    padding: Dp,
+    dimmed: Boolean,
+    onLaunch: (AppEntry) -> Unit,
+    onAppMenu: (AppEntry) -> Unit,
+) {
+    val c = LocalFocusColors.current
+    Row(
+        Modifier
+            .press(onLongClick = { onAppMenu(app) }) { onLaunch(app) }
+            .padding(vertical = padding, horizontal = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        T(
+            app.label,
+            Modifier.weight(1f, fill = false).then(if (hasColourGlyphs(app.label)) Modifier.monochrome() else Modifier),
+            size = size,
+            color = if (dimmed) c.faint else c.fg,
+            weight = FontWeight.Normal,
+            maxLines = 1,
+        )
+        // Same marker as in the drawer, sized with the name next to it.
+        if (app.isWorkProfile) WorkBadge(Modifier.padding(start = 10.dp), side = (size.value * 0.62f).dp)
+    }
 }
 
 private fun launchShortcut(context: Context, spec: String, apps: List<AppEntry>, onLaunch: (AppEntry) -> Unit) {
