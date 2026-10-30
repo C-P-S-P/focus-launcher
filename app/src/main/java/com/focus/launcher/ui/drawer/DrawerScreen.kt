@@ -384,8 +384,20 @@ private fun AppRow(
 
 private val MARKS = Regex("\\p{Mn}+")
 
-private fun normalize(text: String): String =
-    MARKS.replace(Normalizer.normalize(text, Normalizer.Form.NFD), "").lowercase().trim()
+/**
+ * Latin letters that Unicode does not decompose into a base letter plus a mark, so stripping marks
+ * leaves them as they are: "Łódź" would sort under '#' and never match "lodz" without this.
+ */
+private val UNDECOMPOSED = mapOf(
+    'ł' to "l", 'đ' to "d", 'ø' to "o", 'ħ' to "h", 'ı' to "i",
+    'ß' to "ss", 'æ' to "ae", 'œ' to "oe", 'þ' to "th",
+)
+
+private fun normalize(text: String): String {
+    val plain = MARKS.replace(Normalizer.normalize(text, Normalizer.Form.NFD), "").lowercase().trim()
+    if (plain.none { it in UNDECOMPOSED }) return plain
+    return buildString(plain.length) { plain.forEach { c -> append(UNDECOMPOSED[c] ?: c) } }
+}
 
 /**
  * Filters [apps] by [query]. Best matches first: name starts with the query, then a word in the
