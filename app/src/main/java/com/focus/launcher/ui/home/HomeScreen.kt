@@ -256,7 +256,8 @@ fun HomeScreen(
         }
         val halfWidth = (maxWidth.value - 36f) / 2f - 30f // column padding, then the half's own padding
         val amPmWidth = if (use24h) 0f else 26f * textScale
-        val emsWide = if (settings.font == FontChoice.MONO) 3.1f else 2.75f
+        // Seconds add two digits at 0.4 of the time's size plus a small gap: about half an em more.
+        val emsWide = (if (settings.font == FontChoice.MONO) 3.1f else 2.75f) + (if (settings.showSeconds) 0.55f else 0f)
         val splitTimeSp = ((halfWidth - amPmWidth) / emsWide / textScale).coerceIn(30f, 56f)
 
         fun heightOf(fit: Fit): Float {
@@ -278,7 +279,7 @@ fun HomeScreen(
             val sectionCount = listOf(settings.showCalendar && !sideCalendar, musicVisible, settings.showNote).count { it }
             val lines = if (sectionCount > 0) (sectionCount + 1) * 1f else 0f
             val shortcuts = if (settings.showShortcuts) 28f + 20f * textScale else 20f
-            val rows = rowCount * (fit.textSp * 1.2f * textScale + fit.padDp * 2)
+            val rows = rowCount * (fit.textSp * settings.favoriteSize.scale * 1.2f * textScale + fit.padDp * 2)
             val screenTime = if (sideScreenTime) 0f else 25f + 64f * textScale // gap, title, total, share of the day
             return clock + screenTime + noticeLines + calendar + musicHeight + note + lines + rows + shortcuts + 6f + 36f // 36 = air
         }
@@ -292,7 +293,7 @@ fun HomeScreen(
         )
         val fit = options.firstOrNull { heightOf(it) <= available } ?: options.last()
         val ring = fit.ring.coerceAtLeast(132.dp)
-        val favoriteSize = fit.textSp.sp
+        val favoriteSize = (fit.textSp * settings.favoriteSize.scale).sp
         val favoritePadding = fit.padDp.dp
 
         Column(

@@ -104,6 +104,9 @@
     <string name="time_format_system">Follow system</string>
     <string name="time_format_24h">24-hour</string>
     <string name="time_format_12h">12-hour</string>
+    <string name="favorite_size_small">Small</string>
+    <string name="favorite_size_medium">Medium</string>
+    <string name="favorite_size_large">Large</string>
 
     <!-- How Focus sorted an app for the automatic timers. -->
     <string name="category_social">social media</string>

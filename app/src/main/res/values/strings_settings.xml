@@ -97,6 +97,8 @@
     <string name="settings_clock_tap_summary">Opens an app of your choice, or alarms, calendar, screen time. Long-pressing the clock gets you here too.</string>
     <string name="settings_time_format">Time format</string>
     <string name="settings_show_date">Show the date</string>
+    <string name="settings_show_seconds">Show seconds</string>
+    <string name="settings_show_seconds_summary">The clock redraws every second while the home screen is on.</string>
     <string name="settings_sections">Sections</string>
     <string name="settings_calendar">Calendar</string>
     <string name="settings_calendar_summary">Your next events, from one calendar. Emoji in titles are left out.</string>
@@ -126,6 +128,8 @@
         <item quantity="one">Up to %1$d app, one tap from the home screen.</item>
         <item quantity="other">Up to %1$d apps, one tap from the home screen.</item>
     </plurals>
+    <!-- Size of the fast apps on the home screen. -->
+    <string name="settings_favorite_size">Text size</string>
     <string name="settings_alignment">Alignment</string>
     <string name="settings_corner_shortcuts">Corner shortcuts</string>
     <string name="settings_show_shortcuts">Show shortcuts</string>

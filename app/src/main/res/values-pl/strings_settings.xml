@@ -85,6 +85,8 @@
     <string name="settings_clock_tap_summary">Otwiera wybraną aplikację albo alarmy, kalendarz, czas przed ekranem. Trafisz tu też, przytrzymując zegar.</string>
     <string name="settings_time_format">Format godziny</string>
     <string name="settings_show_date">Pokazuj datę</string>
+    <string name="settings_show_seconds">Pokazuj sekundy</string>
+    <string name="settings_show_seconds_summary">Zegar odświeża się co sekundę, gdy widać ekran główny.</string>
     <string name="settings_sections">Sekcje</string>
     <string name="settings_calendar">Kalendarz</string>
     <string name="settings_calendar_summary">Najbliższe wydarzenia z jednego kalendarza. Emoji w tytułach są pomijane.</string>
@@ -113,6 +115,7 @@
         <item quantity="many">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
         <item quantity="other">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
     </plurals>
+    <string name="settings_favorite_size">Rozmiar tekstu</string>
     <string name="settings_alignment">Wyrównanie</string>
     <string name="settings_corner_shortcuts">Skróty w rogach</string>
     <string name="settings_show_shortcuts">Pokazuj skróty</string>

@@ -30,6 +30,7 @@ import com.focus.launcher.data.CALENDAR_ALL
 import com.focus.launcher.data.CalendarInfo
 import com.focus.launcher.data.CalendarRepository
 import com.focus.launcher.data.ClockStyle
+import com.focus.launcher.data.FavoriteSize
 import com.focus.launcher.data.FontChoice
 import com.focus.launcher.data.HomeAlign
 import com.focus.launcher.data.LaunchAnimation
@@ -58,7 +59,7 @@ private fun update(transform: (Settings) -> Settings) = Graph.settings.update(tr
 
 // ---- Home screen -----------------------------------------------------------------------------
 
-private enum class HomeDialog { NONE, CLOCK, SPLIT_SIDE, RING, TAP, TIME_FORMAT, ALIGN, LEFT, RIGHT, CALENDAR, MUSIC_APP, NOTE_APP }
+private enum class HomeDialog { NONE, CLOCK, SPLIT_SIDE, RING, TAP, TIME_FORMAT, FAVORITE_SIZE, ALIGN, LEFT, RIGHT, CALENDAR, MUSIC_APP, NOTE_APP }
 
 @Composable
 internal fun HomePage(settings: Settings, apps: List<AppEntry>, onBack: () -> Unit, go: (String) -> Unit) {
@@ -120,6 +121,10 @@ internal fun HomePage(settings: Settings, apps: List<AppEntry>, onBack: () -> Un
             onClick = { dialog = HomeDialog.TAP },
         )
         SettingRow(stringResource(R.string.settings_time_format), value = stringResource(settings.timeFormat.labelRes), onClick = { dialog = HomeDialog.TIME_FORMAT })
+        ToggleRow(
+            stringResource(R.string.settings_show_seconds), settings.showSeconds,
+            subtitle = stringResource(R.string.settings_show_seconds_summary),
+        ) { v -> update { it.copy(showSeconds = v) } }
         ToggleRow(stringResource(R.string.settings_show_date), settings.showDate) { v -> update { it.copy(showDate = v) } }
 
         Section(stringResource(R.string.settings_sections))
@@ -182,6 +187,11 @@ internal fun HomePage(settings: Settings, apps: List<AppEntry>, onBack: () -> Un
             value = "$favoriteCount / $MAX_FAVORITES",
             onClick = { go(Routes.FAST_APPS) },
         )
+        SettingRow(
+            stringResource(R.string.settings_favorite_size),
+            value = stringResource(settings.favoriteSize.labelRes),
+            onClick = { dialog = HomeDialog.FAVORITE_SIZE },
+        )
         SettingRow(stringResource(R.string.settings_alignment), value = stringResource(settings.homeAlign.labelRes), onClick = { dialog = HomeDialog.ALIGN })
 
         Section(stringResource(R.string.settings_corner_shortcuts))
@@ -225,6 +235,11 @@ internal fun HomePage(settings: Settings, apps: List<AppEntry>, onBack: () -> Un
             TimeFormat.entries.map { it to stringResource(it.labelRes) },
             settings.timeFormat, close,
         ) { v -> update { it.copy(timeFormat = v) } }
+        HomeDialog.FAVORITE_SIZE -> ChoiceDialog(
+            stringResource(R.string.settings_favorite_size),
+            FavoriteSize.entries.map { it to stringResource(it.labelRes) },
+            settings.favoriteSize, close,
+        ) { v -> update { it.copy(favoriteSize = v) } }
         HomeDialog.ALIGN -> ChoiceDialog(
             stringResource(R.string.settings_alignment),
             HomeAlign.entries.map { it to stringResource(it.labelRes) },

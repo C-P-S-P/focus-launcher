@@ -129,19 +129,25 @@ fun Modifier.tipTarget(on: Boolean, color: Color): Modifier = if (on) border(1.d
 @Composable
 fun currentLocale(): Locale = LocalResources.current.appLocale()
 
-/** The current time, refreshed on each minute boundary and only while the screen is visible. */
+/**
+ * The current time, refreshed on each minute boundary (or each second, for a clock that shows
+ * seconds) and only while the screen is visible.
+ */
 @Composable
-fun rememberNow(): State<LocalDateTime> {
+fun rememberNow(everySecond: Boolean = false): State<LocalDateTime> {
     val owner = LocalLifecycleOwner.current
-    return produceState(LocalDateTime.now(), owner) {
+    val period = if (everySecond) 1_000L else 60_000L
+    return produceState(LocalDateTime.now(), owner, period) {
         owner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (true) {
                 value = LocalDateTime.now()
-                delay(60_000 - System.currentTimeMillis() % 60_000 + 40)
+                delay(period - System.currentTimeMillis() % period + 40)
             }
         }
     }
 }
+
+private val SECONDS = DateTimeFormatter.ofPattern("ss")
 
 fun HomeAlign.horizontal(): Alignment.Horizontal = when (this) {
     HomeAlign.LEFT -> Alignment.Start
@@ -224,8 +230,11 @@ fun HomeClock(
         TimeFormat.H24 -> true
         TimeFormat.H12 -> false
     }
-    val time = now.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
-    val amPm = if (use24h) null else now.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
+    // With seconds on, the clock keeps its own once-a-second time, so only the clock redraws each second.
+    val shown = if (settings.showSeconds) rememberNow(everySecond = true).value else now
+    val time = shown.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
+    val seconds = if (settings.showSeconds) shown.format(SECONDS) else null
+    val amPm = if (use24h) null else shown.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
 
     val showBattery = settings.ringMode == RingMode.BATTERY
     val battery by rememberBattery()
@@ -261,6 +270,10 @@ fun HomeClock(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(verticalAlignment = Alignment.Bottom) {
                     T(time, size = (ringSize.value * (if (compact) 0.215f else 0.235f)).sp, weight = FontWeight.Light, maxLines = 1)
+                    if (seconds != null) {
+                        HSpace(3.dp)
+                        T(seconds, Modifier.padding(bottom = (ringSize.value * 0.035f).dp), size = (ringSize.value * 0.09f).sp, color = c.dim, maxLines = 1)
+                    }
                     if (amPm != null) {
                         HSpace(4.dp)
                         T(amPm, Modifier.padding(bottom = (ringSize.value * 0.04f).dp), size = 12.sp, color = c.dim, maxLines = 1)
@@ -281,6 +294,10 @@ fun HomeClock(
         Column(modifier.then(tap), horizontalAlignment = settings.homeAlign.horizontal()) {
             Row(verticalAlignment = Alignment.Bottom) {
                 T(time, size = 68.sp, weight = FontWeight.Light, maxLines = 1)
+                if (seconds != null) {
+                    HSpace(6.dp)
+                    T(seconds, Modifier.padding(bottom = 12.dp), size = 26.sp, color = c.dim, maxLines = 1)
+                }
                 if (amPm != null) {
                     HSpace(6.dp)
                     T(amPm, Modifier.padding(bottom = 14.dp), size = 15.sp, color = c.dim, maxLines = 1)
@@ -323,8 +340,11 @@ fun SplitClockRow(
         TimeFormat.H24 -> true
         TimeFormat.H12 -> false
     }
-    val time = now.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
-    val amPm = if (use24h) null else now.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
+    // With seconds on, the clock keeps its own once-a-second time, so only the clock redraws each second.
+    val shown = if (settings.showSeconds) rememberNow(everySecond = true).value else now
+    val time = shown.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
+    val seconds = if (settings.showSeconds) shown.format(SECONDS) else null
+    val amPm = if (use24h) null else shown.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
     val showBattery = settings.ringMode == RingMode.BATTERY
     val battery by rememberBattery()
 
@@ -348,6 +368,10 @@ fun SplitClockRow(
         ) {
             Row(verticalAlignment = Alignment.Bottom) {
                 T(time, size = timeSize, weight = FontWeight.Light, maxLines = 1)
+                if (seconds != null) {
+                    HSpace(4.dp)
+                    T(seconds, Modifier.padding(bottom = (timeSize.value * 0.15f).dp), size = (timeSize.value * 0.4f).sp, color = c.dim, maxLines = 1)
+                }
                 if (amPm != null) {
                     HSpace(5.dp)
                     T(amPm, Modifier.padding(bottom = (timeSize.value * 0.17f).dp), size = 12.sp, color = c.dim, maxLines = 1)

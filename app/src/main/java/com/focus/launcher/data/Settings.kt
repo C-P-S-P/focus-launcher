@@ -43,6 +43,13 @@ enum class TimeFormat(@StringRes val labelRes: Int) {
     SYSTEM(R.string.time_format_system), H24(R.string.time_format_24h), H12(R.string.time_format_12h),
 }
 
+/** Text size of the fast apps on the home screen, as a share of what the layout would pick by itself. */
+enum class FavoriteSize(@StringRes val labelRes: Int, val scale: Float) {
+    SMALL(R.string.favorite_size_small, 0.75f),
+    MEDIUM(R.string.favorite_size_medium, 0.875f),
+    LARGE(R.string.favorite_size_large, 1f),
+}
+
 const val MAX_FAVORITES = 5
 
 /** Corner shortcuts that resolve to whatever the phone's default dialer / camera is. */
@@ -77,6 +84,8 @@ data class Settings(
     val ringMode: RingMode = RingMode.BATTERY,
     val clockTap: String = TAP_ALARMS,
     val timeFormat: TimeFormat = TimeFormat.SYSTEM,
+    /** Seconds after the minutes, smaller. The clock then redraws every second while the home screen is shown. */
+    val showSeconds: Boolean = false,
     val showDate: Boolean = true,
     val showCalendar: Boolean = false,
     /** [CalendarInfo.key] of the single calendar shown on the home screen, or [CALENDAR_AUTO] / [CALENDAR_ALL]. */
@@ -101,6 +110,7 @@ data class Settings(
     val noteLink: String = "",
     val homeAlign: HomeAlign = HomeAlign.CENTER,
     val favorites: List<String> = emptyList(),
+    val favoriteSize: FavoriteSize = FavoriteSize.LARGE,
     val showShortcuts: Boolean = true,
     val leftShortcut: String = SHORTCUT_PHONE,
     val rightShortcut: String = SHORTCUT_CAMERA,
@@ -161,6 +171,7 @@ data class Settings(
         put("ringMode", ringMode.name)
         put("clockTap", clockTap)
         put("timeFormat", timeFormat.name)
+        put("showSeconds", showSeconds)
         put("showDate", showDate)
         put("showCalendar", showCalendar)
         put("calendarKey", calendarKey)
@@ -174,6 +185,7 @@ data class Settings(
         put("noteLink", noteLink)
         put("homeAlign", homeAlign.name)
         put("favorites", JSONArray(favorites))
+        put("favoriteSize", favoriteSize.name)
         put("showShortcuts", showShortcuts)
         put("leftShortcut", leftShortcut)
         put("rightShortcut", rightShortcut)
@@ -232,6 +244,7 @@ data class Settings(
                 ringMode = enumOr(o.optString("ringMode"), d.ringMode),
                 clockTap = o.optString("clockTap", d.clockTap).ifEmpty { d.clockTap },
                 timeFormat = enumOr(o.optString("timeFormat"), d.timeFormat),
+                showSeconds = o.optBoolean("showSeconds", d.showSeconds),
                 showDate = o.optBoolean("showDate", d.showDate),
                 showCalendar = o.optBoolean("showCalendar", d.showCalendar),
                 calendarKey = o.optString("calendarKey").ifEmpty {
@@ -252,6 +265,7 @@ data class Settings(
                 noteLink = o.optString("noteLink", d.noteLink),
                 homeAlign = enumOr(o.optString("homeAlign"), d.homeAlign),
                 favorites = o.optJSONArray("favorites").strings().take(MAX_FAVORITES),
+                favoriteSize = enumOr(o.optString("favoriteSize"), d.favoriteSize),
                 showShortcuts = o.optBoolean("showShortcuts", d.showShortcuts),
                 leftShortcut = o.optString("leftShortcut", d.leftShortcut),
                 rightShortcut = o.optString("rightShortcut", d.rightShortcut),

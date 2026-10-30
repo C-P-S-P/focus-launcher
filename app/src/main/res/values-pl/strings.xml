@@ -82,6 +82,9 @@
     <string name="time_format_system">Jak w systemie</string>
     <string name="time_format_24h">24-godzinny</string>
     <string name="time_format_12h">12-godzinny</string>
+    <string name="favorite_size_small">Mały</string>
+    <string name="favorite_size_medium">Średni</string>
+    <string name="favorite_size_large">Duży</string>
 
     <string name="category_social">media społecznościowe</string>
     <string name="category_game">gra</string>
