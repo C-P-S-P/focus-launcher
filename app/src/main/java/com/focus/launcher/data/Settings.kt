@@ -1,33 +1,59 @@
 package com.focus.launcher.data
 
+import androidx.annotation.StringRes
+import com.focus.launcher.R
 import org.json.JSONArray
 import org.json.JSONObject
 
-enum class FontChoice(val label: String) { SANS("Sans"), SERIF("Serif"), MONO("Mono") }
+enum class FontChoice(@StringRes val labelRes: Int) {
+    SANS(R.string.font_sans), SERIF(R.string.font_serif), MONO(R.string.font_mono),
+}
 
 /**
  * SPLIT: the clock on the left, one section on the right, a single vertical line between them and
  * no frame around it. RING: the clock inside a circle whose arc is the battery (or the day).
  */
-enum class ClockStyle(val label: String) { SPLIT("Split"), RING("Ring"), PLAIN("Plain") }
+enum class ClockStyle(@StringRes val labelRes: Int) {
+    SPLIT(R.string.clock_style_split), RING(R.string.clock_style_ring), PLAIN(R.string.clock_style_plain),
+}
 
 /** What the right half of the split clock shows. The section shown there is not repeated below. */
-enum class SplitSide(val label: String) { CALENDAR("Calendar"), SCREEN_TIME("Screen time") }
+enum class SplitSide(@StringRes val labelRes: Int) {
+    CALENDAR(R.string.split_side_calendar), SCREEN_TIME(R.string.split_side_screen_time),
+}
 
 /** What the arc of the clock ring stands for. */
-enum class RingMode(val label: String) { BATTERY("Battery level"), DAY("Day passed") }
+enum class RingMode(@StringRes val labelRes: Int) { BATTERY(R.string.ring_mode_battery), DAY(R.string.ring_mode_day) }
 
 /** How an app appears when it is opened from the launcher. */
-enum class LaunchAnimation(val label: String) { FAST("Fast"), SYSTEM("System default") }
+enum class LaunchAnimation(@StringRes val labelRes: Int) {
+    FAST(R.string.launch_animation_fast), SYSTEM(R.string.launch_animation_system),
+}
 
-enum class HomeAlign(val label: String) { LEFT("Left"), CENTER("Center"), RIGHT("Right") }
+enum class HomeAlign(@StringRes val labelRes: Int) {
+    LEFT(R.string.align_left), CENTER(R.string.align_center), RIGHT(R.string.align_right),
+}
 
 /** Order of the app list in the drawer. */
-enum class DrawerSort(val label: String) { ALPHA("A–Z"), MOST_USED("Most used"), RECENT("Recent") }
+enum class DrawerSort(@StringRes val labelRes: Int) {
+    ALPHA(R.string.sort_alpha), MOST_USED(R.string.sort_most_used), RECENT(R.string.sort_recent),
+}
 
-enum class TimeFormat(val label: String) { SYSTEM("Follow system"), H24("24-hour"), H12("12-hour") }
+enum class TimeFormat(@StringRes val labelRes: Int) {
+    SYSTEM(R.string.time_format_system), H24(R.string.time_format_24h), H12(R.string.time_format_12h),
+}
 
-const val MAX_FAVORITES = 5
+/** Text size of the fast apps on the home screen, as a share of what the layout would pick by itself. */
+enum class FavoriteSize(@StringRes val labelRes: Int, val scale: Float) {
+    SMALL(R.string.favorite_size_small, 0.75f),
+    MEDIUM(R.string.favorite_size_medium, 0.875f),
+    LARGE(R.string.favorite_size_large, 1f),
+}
+
+const val MAX_FAVORITES = 10
+
+/** Up to this many fast apps stand in one column on the home screen; more are split into two. */
+const val FAVORITES_PER_COLUMN = 5
 
 /** Corner shortcuts that resolve to whatever the phone's default dialer / camera is. */
 const val SHORTCUT_PHONE = "auto:phone"
@@ -61,6 +87,8 @@ data class Settings(
     val ringMode: RingMode = RingMode.BATTERY,
     val clockTap: String = TAP_ALARMS,
     val timeFormat: TimeFormat = TimeFormat.SYSTEM,
+    /** Seconds after the minutes, smaller. The clock then redraws every second while the home screen is shown. */
+    val showSeconds: Boolean = false,
     val showDate: Boolean = true,
     val showCalendar: Boolean = false,
     /** [CalendarInfo.key] of the single calendar shown on the home screen, or [CALENDAR_AUTO] / [CALENDAR_ALL]. */
@@ -85,6 +113,7 @@ data class Settings(
     val noteLink: String = "",
     val homeAlign: HomeAlign = HomeAlign.CENTER,
     val favorites: List<String> = emptyList(),
+    val favoriteSize: FavoriteSize = FavoriteSize.LARGE,
     val showShortcuts: Boolean = true,
     val leftShortcut: String = SHORTCUT_PHONE,
     val rightShortcut: String = SHORTCUT_CAMERA,
@@ -145,6 +174,7 @@ data class Settings(
         put("ringMode", ringMode.name)
         put("clockTap", clockTap)
         put("timeFormat", timeFormat.name)
+        put("showSeconds", showSeconds)
         put("showDate", showDate)
         put("showCalendar", showCalendar)
         put("calendarKey", calendarKey)
@@ -158,6 +188,7 @@ data class Settings(
         put("noteLink", noteLink)
         put("homeAlign", homeAlign.name)
         put("favorites", JSONArray(favorites))
+        put("favoriteSize", favoriteSize.name)
         put("showShortcuts", showShortcuts)
         put("leftShortcut", leftShortcut)
         put("rightShortcut", rightShortcut)
@@ -216,6 +247,7 @@ data class Settings(
                 ringMode = enumOr(o.optString("ringMode"), d.ringMode),
                 clockTap = o.optString("clockTap", d.clockTap).ifEmpty { d.clockTap },
                 timeFormat = enumOr(o.optString("timeFormat"), d.timeFormat),
+                showSeconds = o.optBoolean("showSeconds", d.showSeconds),
                 showDate = o.optBoolean("showDate", d.showDate),
                 showCalendar = o.optBoolean("showCalendar", d.showCalendar),
                 calendarKey = o.optString("calendarKey").ifEmpty {
@@ -236,6 +268,7 @@ data class Settings(
                 noteLink = o.optString("noteLink", d.noteLink),
                 homeAlign = enumOr(o.optString("homeAlign"), d.homeAlign),
                 favorites = o.optJSONArray("favorites").strings().take(MAX_FAVORITES),
+                favoriteSize = enumOr(o.optString("favoriteSize"), d.favoriteSize),
                 showShortcuts = o.optBoolean("showShortcuts", d.showShortcuts),
                 leftShortcut = o.optString("leftShortcut", d.leftShortcut),
                 rightShortcut = o.optString("rightShortcut", d.rightShortcut),

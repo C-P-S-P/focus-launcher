@@ -1,7 +1,9 @@
 package com.focus.launcher.data
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.core.content.edit
+import com.focus.launcher.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -11,22 +13,22 @@ import java.time.LocalDate
  * gone the moment the thing has been done once (or the line is tapped away), then the next.
  * A new gesture or hidden feature gets its line here.
  */
-enum class Tip(val gesture: String, val result: String) {
+enum class Tip(@StringRes val gestureRes: Int, @StringRes val resultRes: Int) {
     // Two or three words each side, so that a tip is one glance and fits one line on any phone.
-    SWIPE_LEFT("Swipe left", "all apps"),
-    APP_MENU("Long-press an app", "pin, timer, hide"),
-    SWIPE_UP("Swipe up", "search apps"),
-    SWIPE_RIGHT("Swipe right", "web search"),
-    SWIPE_DOWN("Swipe down", "notifications"),
-    CLOCK("Long-press the clock", "set its tap"),
-    SCREEN_TIME("Tap screen time", "your day"),
-    CORNERS("Long-press a bottom corner", "change it"),
-    SECTIONS("Tap here", "add calendar, music, note"),
+    SWIPE_LEFT(R.string.tip_swipe_left, R.string.tip_swipe_left_result),
+    APP_MENU(R.string.tip_app_menu, R.string.tip_app_menu_result),
+    SWIPE_UP(R.string.tip_swipe_up, R.string.tip_swipe_up_result),
+    SWIPE_RIGHT(R.string.tip_swipe_right, R.string.tip_swipe_right_result),
+    SWIPE_DOWN(R.string.tip_swipe_down, R.string.tip_swipe_down_result),
+    CLOCK(R.string.tip_clock, R.string.tip_clock_result),
+    SCREEN_TIME(R.string.tip_screen_time, R.string.tip_screen_time_result),
+    CORNERS(R.string.tip_corners, R.string.tip_corners_result),
+    SECTIONS(R.string.tip_sections, R.string.tip_sections_result),
     /** Only shown while one of the two sections is on; see `HomeScreen`. */
-    SECTION_APPS("Long-press music or note", "pick its app"),
-    SETTINGS("Long-press empty space", "settings"),
+    SECTION_APPS(R.string.tip_section_apps, R.string.tip_section_apps_result),
+    SETTINGS(R.string.tip_settings, R.string.tip_settings_result),
     // Last on purpose: it turns the screen off, which would cut any tip after it short.
-    DOUBLE_TAP("Double tap empty space", "lock"),
+    DOUBLE_TAP(R.string.tip_double_tap, R.string.tip_double_tap_result),
 }
 
 /** Small bits of launcher state that are not preferences: review reminders and reflection notes. */

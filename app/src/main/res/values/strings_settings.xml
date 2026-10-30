@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings: the main list and every page under it, the welcome screen and the calendar picker. -->
+<resources>
+    <!-- Short values on the right of a settings row. -->
+    <string name="settings_on">On</string>
+    <string name="settings_off">Off</string>
+    <string name="settings_none">None</string>
+
+    <!-- Main page -->
+    <string name="settings_setup">Setup</string>
+    <string name="settings_setup_complete">Everything Focus needs is switched on.</string>
+    <string name="settings_setup_incomplete">Finish these so timers and screen time work.</string>
+    <string name="settings_setup_all_set">All set</string>
+    <!-- Setup progress: %1$d steps done, out of %2$d (3). -->
+    <string name="settings_setup_progress">%1$d of %2$d</string>
+    <!-- Section header over the launcher settings (home screen, drawer, gestures, appearance). -->
+    <string name="settings_section_launcher">Launcher</string>
+    <string name="settings_home_screen">Home screen</string>
+    <string name="settings_home_screen_summary">Clock, sections, fast apps, corner shortcuts</string>
+    <string name="settings_app_drawer">App drawer</string>
+    <string name="settings_app_drawer_summary">Keyboard, search, recently installed, hidden apps</string>
+    <!-- How many apps the drawer lists. %1$d is the count. -->
+    <plurals name="settings_app_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <string name="settings_gestures">Gestures</string>
+    <string name="settings_gestures_summary">Swipes, double tap, keyboard in the drawer</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_appearance_summary">Black or white, typeface, text size</string>
+    <!-- Section header over app timers and the weekly review: the features that help you focus. -->
+    <string name="settings_section_focus">Focus</string>
+    <string name="settings_app_timers">App timers</string>
+    <string name="settings_app_timers_summary">Daily limits that lock social apps and games</string>
+    <string name="settings_weekly_review">Weekly review</string>
+    <string name="settings_weekly_review_summary">A look back at the end of every week</string>
+    <string name="settings_about">About</string>
+
+    <!-- About -->
+    <string name="settings_about_welcome">Welcome screen and tips</string>
+    <string name="settings_about_welcome_summary">Shows the tips on the home screen again, one at a time.</string>
+    <!-- %1$s is the version number, e.g. "1.4". -->
+    <string name="settings_about_version" translatable="false">Focus %1$s</string>
+    <string name="settings_about_text">A launcher with nothing to look at. No icons, no colour, no feed: the time, the few apps you chose, and an honest picture of where your day is going.</string>
+    <string name="settings_about_privacy">Privacy</string>
+    <string name="settings_about_privacy_text">Focus has no internet permission, so nothing it knows can leave this phone. Screen time is read from Android\'s own usage log and stored only in the app\'s private storage. The timer service sees the name of the app in front and nothing else; it cannot read what is on your screen.</string>
+    <string name="settings_about_tips">Tips</string>
+    <string name="settings_about_tip_drawer">Swipe left on the home screen for all apps.</string>
+    <string name="settings_about_tip_app_menu">Long-press any app for its menu: timer, rename, hide, fast apps.</string>
+    <string name="settings_about_tip_settings">Long-press empty space on the home screen to open these settings.</string>
+    <string name="settings_about_tip_corners">Long-press a corner shortcut to change it.</string>
+    <string name="settings_about_tip_clock">Tap the clock for alarms, the date for your calendar, the day bar for details.</string>
+
+    <!-- Setup: the system switches Focus depends on. -->
+    <string name="settings_setup_intro">Three switches make Focus work. Tap one to open the right system screen, flip it, and come back.</string>
+    <string name="settings_setup_required">Required</string>
+    <string name="settings_setup_launcher">1 · Default launcher</string>
+    <string name="settings_setup_launcher_summary">Makes Focus the screen you land on when you press Home.</string>
+    <string name="settings_setup_done">Done</string>
+    <!-- Action: make Focus the default launcher. -->
+    <string name="settings_setup_set">Set</string>
+    <string name="settings_setup_usage">2 · Usage access</string>
+    <string name="settings_setup_usage_summary">Lets Focus measure screen time: the day bar, app timers and the weekly review all depend on it.</string>
+    <!-- State: the permission is granted. -->
+    <string name="settings_setup_allowed">Allowed</string>
+    <!-- Action: ask for the permission. -->
+    <string name="settings_setup_allow">Allow</string>
+    <string name="settings_setup_timer_service">3 · Focus timer service</string>
+    <!-- %1$s is the name the service has in Android's accessibility settings (accessibility_label). -->
+    <string name="settings_setup_timer_service_summary">An accessibility service that notices which app is in front, so an app can be locked the moment its time runs out. It cannot read your screen. Find “%1$s” under installed or downloaded apps.</string>
+    <string name="settings_setup_turn_on">Turn on</string>
+    <!-- Tapping the note opens App info. The path names Android's own screens and menu items. -->
+    <string name="settings_setup_restricted">Switch greyed out, or “restricted setting”? Open App info → ⋮ (top right) → Allow restricted settings, then try again.  Open App info  →</string>
+    <string name="settings_setup_optional">Optional</string>
+    <string name="settings_setup_notifications">Notifications</string>
+    <string name="settings_setup_notifications_summary">Only used for one thing: telling you the weekly review is ready.</string>
+    <string name="settings_setup_calendar">Calendar section</string>
+    <string name="settings_setup_calendar_summary">This week at a glance and your next events, on the home screen.</string>
+    <string name="settings_setup_calendar_added">Calendar added to your home screen</string>
+
+    <!-- Home screen -->
+    <string name="settings_clock">Clock</string>
+    <!-- Row that picks the clock style. -->
+    <string name="settings_style">Style</string>
+    <string name="settings_clock_split_summary">The clock on the left, one section on the right, a single line between them.</string>
+    <string name="settings_clock_ring_summary">The clock inside a circle.</string>
+    <string name="settings_clock_plain_summary">The clock as plain text.</string>
+    <string name="settings_clock_style">Clock style</string>
+    <!-- What the right half of the split clock shows. -->
+    <string name="settings_next_to_clock">Next to the clock</string>
+    <string name="settings_next_to_clock_summary">What the right half shows. It is not repeated further down. Long-pressing it on the home screen gets you here too.</string>
+    <string name="settings_ring_shows">Ring shows</string>
+    <string name="settings_ring_battery_summary">A full circle is a full battery.</string>
+    <string name="settings_ring_day_summary">The circle fills up as the day passes.</string>
+    <string name="settings_show_battery">Show the battery level</string>
+    <string name="settings_clock_tap">Tap on the clock</string>
+    <string name="settings_clock_tap_summary">Opens an app of your choice, or alarms, calendar, screen time. Long-pressing the clock gets you here too.</string>
+    <string name="settings_time_format">Time format</string>
+    <string name="settings_show_date">Show the date</string>
+    <string name="settings_show_seconds">Show seconds</string>
+    <string name="settings_show_seconds_summary">The clock redraws every second while the home screen is on.</string>
+    <string name="settings_sections">Sections</string>
+    <string name="settings_calendar">Calendar</string>
+    <string name="settings_calendar_summary">Your next events, from one calendar. Emoji in titles are left out.</string>
+    <string name="settings_calendar_to_show">Calendar to show</string>
+    <string name="settings_calendar_to_show_summary">Only one is shown at a time. Search the list to find the one you want.</string>
+    <!-- Value of "Calendar to show": all calendars together. -->
+    <string name="settings_calendar_all">All</string>
+    <string name="settings_calendar_none_found">None found</string>
+    <string name="settings_calendar_work_blocked">Calendars inside your Work profile are not listed: the organisation that manages it does not let other apps read them, and Focus respects that. If you share your work calendar with a personal Google account, it shows up here like any other calendar.</string>
+    <string name="settings_week_strip">Week strip</string>
+    <string name="settings_week_strip_summary">Monday to Sunday with today marked, above the events.</string>
+    <string name="settings_music">Music</string>
+    <string name="settings_music_summary">Previous, play or pause, next, in words. It can name the song if you allow it notification access.</string>
+    <string name="settings_music_auto_hide">Hide it while nothing is playing</string>
+    <string name="settings_music_auto_hide_summary">The section comes with the music and leaves a minute after it stops. Off: it is always there.</string>
+    <string name="settings_music_app">Music app</string>
+    <string name="settings_music_app_summary">Opens when you tap the section and nothing is playing. Long-pressing the section gets you here too.</string>
+    <!-- Value of "Music app" when none is chosen yet: tapping the section asks which app. -->
+    <string name="settings_music_app_ask">Asks first</string>
+    <string name="settings_note">Note</string>
+    <string name="settings_note_summary">A few lines of your own, always in sight. Tap them on the home screen to write.</string>
+    <string name="settings_notes_app">Notes app</string>
+    <string name="settings_notes_app_summary">A word next to the note\'s title that opens it. Your own lines stay on the home screen either way.</string>
+    <string name="settings_fast_apps">Fast apps</string>
+    <!-- %1$d is the most fast apps the home screen holds (MAX_FAVORITES). -->
+    <plurals name="settings_fast_apps_summary">
+        <item quantity="one">Up to %1$d app, one tap from the home screen.</item>
+        <item quantity="other">Up to %1$d apps, one tap from the home screen.</item>
+    </plurals>
+    <!-- Size of the fast apps on the home screen. -->
+    <string name="settings_favorite_size">Text size</string>
+    <string name="settings_alignment">Alignment</string>
+    <string name="settings_corner_shortcuts">Corner shortcuts</string>
+    <string name="settings_show_shortcuts">Show shortcuts</string>
+    <string name="settings_bottom_left">Bottom left</string>
+    <string name="settings_bottom_right">Bottom right</string>
+    <string name="settings_bottom_left_shortcut">Bottom left shortcut</string>
+    <string name="settings_bottom_right_shortcut">Bottom right shortcut</string>
+    <string name="settings_shortcut_phone">Phone</string>
+    <string name="settings_shortcut_camera">Camera</string>
+
+    <!-- Fast apps -->
+    <!-- “Move to fast apps” is an item of the app menu in the drawer: keep it the same wording. -->
+    <string name="settings_fast_apps_note">The apps listed on your home screen, in this order. You can also add one from the app drawer: long-press it, then “Move to fast apps”.</string>
+    <string name="settings_remove">Remove</string>
+    <string name="settings_add_app">Add an app</string>
+    <!-- %1$d is the most fast apps the home screen holds. -->
+    <string name="settings_fast_apps_full">That\'s the maximum. %1$d is plenty.</string>
+    <string name="settings_add_fast_app">Add a fast app</string>
+
+    <!-- App drawer -->
+    <string name="settings_search">Search</string>
+    <string name="settings_auto_keyboard">Open the keyboard right away</string>
+    <string name="settings_auto_keyboard_summary">Start typing the moment you swipe to the drawer.</string>
+    <string name="settings_auto_launch">Open when one app is left</string>
+    <string name="settings_auto_launch_summary">Launches the app as soon as your search matches only one.</string>
+    <string name="settings_list">List</string>
+    <string name="settings_recent_installs">Recently installed</string>
+    <string name="settings_recent_installs_summary">Apps installed in the last 24 hours, at the top.</string>
+    <string name="settings_drawer_usage">Show timer progress</string>
+    <!-- The example uses the short duration format (duration_minutes): time used / daily limit. -->
+    <string name="settings_drawer_usage_summary">“12m / 30m” next to every app that has a daily limit.</string>
+    <string name="settings_hidden_apps">Hidden apps</string>
+    <!-- “Hide app” is an item of the app menu in the drawer: keep it the same wording. -->
+    <string name="settings_hidden_apps_empty">Nothing is hidden. To hide an app, long-press it in the drawer and choose “Hide app”. Hidden apps stay installed and can be opened from here.</string>
+    <string name="settings_open">Open</string>
+    <string name="settings_unhide">Unhide</string>
+
+    <!-- Appearance -->
+    <string name="settings_black_and_white">Black and white</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_summary">Pure black saves battery on OLED screens.</string>
+    <string name="settings_theme_black">Black</string>
+    <string name="settings_theme_white">White</string>
+    <string name="settings_typeface">Typeface</string>
+    <string name="settings_text_size">Text size</string>
+    <string name="settings_text_size_small">Small</string>
+    <string name="settings_text_size_default">Default</string>
+    <string name="settings_text_size_large">Large</string>
+    <string name="settings_text_size_larger">Larger</string>
+    <string name="settings_screen">Screen</string>
+    <string name="settings_opening_apps">Opening apps</string>
+    <!-- "Fast" and "System default" are the two choices (launch_animation_fast, launch_animation_system). -->
+    <string name="settings_opening_apps_summary">Fast puts the app over the whole screen from its first frame. System default uses your phone\'s own animation.</string>
+    <string name="settings_hide_status_bar">Hide the status bar</string>
+    <string name="settings_hide_status_bar_summary">No notification icons on the home screen. Swipe down from the top edge to peek.</string>
+
+    <!-- Gestures -->
+    <string name="settings_gestures_note">Swiping left always opens the app drawer, and a long-press on empty space opens these settings.</string>
+    <string name="settings_swipe_down_notifications">Swipe down for notifications</string>
+    <string name="settings_swipe_up_search">Swipe up to search</string>
+    <string name="settings_swipe_up_search_summary">Jumps to the drawer with the keyboard open.</string>
+    <string name="settings_keyboard_with_drawer">Keyboard opens with the drawer</string>
+    <string name="settings_keyboard_with_drawer_summary">Start typing the moment you swipe to your apps.</string>
+    <string name="settings_swipe_right">Swipe right</string>
+    <string name="settings_swipe_right_summary">Opens the app below, or the web search, like the page left of a stock home screen.</string>
+    <string name="settings_double_tap_lock">Double tap to lock</string>
+    <string name="settings_double_tap_lock_summary">Turns the screen off. Uses the Focus timer service.</string>
+    <!-- Tapping the note opens Setup. -->
+    <string name="settings_double_tap_service_off">The Focus timer service is off, so double tap cannot lock yet.  Open setup  →</string>
+    <string name="settings_swipe_right_opens">Swipe right opens</string>
+    <string name="settings_swipe_right_opens_summary">Any app, or the web search.</string>
+    <string name="settings_web_search">Web search</string>
+
+    <!-- App timers -->
+    <!-- A daily limit. %1$s is a duration such as "30m". -->
+    <string name="settings_per_day">%1$s a day</string>
+    <string name="settings_app_timers_toggle_summary">Give distracting apps a daily allowance. When it is used up, Focus locks the app for the rest of the day.</string>
+    <!-- Tapping the note opens Setup. -->
+    <string name="settings_timers_no_usage_access">Timers cannot count anything until usage access is allowed.  Open setup  →</string>
+    <!-- Tapping the note opens Setup. -->
+    <string name="settings_timers_service_off">The Focus timer service is off: apps are only locked when opened from Focus, not while you are inside them.  Open setup  →</string>
+    <string name="settings_automatic_limits">Automatic limits</string>
+    <string name="settings_social_media">Social media</string>
+    <string name="settings_social_media_summary">Feeds, social networks and dating apps. Not mail, browsers or messengers.</string>
+    <string name="settings_social_media_dialog">Instagram, X, Reddit, Snapchat, LinkedIn, dating apps and the like.</string>
+    <string name="settings_games">Games</string>
+    <string name="settings_games_summary">Every app the Play Store lists as a game.</string>
+    <string name="settings_games_dialog">Every app Android lists as a game.</string>
+    <string name="settings_video">Video &amp; streaming</string>
+    <string name="settings_video_summary">YouTube, Netflix and other video apps.</string>
+    <string name="settings_video_dialog">YouTube, Netflix, Prime Video and anything else Android lists as a video app.</string>
+    <string name="settings_limited_apps">Limited apps</string>
+    <string name="settings_limited_apps_summary">See exactly which apps these cover, change one, or add your own.</string>
+    <string name="settings_automatic_limits_note">An automatic limit only applies to apps without a limit of their own. Browsers, mail, messengers and other tools are never limited unless you add a timer yourself.</string>
+    <string name="settings_when_time_is_up">When time is up</string>
+    <string name="settings_allow_continue">Allow “continue for a few minutes”</string>
+    <string name="settings_continue_options">Continue options</string>
+    <!-- %1$s is a list of minute counts, e.g. "1, 5, 10". -->
+    <string name="settings_continue_options_value">%1$s min</string>
+    <!-- One of the continue choices. %1$d is a number of minutes. -->
+    <string name="settings_continue_option">%1$d min</string>
+    <string name="settings_continue_options_subtitle">Up to four are shown on the lock screen.</string>
+    <string name="settings_allow_bypass">Allow “ignore the limit for today”</string>
+    <string name="settings_strict_mode">Strict mode: with both off, a locked app stays locked until midnight.</string>
+    <string name="settings_ask_after_bypass">Ask before every open after ignoring</string>
+    <string name="settings_ask_after_bypass_summary">Ignoring a limit does not make the app free for the day: Focus still asks “open anyway?” each time.</string>
+    <string name="settings_pause">Pause before continuing</string>
+    <string name="settings_pause_summary">A short wait before the continue choices unlock. Time to change your mind.</string>
+    <!-- %1$d is a number of seconds, in short form. -->
+    <string name="settings_pause_value">%1$d s</string>
+    <!-- One of the pause choices. %1$d is a number of seconds. -->
+    <plurals name="settings_pause_seconds">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
+    </plurals>
+    <string name="settings_heads_up">Heads-up before the limit</string>
+    <!-- How long before the limit the warning comes. %1$s is a duration such as "5m". -->
+    <string name="settings_heads_up_before">%1$s before</string>
+    <string name="settings_preview_lock">Preview the lock screen</string>
+
+    <!-- Limited apps -->
+    <string name="settings_add_timer">Add a timer</string>
+    <string name="settings_add_timer_summary">Any app can have one, not just social apps and games.</string>
+    <string name="settings_with_daily_limit">With a daily limit</string>
+    <!-- Where an app's limit comes from. -->
+    <string name="settings_limit_own">Own limit</string>
+    <string name="settings_limit_social">Social media, automatic</string>
+    <string name="settings_limit_game">Game, automatic</string>
+    <string name="settings_limit_video">Video, automatic</string>
+    <string name="settings_no_limited_apps">No app is limited right now. Add a timer above, or set automatic limits for social apps and games on the previous page.</string>
+    <string name="settings_excluded">Excluded from the automatic limits</string>
+    <string name="settings_no_limit">No limit</string>
+    <string name="settings_unsure">Not sure about these</string>
+    <string name="settings_unsure_note">Android files these under “social”, a label it also gives to mail, browsers and messengers. Focus leaves them alone; tap one to give it a timer.</string>
+    <!-- Value next to an app Focus is unsure about: tap it to give the app a timer. -->
+    <string name="settings_add">Add</string>
+
+    <!-- Weekly review -->
+    <string name="settings_weekly_review_toggle_summary">At the end of each week Focus adds it all up: total time, which apps, which hours of the day, how often you went past a limit. Then it asks what you want to change.</string>
+    <string name="settings_schedule">Schedule</string>
+    <string name="settings_week_starts_on">Week starts on</string>
+    <string name="settings_week_starts_monday">Monday</string>
+    <string name="settings_week_starts_sunday">Sunday</string>
+    <string name="settings_review_ready">Review is ready</string>
+    <string name="settings_review_ready_summary">A line on the home screen, plus a notification if allowed.</string>
+    <!--
+        The last day of the week, on which the review is ready. Used alone at the start of
+        settings_review_ready_value and as %1$s in settings_review_ready_at_subtitle.
+    -->
+    <string name="settings_last_day_sunday">Sunday</string>
+    <string name="settings_last_day_saturday">Saturday</string>
+    <!-- When the review is ready. %1$s is the day (settings_last_day_*), %2$s the hour, e.g. "18:00". -->
+    <string name="settings_review_ready_value">%1$s, %2$s</string>
+    <!-- Tapping the note opens Setup. -->
+    <string name="settings_review_notifications_off">Notifications are off, so the reminder will only show on the home screen.  Open setup  →</string>
+    <string name="settings_open_this_week">Open this week so far</string>
+    <!-- Title of the list of hours. -->
+    <string name="settings_review_ready_at">Review is ready at</string>
+    <!-- %1$s is the last day of the week (settings_last_day_*). -->
+    <string name="settings_review_ready_at_subtitle">On %1$s, the last day of your week.</string>
+
+    <!-- Welcome screen, shown once on the first start. -->
+    <string name="settings_welcome_tagline">Reclaim your time.\nSpend it touching some grass.</string>
+    <string name="settings_welcome_intro">No icons. No colour. No feed.\nTips on the home screen show you around.</string>
+    <!-- Above the row that picks the app a swipe right opens. -->
+    <string name="settings_welcome_swipe_right">Swipe right opens. Which app?</string>
+    <string name="settings_welcome_start">Start</string>
+    <string name="settings_welcome_setup_first">Set up Focus first</string>
+
+    <!-- Calendar picker -->
+    <string name="settings_calendar_picker_subtitle">One calendar at a time. Search by calendar or account name.</string>
+    <string name="settings_calendar_search">Search calendars</string>
+    <string name="settings_calendar_picker_work_note">Looking for your work calendar? This phone has a Work profile, and the organisation that manages it does not allow other apps to read its calendars, so they cannot be listed here. If you share your work calendar with one of your personal Google accounts, it appears in this list.</string>
+    <!-- How many events a calendar has coming up. %1$d is the count. -->
+    <plurals name="settings_calendar_upcoming">
+        <item quantity="one">%1$d upcoming</item>
+        <item quantity="other">%1$d upcoming</item>
+    </plurals>
+    <!-- A calendar with no events coming up. -->
+    <string name="settings_calendar_empty">empty</string>
+    <!-- %1$s is what was typed into the search field. -->
+    <string name="settings_calendar_no_match">No calendar matches “%1$s”.</string>
+    <string name="settings_calendar_all_together">All calendars together</string>
+</resources>

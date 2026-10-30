@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Home screen: the clock, today's screen time, the sections (calendar, music, note), the fast
+    apps, the corner shortcuts, and the dialogs reached from them by a long-press.
+-->
+<resources>
+    <!--
+        Date and time patterns (java.time DateTimeFormatter syntax). Translate them only to change
+        the order or the style for your language; day and month names are filled in by the system.
+    -->
+    <!-- The date under the clock, e.g. "Thursday, 30 October". -->
+    <string name="home_format_date_long">EEEE, d MMMM</string>
+    <!-- The date inside the ring and in the split clock, e.g. "Thu, 30 Oct". -->
+    <string name="home_format_date_short">EEE, d MMM</string>
+    <!-- The day of a calendar event further away than tomorrow, e.g. "Fri 31". -->
+    <string name="home_format_event_day">EEE d</string>
+    <!-- The start of a calendar event with the 12-hour clock, e.g. "2:30 PM". -->
+    <string name="home_format_time_12h">h:mm a</string>
+
+    <!-- Tap on the clock: the dialog and the actions it offers. -->
+    <string name="home_clock_tap_title">Tap on the clock</string>
+    <string name="home_clock_tap_subtitle">Long-press the clock any time to change this.</string>
+    <string name="home_clock_tap_open_app">Open an app…</string>
+    <!-- Title of the app list reached from "Open an app…". -->
+    <string name="home_clock_tap_picker_title">Tap on the clock opens</string>
+    <string name="home_clock_tap_alarms">Alarms</string>
+    <string name="home_clock_tap_calendar">Calendar</string>
+    <string name="home_clock_tap_screen_time">Screen time</string>
+    <string name="home_clock_tap_battery">Battery</string>
+    <string name="home_clock_tap_nothing">Nothing</string>
+    <!-- A clock tap or a corner shortcut whose app is gone. -->
+    <string name="home_not_set">Not set</string>
+
+    <!-- Battery under the clock, e.g. "85%  ·  charging". %1$d is the battery level in percent. -->
+    <string name="home_battery_level">%1$d%%</string>
+    <string name="home_battery_charging">charging</string>
+    <!-- The battery is at 15% or less. -->
+    <string name="home_battery_low">low</string>
+
+    <!-- Today's screen time under the clock. -->
+    <string name="home_screen_time_title">Screen Time</string>
+    <!-- %1$d is the share of the whole day (all 24 hours, sleep included) spent on the phone, in percent. -->
+    <string name="home_share_of_today">%1$d%% of today</string>
+    <string name="home_allow_usage_access">Allow usage access  →</string>
+
+    <!-- One-line notices under the screen time. -->
+    <string name="home_notice_review_ready">Your weekly review is ready  →</string>
+    <string name="home_notice_finish_setup">Finish setting up Focus  →</string>
+    <!-- The small badge above a tip. %1$d is the tip's number, %2$d how many tips there are. -->
+    <string name="home_tip_counter">TIP %1$d / %2$d</string>
+    <string name="home_toast_double_tap_lock">Turn on the Focus timer service to lock with a double tap</string>
+
+    <!-- Fast apps: shown while none is pinned. Two lines. -->
+    <string name="home_favorites_empty">Swipe left for your apps.\nLong-press one to pin it here.</string>
+
+    <!-- Calendar section. -->
+    <string name="home_calendar_title">Calendar</string>
+    <string name="home_calendar_show_events">Show upcoming events  →</string>
+    <string name="home_calendar_empty">Nothing in the next 7 days</string>
+    <string name="home_event_today">Today</string>
+    <string name="home_event_tomorrow">Tomorrow</string>
+    <!-- An all-day event. %1$s is its day: "Today", "Tomorrow" or a date made with home_format_event_day. -->
+    <string name="home_event_all_day">%1$s · all day</string>
+    <!-- When an event starts. %1$s is its day (as in home_event_all_day), %2$s its start time. -->
+    <string name="home_event_day_time">%1$s %2$s</string>
+    <!-- Next to the clock in the split clock: what its right half shows. -->
+    <string name="home_next_to_clock">Next to the clock</string>
+
+    <!-- Music section. -->
+    <string name="home_music_title">Music</string>
+    <!-- Leads to notification access, which tells Focus what is playing. -->
+    <string name="home_music_show_song">Show the song\'s name  →</string>
+    <string name="home_music_nothing_playing">Nothing playing  ·  tap to open your music app</string>
+    <string name="home_music_app">Music app</string>
+    <string name="home_music_app_subtitle">Opens when you tap the music section and nothing is playing. Long-press the section to change it.</string>
+    <!-- Last row under a list of music players: shows every app instead. -->
+    <string name="home_all_apps_more">All apps…</string>
+    <!-- Read out by screen readers for the drawn player buttons. -->
+    <string name="home_media_previous">Previous</string>
+    <string name="home_media_play">Play</string>
+    <string name="home_media_pause">Pause</string>
+    <string name="home_media_next">Next</string>
+
+    <!-- Note section: a few lines of the user's own, and optionally a notes app opened from it. -->
+    <string name="home_note_title">Note</string>
+    <string name="home_note_empty">Tap to write a note</string>
+    <string name="home_note_placeholder">Write something</string>
+    <string name="home_notes_app">Notes app</string>
+    <string name="home_notes_app_subtitle">Shown as a word next to the note\'s title; a tap on it opens the app. Your own lines stay where they are.</string>
+    <!-- A choice in the list of notes apps: no app. -->
+    <string name="home_notes_app_none">None</string>
+    <!-- Shown next to "Notes app" while none is chosen. -->
+    <string name="home_notes_app_detail_none">none</string>
+    <string name="home_note_open_page">Open one page instead of the app</string>
+    <!-- Shown next to "Open one page instead of the app" once a link is saved. -->
+    <string name="home_note_link_detail_set">set</string>
+    <string name="home_note_link_title">Link to the page</string>
+    <!-- %1$s is the name of the notes app. "Share" and "Copy link" are the menu items of that app. -->
+    <string name="home_note_link_subtitle">In %1$s, open the page, choose Share or Copy link, and paste it here. Leave it empty to open the app itself.</string>
+    <!-- The same, when the notes app is not known. -->
+    <string name="home_note_link_subtitle_generic">In your notes app, open the page, choose Share or Copy link, and paste it here. Leave it empty to open the app itself.</string>
+
+    <!-- Corner shortcuts. -->
+    <string name="home_shortcut_left">Left shortcut</string>
+    <string name="home_shortcut_right">Right shortcut</string>
+    <string name="home_shortcut_subtitle">Opens from the bottom corner of the home screen.</string>
+    <string name="home_shortcut_phone">Phone</string>
+    <string name="home_shortcut_camera">Camera</string>
+</resources>

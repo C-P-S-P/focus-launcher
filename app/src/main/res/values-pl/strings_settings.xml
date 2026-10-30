@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Krótkie wartości po prawej stronie wiersza ustawień -->
+    <string name="settings_on">Wł.</string>
+    <string name="settings_off">Wył.</string>
+    <string name="settings_none">Brak</string>
+
+    <!-- Strona główna ustawień -->
+    <string name="settings_setup">Konfiguracja</string>
+    <string name="settings_setup_complete">Wszystko, czego potrzebuje Focus, jest włączone.</string>
+    <string name="settings_setup_incomplete">Dokończ, żeby minutniki i czas przed ekranem działały.</string>
+    <string name="settings_setup_all_set">Gotowe</string>
+    <string name="settings_setup_progress">%1$d z %2$d</string>
+    <string name="settings_section_launcher">Launcher</string>
+    <string name="settings_home_screen">Ekran główny</string>
+    <string name="settings_home_screen_summary">Zegar, sekcje, szybkie aplikacje, skróty w rogach</string>
+    <string name="settings_app_drawer">Lista aplikacji</string>
+    <string name="settings_app_drawer_summary">Klawiatura, wyszukiwanie, ostatnio zainstalowane, ukryte aplikacje</string>
+    <plurals name="settings_app_count">
+        <item quantity="one">%1$d aplikacja</item>
+        <item quantity="few">%1$d aplikacje</item>
+        <item quantity="many">%1$d aplikacji</item>
+        <item quantity="other">%1$d aplikacji</item>
+    </plurals>
+    <string name="settings_gestures">Gesty</string>
+    <string name="settings_gestures_summary">Przesunięcia, dwukrotne kliknięcie, klawiatura na liście aplikacji</string>
+    <string name="settings_appearance">Wygląd</string>
+    <string name="settings_appearance_summary">Czerń lub biel, krój pisma, rozmiar tekstu</string>
+    <string name="settings_section_focus">Skupienie</string>
+    <string name="settings_app_timers">Minutniki aplikacji</string>
+    <string name="settings_app_timers_summary">Dzienne limity, które blokują media społecznościowe i gry</string>
+    <string name="settings_weekly_review">Podsumowanie tygodnia</string>
+    <string name="settings_weekly_review_summary">Spojrzenie wstecz na koniec każdego tygodnia</string>
+    <string name="settings_about">O aplikacji</string>
+
+    <!-- O aplikacji -->
+    <string name="settings_about_welcome">Ekran powitalny i wskazówki</string>
+    <string name="settings_about_welcome_summary">Znów pokazuje wskazówki na ekranie głównym, po jednej.</string>
+    <string name="settings_about_text">Launcher, na który nie ma co patrzeć. Bez ikon, bez kolorów, bez feedu: godzina, kilka wybranych przez ciebie aplikacji i uczciwy obraz tego, na co idzie twój dzień.</string>
+    <string name="settings_about_privacy">Prywatność</string>
+    <string name="settings_about_privacy_text">Focus nie ma uprawnienia do internetu, więc nic, co wie, nie może opuścić tego telefonu. Czas przed ekranem jest odczytywany z dziennika użycia Androida i przechowywany tylko w prywatnej pamięci aplikacji. Usługa minutników widzi nazwę aplikacji na pierwszym planie i nic więcej; nie może odczytać tego, co jest na ekranie.</string>
+    <string name="settings_about_tips">Wskazówki</string>
+    <string name="settings_about_tip_drawer">Przesuń w lewo na ekranie głównym, żeby zobaczyć wszystkie aplikacje.</string>
+    <string name="settings_about_tip_app_menu">Przytrzymaj dowolną aplikację, żeby otworzyć jej menu: minutnik, zmiana nazwy, ukrywanie, szybkie aplikacje.</string>
+    <string name="settings_about_tip_settings">Przytrzymaj puste miejsce na ekranie głównym, żeby otworzyć te ustawienia.</string>
+    <string name="settings_about_tip_corners">Przytrzymaj skrót w rogu, żeby go zmienić.</string>
+    <string name="settings_about_tip_clock">Kliknij zegar – alarmy, datę – kalendarz, pasek dnia – szczegóły.</string>
+
+    <!-- Konfiguracja -->
+    <string name="settings_setup_intro">Trzy przełączniki sprawiają, że Focus działa. Kliknij jeden, żeby otworzyć właściwy ekran systemowy, przełącz go i wróć.</string>
+    <string name="settings_setup_required">Wymagane</string>
+    <string name="settings_setup_launcher">1 · Domyślny launcher</string>
+    <string name="settings_setup_launcher_summary">Sprawia, że przycisk ekranu głównego prowadzi do Focus.</string>
+    <string name="settings_setup_done">Gotowe</string>
+    <string name="settings_setup_set">Ustaw</string>
+    <string name="settings_setup_usage">2 · Dostęp do danych o użyciu</string>
+    <string name="settings_setup_usage_summary">Pozwala Focus mierzyć czas przed ekranem: zależą od tego pasek dnia, minutniki aplikacji i podsumowanie tygodnia.</string>
+    <string name="settings_setup_allowed">Dozwolone</string>
+    <string name="settings_setup_allow">Zezwól</string>
+    <string name="settings_setup_timer_service">3 · Usługa minutników Focus</string>
+    <string name="settings_setup_timer_service_summary">Usługa ułatwień dostępu, która zauważa, jaka aplikacja jest na pierwszym planie, żeby zablokować ją, gdy tylko skończy się jej czas. Nie może odczytać ekranu. Znajdziesz ją jako „%1$s” wśród zainstalowanych lub pobranych aplikacji.</string>
+    <string name="settings_setup_turn_on">Włącz</string>
+    <string name="settings_setup_restricted">Przełącznik jest nieaktywny albo widzisz „ustawienie z ograniczonym dostępem”? Otwórz Informacje o aplikacji → ⋮ (w prawym górnym rogu) → Zezwól na ustawienia z ograniczonym dostępem i spróbuj ponownie.  Otwórz informacje o aplikacji  →</string>
+    <string name="settings_setup_optional">Opcjonalne</string>
+    <string name="settings_setup_notifications">Powiadomienia</string>
+    <string name="settings_setup_notifications_summary">Służą tylko do jednego: dają znać, że podsumowanie tygodnia jest gotowe.</string>
+    <string name="settings_setup_calendar">Sekcja kalendarza</string>
+    <string name="settings_setup_calendar_summary">Ten tydzień w skrócie i najbliższe wydarzenia, na ekranie głównym.</string>
+    <string name="settings_setup_calendar_added">Dodano kalendarz do ekranu głównego</string>
+
+    <!-- Ekran główny -->
+    <string name="settings_clock">Zegar</string>
+    <string name="settings_style">Styl</string>
+    <string name="settings_clock_split_summary">Zegar po lewej, jedna sekcja po prawej, pojedyncza linia między nimi.</string>
+    <string name="settings_clock_ring_summary">Zegar wewnątrz okręgu.</string>
+    <string name="settings_clock_plain_summary">Zegar jako zwykły tekst.</string>
+    <string name="settings_clock_style">Styl zegara</string>
+    <string name="settings_next_to_clock">Obok zegara</string>
+    <string name="settings_next_to_clock_summary">Co pokazuje prawa połowa. Nie powtarza się niżej. Trafisz tu też, przytrzymując ją na ekranie głównym.</string>
+    <string name="settings_ring_shows">Pierścień pokazuje</string>
+    <string name="settings_ring_battery_summary">Pełny okrąg to pełna bateria.</string>
+    <string name="settings_ring_day_summary">Okrąg wypełnia się w miarę upływu dnia.</string>
+    <string name="settings_show_battery">Pokazuj poziom baterii</string>
+    <string name="settings_clock_tap">Kliknięcie zegara</string>
+    <string name="settings_clock_tap_summary">Otwiera wybraną aplikację albo alarmy, kalendarz, czas przed ekranem. Trafisz tu też, przytrzymując zegar.</string>
+    <string name="settings_time_format">Format godziny</string>
+    <string name="settings_show_date">Pokazuj datę</string>
+    <string name="settings_show_seconds">Pokazuj sekundy</string>
+    <string name="settings_show_seconds_summary">Zegar odświeża się co sekundę, gdy widać ekran główny.</string>
+    <string name="settings_sections">Sekcje</string>
+    <string name="settings_calendar">Kalendarz</string>
+    <string name="settings_calendar_summary">Najbliższe wydarzenia z jednego kalendarza. Emoji w tytułach są pomijane.</string>
+    <string name="settings_calendar_to_show">Pokazywany kalendarz</string>
+    <string name="settings_calendar_to_show_summary">Naraz widać tylko jeden. Przeszukaj listę, żeby znaleźć ten, który chcesz.</string>
+    <string name="settings_calendar_all">Wszystkie</string>
+    <string name="settings_calendar_none_found">Nie znaleziono</string>
+    <string name="settings_calendar_work_blocked">Kalendarze z twojego profilu służbowego nie są tu wymienione: organizacja, która nim zarządza, nie pozwala innym aplikacjom ich odczytywać, a Focus to szanuje. Jeśli udostępnisz kalendarz służbowy osobistemu kontu Google, pojawi się tutaj jak każdy inny.</string>
+    <string name="settings_week_strip">Pasek tygodnia</string>
+    <string name="settings_week_strip_summary">Od poniedziałku do niedzieli z zaznaczonym dniem dzisiejszym, nad wydarzeniami.</string>
+    <string name="settings_music">Muzyka</string>
+    <string name="settings_music_summary">Poprzedni, odtwórz lub wstrzymaj, następny – słowami. Może podać tytuł utworu, jeśli przyznasz dostęp do powiadomień.</string>
+    <string name="settings_music_auto_hide">Ukryj, gdy nic nie gra</string>
+    <string name="settings_music_auto_hide_summary">Sekcja pojawia się z muzyką i znika minutę po jej zatrzymaniu. Wyłączone: jest zawsze widoczna.</string>
+    <string name="settings_music_app">Aplikacja muzyczna</string>
+    <string name="settings_music_app_summary">Otwiera się po kliknięciu sekcji, gdy nic nie gra. Trafisz tu też, przytrzymując sekcję.</string>
+    <string name="settings_music_app_ask">Zapyta najpierw</string>
+    <string name="settings_note">Notatka</string>
+    <string name="settings_note_summary">Kilka twoich linijek, zawsze na widoku. Kliknij je na ekranie głównym, żeby pisać.</string>
+    <string name="settings_notes_app">Aplikacja do notatek</string>
+    <string name="settings_notes_app_summary">Słowo obok tytułu notatki, które ją otwiera. Twoje linijki i tak zostają na ekranie głównym.</string>
+    <string name="settings_fast_apps">Szybkie aplikacje</string>
+    <plurals name="settings_fast_apps_summary">
+        <item quantity="one">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
+        <item quantity="few">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
+        <item quantity="many">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
+        <item quantity="other">Do %1$d aplikacji, jedno kliknięcie od ekranu głównego.</item>
+    </plurals>
+    <string name="settings_favorite_size">Rozmiar tekstu</string>
+    <string name="settings_alignment">Wyrównanie</string>
+    <string name="settings_corner_shortcuts">Skróty w rogach</string>
+    <string name="settings_show_shortcuts">Pokazuj skróty</string>
+    <string name="settings_bottom_left">Lewy dolny</string>
+    <string name="settings_bottom_right">Prawy dolny</string>
+    <string name="settings_bottom_left_shortcut">Skrót w lewym dolnym rogu</string>
+    <string name="settings_bottom_right_shortcut">Skrót w prawym dolnym rogu</string>
+    <string name="settings_shortcut_phone">Telefon</string>
+    <string name="settings_shortcut_camera">Aparat</string>
+
+    <!-- Szybkie aplikacje -->
+    <string name="settings_fast_apps_note">Aplikacje z twojego ekranu głównego, w tej kolejności. Możesz też dodać aplikację z listy aplikacji: przytrzymaj ją i wybierz „Dodaj do szybkich aplikacji”.</string>
+    <string name="settings_remove">Usuń</string>
+    <string name="settings_add_app">Dodaj aplikację</string>
+    <string name="settings_fast_apps_full">To maksimum. %1$d w zupełności wystarczy.</string>
+    <string name="settings_add_fast_app">Dodaj szybką aplikację</string>
+
+    <!-- Lista aplikacji -->
+    <string name="settings_search">Wyszukiwanie</string>
+    <string name="settings_auto_keyboard">Od razu otwieraj klawiaturę</string>
+    <string name="settings_auto_keyboard_summary">Zacznij pisać, gdy tylko przesuniesz do listy aplikacji.</string>
+    <string name="settings_auto_launch">Otwórz, gdy zostanie jedna</string>
+    <string name="settings_auto_launch_summary">Uruchamia aplikację, gdy tylko wyszukiwanie pasuje do jednej.</string>
+    <string name="settings_list">Lista</string>
+    <string name="settings_recent_installs">Ostatnio zainstalowane</string>
+    <string name="settings_recent_installs_summary">Aplikacje zainstalowane w ciągu ostatnich 24 godzin, na górze.</string>
+    <string name="settings_drawer_usage">Pokazuj postęp minutników</string>
+    <string name="settings_drawer_usage_summary">„12 min / 30 min” obok każdej aplikacji z dziennym limitem.</string>
+    <string name="settings_hidden_apps">Ukryte aplikacje</string>
+    <string name="settings_hidden_apps_empty">Nic nie jest ukryte. Żeby ukryć aplikację, przytrzymaj ją na liście aplikacji i wybierz „Ukryj aplikację”. Ukryte aplikacje pozostają zainstalowane i można je stąd otworzyć.</string>
+    <string name="settings_open">Otwórz</string>
+    <string name="settings_unhide">Pokaż aplikację</string>
+
+    <!-- Wygląd -->
+    <string name="settings_black_and_white">Czerń i biel</string>
+    <string name="settings_theme">Motyw</string>
+    <string name="settings_theme_summary">Czysta czerń oszczędza baterię na ekranach OLED.</string>
+    <string name="settings_theme_black">Czarny</string>
+    <string name="settings_theme_white">Biały</string>
+    <string name="settings_typeface">Krój pisma</string>
+    <string name="settings_text_size">Rozmiar tekstu</string>
+    <string name="settings_text_size_small">Mały</string>
+    <string name="settings_text_size_default">Domyślny</string>
+    <string name="settings_text_size_large">Duży</string>
+    <string name="settings_text_size_larger">Większy</string>
+    <string name="settings_screen">Ekran</string>
+    <string name="settings_opening_apps">Otwieranie aplikacji</string>
+    <string name="settings_opening_apps_summary">Szybkie: aplikacja zajmuje cały ekran od pierwszej klatki. Domyślne systemowe: animacja twojego telefonu.</string>
+    <string name="settings_hide_status_bar">Ukryj pasek stanu</string>
+    <string name="settings_hide_status_bar_summary">Bez ikon powiadomień na ekranie głównym. Przesuń w dół od górnej krawędzi, żeby zerknąć.</string>
+
+    <!-- Gesty -->
+    <string name="settings_gestures_note">Przesunięcie w lewo zawsze otwiera listę aplikacji, a przytrzymanie pustego miejsca – te ustawienia.</string>
+    <string name="settings_swipe_down_notifications">Przesuń w dół – powiadomienia</string>
+    <string name="settings_swipe_up_search">Przesuń w górę – wyszukiwanie</string>
+    <string name="settings_swipe_up_search_summary">Przechodzi do listy aplikacji z otwartą klawiaturą.</string>
+    <string name="settings_keyboard_with_drawer">Otwieraj klawiaturę z listą</string>
+    <string name="settings_keyboard_with_drawer_summary">Zacznij pisać, gdy tylko przesuniesz do aplikacji.</string>
+    <string name="settings_swipe_right">Przesuń w prawo</string>
+    <string name="settings_swipe_right_summary">Otwiera aplikację wybraną niżej albo wyszukiwanie w sieci, jak strona na lewo od zwykłego ekranu głównego.</string>
+    <string name="settings_double_tap_lock">Dwukrotne kliknięcie blokuje</string>
+    <string name="settings_double_tap_lock_summary">Wyłącza ekran. Korzysta z usługi minutników Focus.</string>
+    <string name="settings_double_tap_service_off">Usługa minutników Focus jest wyłączona, więc dwukrotne kliknięcie jeszcze nie zablokuje ekranu.  Otwórz konfigurację  →</string>
+    <string name="settings_swipe_right_opens">Przesunięcie w prawo otwiera</string>
+    <string name="settings_swipe_right_opens_summary">Dowolną aplikację albo wyszukiwanie w sieci.</string>
+    <string name="settings_web_search">Wyszukiwanie w sieci</string>
+
+    <!-- Minutniki aplikacji -->
+    <string name="settings_per_day">%1$s dziennie</string>
+    <string name="settings_app_timers_toggle_summary">Daj rozpraszającym aplikacjom dzienny przydział czasu. Gdy się wyczerpie, Focus blokuje aplikację do końca dnia.</string>
+    <string name="settings_timers_no_usage_access">Minutniki nic nie policzą, dopóki nie zezwolisz na dostęp do danych o użyciu.  Otwórz konfigurację  →</string>
+    <string name="settings_timers_service_off">Usługa minutników Focus jest wyłączona: aplikacje są blokowane tylko przy otwieraniu z Focus, a nie wtedy, gdy już w nich jesteś.  Otwórz konfigurację  →</string>
+    <string name="settings_automatic_limits">Limity automatyczne</string>
+    <string name="settings_social_media">Media społecznościowe</string>
+    <string name="settings_social_media_summary">Kanały, sieci społecznościowe i aplikacje randkowe. Nie poczta, przeglądarki ani komunikatory.</string>
+    <string name="settings_social_media_dialog">Instagram, X, Reddit, Snapchat, LinkedIn, aplikacje randkowe i podobne.</string>
+    <string name="settings_games">Gry</string>
+    <string name="settings_games_summary">Każda aplikacja, którą Sklep Play klasyfikuje jako grę.</string>
+    <string name="settings_games_dialog">Każda aplikacja, którą Android klasyfikuje jako grę.</string>
+    <string name="settings_video">Wideo i streaming</string>
+    <string name="settings_video_summary">YouTube, Netflix i inne aplikacje wideo.</string>
+    <string name="settings_video_dialog">YouTube, Netflix, Prime Video i wszystko inne, co Android klasyfikuje jako aplikację wideo.</string>
+    <string name="settings_limited_apps">Aplikacje z limitem</string>
+    <string name="settings_limited_apps_summary">Zobacz, których aplikacji to dotyczy, zmień jedną albo dodaj własną.</string>
+    <string name="settings_automatic_limits_note">Limit automatyczny dotyczy tylko aplikacji bez własnego limitu. Przeglądarki, poczta, komunikatory i inne narzędzia nigdy nie są ograniczane, chyba że dodasz im minutnik.</string>
+    <string name="settings_when_time_is_up">Gdy czas minie</string>
+    <string name="settings_allow_continue">Zezwalaj na „kontynuuj przez kilka minut”</string>
+    <string name="settings_continue_options">Opcje kontynuacji</string>
+    <string name="settings_continue_options_value">%1$s min</string>
+    <string name="settings_continue_option">%1$d min</string>
+    <string name="settings_continue_options_subtitle">Na ekranie blokady widać najwyżej cztery.</string>
+    <string name="settings_allow_bypass">Zezwalaj na „pomiń limit na dziś”</string>
+    <string name="settings_strict_mode">Tryb ścisły: gdy obie opcje są wyłączone, zablokowana aplikacja zostaje zablokowana do północy.</string>
+    <string name="settings_ask_after_bypass">Pytaj przy każdym otwarciu po pominięciu</string>
+    <string name="settings_ask_after_bypass_summary">Pominięcie limitu nie uwalnia aplikacji na cały dzień: Focus i tak za każdym razem pyta „otworzyć mimo to?”.</string>
+    <string name="settings_pause">Pauza przed kontynuacją</string>
+    <string name="settings_pause_summary">Krótkie oczekiwanie, zanim odblokują się opcje kontynuacji. Czas, żeby zmienić zdanie.</string>
+    <string name="settings_pause_value">%1$d s</string>
+    <plurals name="settings_pause_seconds">
+        <item quantity="one">%1$d sekunda</item>
+        <item quantity="few">%1$d sekundy</item>
+        <item quantity="many">%1$d sekund</item>
+        <item quantity="other">%1$d sekundy</item>
+    </plurals>
+    <string name="settings_heads_up">Ostrzeżenie przed limitem</string>
+    <string name="settings_heads_up_before">%1$s wcześniej</string>
+    <string name="settings_preview_lock">Podgląd ekranu blokady</string>
+
+    <!-- Aplikacje z limitem -->
+    <string name="settings_add_timer">Dodaj minutnik</string>
+    <string name="settings_add_timer_summary">Każda aplikacja może go mieć, nie tylko media społecznościowe i gry.</string>
+    <string name="settings_with_daily_limit">Z dziennym limitem</string>
+    <string name="settings_limit_own">Własny limit</string>
+    <string name="settings_limit_social">Media społecznościowe, automatycznie</string>
+    <string name="settings_limit_game">Gra, automatycznie</string>
+    <string name="settings_limit_video">Wideo, automatycznie</string>
+    <string name="settings_no_limited_apps">Żadna aplikacja nie ma teraz limitu. Dodaj minutnik powyżej albo ustaw limity automatyczne dla mediów społecznościowych i gier na poprzedniej stronie.</string>
+    <string name="settings_excluded">Wyłączone z limitów automatycznych</string>
+    <string name="settings_no_limit">Bez limitu</string>
+    <string name="settings_unsure">Niepewne</string>
+    <string name="settings_unsure_note">Android zalicza je do kategorii „social”, którą nadaje też poczcie, przeglądarkom i komunikatorom. Focus ich nie rusza; kliknij jedną, żeby dać jej minutnik.</string>
+    <string name="settings_add">Dodaj</string>
+
+    <!-- Podsumowanie tygodnia -->
+    <string name="settings_weekly_review_toggle_summary">Na koniec każdego tygodnia Focus wszystko podlicza: łączny czas, które aplikacje, które godziny dnia, ile razy przekroczono limit. Potem pyta, co chcesz zmienić.</string>
+    <string name="settings_schedule">Harmonogram</string>
+    <string name="settings_week_starts_on">Pierwszy dzień tygodnia</string>
+    <string name="settings_week_starts_monday">Poniedziałek</string>
+    <string name="settings_week_starts_sunday">Niedziela</string>
+    <string name="settings_review_ready">Podsumowanie gotowe</string>
+    <string name="settings_review_ready_summary">Linijka na ekranie głównym i powiadomienie, jeśli są dozwolone.</string>
+    <string name="settings_last_day_sunday">Niedziela</string>
+    <string name="settings_last_day_saturday">Sobota</string>
+    <string name="settings_review_ready_value">%1$s, %2$s</string>
+    <string name="settings_review_notifications_off">Powiadomienia są wyłączone, więc przypomnienie pojawi się tylko na ekranie głównym.  Otwórz konfigurację  →</string>
+    <string name="settings_open_this_week">Otwórz ten tydzień do dziś</string>
+    <string name="settings_review_ready_at">Godzina podsumowania</string>
+    <!-- Mianownik celowo: „Niedziela, ostatni dzień twojego tygodnia.” -->
+    <string name="settings_review_ready_at_subtitle">%1$s, ostatni dzień twojego tygodnia.</string>
+
+    <!-- Ekran powitalny -->
+    <string name="settings_welcome_tagline">Odzyskaj swój czas.\nSpędź go, dotykając trawy.</string>
+    <string name="settings_welcome_intro">Bez ikon. Bez kolorów. Bez feedu.\nWskazówki na ekranie głównym pokażą ci, co i jak.</string>
+    <string name="settings_welcome_swipe_right">Przesunięcie w prawo otwiera aplikację. Którą?</string>
+    <string name="settings_welcome_start">Zacznij</string>
+    <string name="settings_welcome_setup_first">Najpierw skonfiguruj Focus</string>
+
+    <!-- Wybór kalendarza -->
+    <string name="settings_calendar_picker_subtitle">Jeden kalendarz naraz. Szukaj po nazwie kalendarza lub konta.</string>
+    <string name="settings_calendar_search">Szukaj kalendarzy</string>
+    <string name="settings_calendar_picker_work_note">Szukasz kalendarza służbowego? Ten telefon ma profil służbowy, a organizacja, która nim zarządza, nie pozwala innym aplikacjom odczytywać jego kalendarzy, więc nie mogą się tu pojawić. Jeśli udostępnisz kalendarz służbowy jednemu ze swoich osobistych kont Google, pojawi się na tej liście.</string>
+    <plurals name="settings_calendar_upcoming">
+        <item quantity="one">%1$d wydarzenie</item>
+        <item quantity="few">%1$d wydarzenia</item>
+        <item quantity="many">%1$d wydarzeń</item>
+        <item quantity="other">%1$d wydarzenia</item>
+    </plurals>
+    <string name="settings_calendar_empty">pusty</string>
+    <string name="settings_calendar_no_match">Żaden kalendarz nie pasuje do „%1$s”.</string>
+    <string name="settings_calendar_all_together">Wszystkie kalendarze razem</string>
+</resources>

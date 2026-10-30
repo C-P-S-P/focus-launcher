@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.ui.components.SettingRow
 import com.focus.launcher.ui.components.T
 import com.focus.launcher.ui.theme.LocalFocusColors
@@ -27,6 +29,7 @@ import com.focus.launcher.util.Perms
 internal fun SetupPage(status: SetupStatus, onBack: () -> Unit, refresh: () -> Unit) {
     val context = LocalContext.current
     val c = LocalFocusColors.current
+    val calendarAdded = stringResource(R.string.settings_setup_calendar_added)
 
     val roleRequest = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { refresh() }
     val notificationRequest = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -38,21 +41,21 @@ internal fun SetupPage(status: SetupStatus, onBack: () -> Unit, refresh: () -> U
         // Allowing access is pointless while the section itself is hidden, so switch it on too.
         if (granted) {
             Graph.settings.update { it.copy(showCalendar = true) }
-            Toast.makeText(context, "Calendar added to your home screen", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, calendarAdded, Toast.LENGTH_SHORT).show()
         }
     }
 
-    Page("Setup", onBack) {
+    Page(stringResource(R.string.settings_setup), onBack) {
         T(
-            "Three switches make Focus work. Tap one to open the right system screen, flip it, and come back.",
+            stringResource(R.string.settings_setup_intro),
             Modifier.padding(horizontal = 24.dp, vertical = 10.dp), size = 15.sp, color = c.dim, lineHeight = 22.sp,
         )
 
-        Section("Required")
+        Section(stringResource(R.string.settings_setup_required))
         SettingRow(
-            "1 · Default launcher",
-            subtitle = "Makes Focus the screen you land on when you press Home.",
-            value = if (status.defaultLauncher) "Done" else "Set",
+            stringResource(R.string.settings_setup_launcher),
+            subtitle = stringResource(R.string.settings_setup_launcher_summary),
+            value = stringResource(if (status.defaultLauncher) R.string.settings_setup_done else R.string.settings_setup_set),
             onClick = {
                 val roles = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) context.getSystemService(RoleManager::class.java) else null
                 if (roles != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
@@ -69,30 +72,26 @@ internal fun SetupPage(status: SetupStatus, onBack: () -> Unit, refresh: () -> U
             },
         )
         SettingRow(
-            "2 · Usage access",
-            subtitle = "Lets Focus measure screen time: the day bar, app timers and the weekly review all depend on it.",
-            value = if (status.usageAccess) "Allowed" else "Allow",
+            stringResource(R.string.settings_setup_usage),
+            subtitle = stringResource(R.string.settings_setup_usage_summary),
+            value = stringResource(if (status.usageAccess) R.string.settings_setup_allowed else R.string.settings_setup_allow),
             onClick = { Perms.openUsageAccess(context) },
         )
         SettingRow(
-            "3 · Focus timer service",
-            subtitle = "An accessibility service that notices which app is in front, so an app can be locked the moment " +
-                "its time runs out. It cannot read your screen. Find “Focus app timers” under installed or downloaded apps.",
-            value = if (status.timerService) "On" else "Turn on",
+            stringResource(R.string.settings_setup_timer_service),
+            subtitle = stringResource(R.string.settings_setup_timer_service_summary, stringResource(R.string.accessibility_label)),
+            value = stringResource(if (status.timerService) R.string.settings_on else R.string.settings_setup_turn_on),
             onClick = { Perms.openAccessibility(context) },
         )
         if (!status.timerService) {
-            Note(
-                "Switch greyed out, or “restricted setting”? Open App info → ⋮ (top right) → Allow restricted " +
-                    "settings, then try again.  Open App info  →",
-            ) { Perms.openAppDetails(context) }
+            Note(stringResource(R.string.settings_setup_restricted)) { Perms.openAppDetails(context) }
         }
 
-        Section("Optional")
+        Section(stringResource(R.string.settings_setup_optional))
         SettingRow(
-            "Notifications",
-            subtitle = "Only used for one thing: telling you the weekly review is ready.",
-            value = if (status.notifications) "Allowed" else "Allow",
+            stringResource(R.string.settings_setup_notifications),
+            subtitle = stringResource(R.string.settings_setup_notifications_summary),
+            value = stringResource(if (status.notifications) R.string.settings_setup_allowed else R.string.settings_setup_allow),
             onClick = {
                 if (!status.notifications && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     notificationRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -103,19 +102,19 @@ internal fun SetupPage(status: SetupStatus, onBack: () -> Unit, refresh: () -> U
         )
         val calendarShown = Graph.settings.flow.collectAsStateWithLifecycle().value.showCalendar
         SettingRow(
-            "Calendar section",
-            subtitle = "This week at a glance and your next events, on the home screen.",
+            stringResource(R.string.settings_setup_calendar),
+            subtitle = stringResource(R.string.settings_setup_calendar_summary),
             value = when {
-                !status.calendar -> "Allow"
-                calendarShown -> "On"
-                else -> "Turn on"
+                !status.calendar -> stringResource(R.string.settings_setup_allow)
+                calendarShown -> stringResource(R.string.settings_on)
+                else -> stringResource(R.string.settings_setup_turn_on)
             },
             onClick = {
                 when {
                     !status.calendar -> calendarRequest.launch(Manifest.permission.READ_CALENDAR)
                     !calendarShown -> {
                         Graph.settings.update { it.copy(showCalendar = true) }
-                        Toast.makeText(context, "Calendar added to your home screen", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, calendarAdded, Toast.LENGTH_SHORT).show()
                     }
                     else -> Perms.openAppDetails(context)
                 }

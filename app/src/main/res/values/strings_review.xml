@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Screen time and the weekly review (review_*), plus the few words that live inside the shared
+    dialogs and controls used by every screen (common_*).
+    Text wrapped in double quotes keeps the double spaces around "·"; without the quotes Android
+    would squeeze them into one.
+-->
+<resources>
+    <!-- Shared dialogs: button words. -->
+    <string name="common_cancel">Cancel</string>
+    <string name="common_done">Done</string>
+    <string name="common_save">Save</string>
+    <!-- Placeholder of the search field at the top of every app picker. -->
+    <string name="common_search">Search</string>
+    <!-- Small tag after a built-in choice (None, Phone, Camera, Web search) above the apps in an app picker. -->
+    <string name="common_default_choice">default</string>
+    <!-- Small tag after an app that belongs to the work profile, in an app picker. -->
+    <string name="common_work_app">work</string>
+    <!-- Read out by screen readers for the briefcase badge that marks a work-profile app. -->
+    <string name="common_work_profile_badge">Work profile</string>
+
+    <!-- Screen time: header, tabs and the usage-access request. -->
+    <string name="review_title">Screen time</string>
+    <string name="review_tab_today">Today</string>
+    <string name="review_tab_week">Week</string>
+    <string name="review_usage_access_needed">Focus needs usage access to show where your time goes.</string>
+    <string name="review_usage_access_private">The numbers are computed on this phone and never leave it.</string>
+    <!-- Button, one line. -->
+    <string name="review_allow_usage_access">Allow usage access</string>
+
+    <!--
+        Today tab, the line under today's total (e.g. "2h 41m"). %1$s is the share of the day in
+        percent, a whole number or "<1"; %2$d is how many times the phone was unlocked today.
+    -->
+    <plurals name="review_today_summary">
+        <item quantity="one">"of 24h  ·  %1$s%% of the day  ·  %2$d unlock"</item>
+        <item quantity="other">"of 24h  ·  %1$s%% of the day  ·  %2$d unlocks"</item>
+    </plurals>
+    <string name="review_apps_today">Apps today</string>
+    <string name="review_today_empty">Nothing yet. Enjoy it.</string>
+    <!-- Value of an app row: %1$s is the time used today, %2$s the app's daily limit, e.g. "12m / 30m". -->
+    <string name="review_used_of_limit">%1$s / %2$s</string>
+
+    <!-- Week tab: under the date range of the week switcher. -->
+    <string name="review_this_week">This week</string>
+    <string name="review_last_week">Last week</string>
+    <string name="review_week_loading">Adding up your week…</string>
+    <string name="review_week_no_data">No screen time recorded for this week.</string>
+    <string name="review_week_no_data_detail">Android only keeps detailed usage for about a week. Focus saves each day from now on, so future weeks stay available.</string>
+
+    <!-- Under the week's total. %1$s is the average per day, e.g. "2h 5m". -->
+    <string name="review_daily_average">%1$s a day</string>
+    <!-- %1$d is the daily average as a percentage of 16 waking hours. -->
+    <string name="review_waking_share">That is %1$d%% of your waking hours.</string>
+
+    <string name="review_day_by_day">Day by day</string>
+    <!-- Over each bar of the daily chart; seven of them share one line, so keep them tiny. %1$d is minutes (under an hour). -->
+    <string name="review_bar_minutes">%1$dm</string>
+    <!-- %1$s is hours with one decimal, already written with the language's decimal separator, e.g. "2.5". -->
+    <string name="review_bar_hours">%1$sh</string>
+    <!-- %1$s is a day of the week, %2$s the time spent on it. -->
+    <string name="review_busiest_day">Most on %1$s (%2$s).</string>
+    <!-- %1$s and %3$s are days of the week, %2$s and %4$s the time spent on each. -->
+    <string name="review_busiest_and_lightest_day">Most on %1$s (%2$s), least on %3$s (%4$s).</string>
+
+    <string name="review_time_of_day">When you were on your phone</string>
+    <!-- Parts of the day, one row each. -->
+    <string name="review_period_morning">Morning</string>
+    <string name="review_period_afternoon">Afternoon</string>
+    <string name="review_period_evening">Evening</string>
+    <string name="review_period_night">Night</string>
+    <!-- Value of a row: %1$s is the time, %2$d its share of the week's total in percent. -->
+    <string name="review_time_and_share">"%1$s  ·  %2$d%%"</string>
+    <!-- %1$s and %2$s are the start and the end of the hour, e.g. "14:00" and "15:00". -->
+    <string name="review_busiest_hour">Busiest hour: %1$s – %2$s.</string>
+
+    <string name="review_where_it_went">Where it went</string>
+    <!-- Small notes under an app: the part of the day it was used most. -->
+    <string name="review_mostly_morning">mostly morning</string>
+    <string name="review_mostly_afternoon">mostly afternoon</string>
+    <string name="review_mostly_evening">mostly evening</string>
+    <string name="review_mostly_night">mostly night</string>
+    <!-- %1$d is the days the app was used, %2$d the days of the week so far (the plural follows %2$d). -->
+    <plurals name="review_days_used">
+        <item quantity="one">%1$d of %2$d day</item>
+        <item quantity="other">%1$d of %2$d days</item>
+    </plurals>
+    <!-- %1$d is how many times the user went past the app's limit, e.g. "past its limit 3×". -->
+    <string name="review_past_limit">past its limit %1$d×</string>
+
+    <string name="review_limits_title">Limits and pickups</string>
+    <string name="review_no_limit_hit">No app hit its daily limit this week.</string>
+    <!--
+        %1$s, %2$s and %3$s are counts made with review_times or review_times_two ("once", "twice",
+        "3 times"): how often time ran out, how often the user continued, how often the limit was
+        ignored for the rest of the day.
+    -->
+    <string name="review_limits_summary">Time ran out %1$s. You carried on %2$s and ignored the limit for the day %3$s.</string>
+    <!-- The same with the extra time taken by carrying on: %3$s is that time (e.g. "45m"), %4$s the last count. -->
+    <string name="review_limits_summary_extra">Time ran out %1$s. You carried on %2$s (+%3$s) and ignored the limit for the day %4$s.</string>
+    <!-- A count put into review_limits_summary. %1$d is the number of times. -->
+    <plurals name="review_times">
+        <item quantity="one">once</item>
+        <item quantity="other">%1$d times</item>
+    </plurals>
+    <!-- Exactly two times. If your language has no word of its own for it, write it as review_times would. -->
+    <string name="review_times_two">twice</string>
+    <!-- %1$d is how many times the phone was unlocked this week, %2$d the average per day. -->
+    <plurals name="review_unlocks">
+        <item quantity="one">You unlocked your phone %1$d time, about %2$d a day.</item>
+        <item quantity="other">You unlocked your phone %1$d times, about %2$d a day.</item>
+    </plurals>
+
+    <!-- Reflection at the end of the week: one thing the user wants to change next week. -->
+    <string name="review_reflect">Reflect</string>
+    <string name="review_reflect_question">Was this how you wanted to spend your week?</string>
+    <string name="review_previous_intention">The week before, you wrote:</string>
+    <!-- %1$s is a sentence the user wrote, shown in quotation marks. -->
+    <string name="review_quoted">“%1$s”</string>
+    <!-- Button, one line. -->
+    <string name="review_write_intention">Write one thing to change next week</string>
+    <string name="review_next_week">Next week:</string>
+    <string name="review_intention_title">One thing to change</string>
+    <string name="review_intention_subtitle">Keep it small and concrete. You will see it again in next week\'s review.</string>
+    <!-- Example shown in the empty text field. -->
+    <string name="review_intention_placeholder">No phone in bed</string>
+</resources>

@@ -3,9 +3,11 @@ package com.focus.launcher.ui.home
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.key
+import androidx.annotation.StringRes
 import android.os.SystemClock
 import androidx.compose.foundation.layout.offset
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.ui.components.AppPickerDialog
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +41,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Resources
 import android.os.BatteryManager
 import android.text.format.DateFormat
 import androidx.compose.animation.core.Animatable
@@ -73,8 +76,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -98,6 +102,7 @@ import com.focus.launcher.ui.components.T
 import com.focus.launcher.ui.components.VSpace
 import com.focus.launcher.ui.components.press
 import com.focus.launcher.ui.theme.LocalFocusColors
+import com.focus.launcher.util.appLocale
 import com.focus.launcher.util.formatDuration
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -117,23 +122,32 @@ import kotlin.math.sin
  */
 fun Modifier.tipTarget(on: Boolean, color: Color): Modifier = if (on) border(1.dp, color, RoundedCornerShape(12.dp)) else this
 
-/** The user's locale, read so that a language change recomposes whatever formats text with it. */
+/**
+ * The app's language (see [appLocale]), read so that a language change recomposes whatever
+ * formats text with it.
+ */
 @Composable
-fun currentLocale(): Locale = LocalConfiguration.current.locales[0]
+fun currentLocale(): Locale = LocalResources.current.appLocale()
 
-/** The current time, refreshed on each minute boundary and only while the screen is visible. */
+/**
+ * The current time, refreshed on each minute boundary (or each second, for a clock that shows
+ * seconds) and only while the screen is visible.
+ */
 @Composable
-fun rememberNow(): State<LocalDateTime> {
+fun rememberNow(everySecond: Boolean = false): State<LocalDateTime> {
     val owner = LocalLifecycleOwner.current
-    return produceState(LocalDateTime.now(), owner) {
+    val period = if (everySecond) 1_000L else 60_000L
+    return produceState(LocalDateTime.now(), owner, period) {
         owner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             while (true) {
                 value = LocalDateTime.now()
-                delay(60_000 - System.currentTimeMillis() % 60_000 + 40)
+                delay(period - System.currentTimeMillis() % period + 40)
             }
         }
     }
 }
+
+private val SECONDS = DateTimeFormatter.ofPattern("ss")
 
 fun HomeAlign.horizontal(): Alignment.Horizontal = when (this) {
     HomeAlign.LEFT -> Alignment.Start
@@ -147,8 +161,13 @@ fun HomeAlign.text(): TextAlign = when (this) {
     HomeAlign.RIGHT -> TextAlign.End
 }
 
-private val DATE_LONG = DateTimeFormatter.ofPattern("EEEE, d MMMM")
-private val DATE_SHORT = DateTimeFormatter.ofPattern("EEE, d MMM")
+/** A date pattern from the resources (home_format_*), in the app's language. */
+@Composable
+private fun rememberDateFormat(@StringRes pattern: Int): DateTimeFormatter {
+    val text = stringResource(pattern)
+    val locale = currentLocale()
+    return remember(text, locale) { DateTimeFormatter.ofPattern(text, locale) }
+}
 
 data class BatteryState(val percent: Int, val charging: Boolean)
 
@@ -211,15 +230,18 @@ fun HomeClock(
         TimeFormat.H24 -> true
         TimeFormat.H12 -> false
     }
-    val time = now.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
-    val amPm = if (use24h) null else now.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
+    // With seconds on, the clock keeps its own once-a-second time, so only the clock redraws each second.
+    val shown = if (settings.showSeconds) rememberNow(everySecond = true).value else now
+    val time = shown.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
+    val seconds = if (settings.showSeconds) shown.format(SECONDS) else null
+    val amPm = if (use24h) null else shown.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
 
     val showBattery = settings.ringMode == RingMode.BATTERY
     val battery by rememberBattery()
     // The lowest line sits where the circle is already narrowing, so a small ring gets short text.
     val compact = settings.clockStyle == ClockStyle.RING && ringSize < 172.dp
     val separator = if (compact) " " else "  ·  "
-    val batteryText = batteryLine(battery, separator)
+    val batteryText = batteryLine(LocalResources.current, battery, separator)
     val tap = Modifier.combinedClickable(onLongClick = onLongPress, onClick = onTap)
 
     if (settings.clockStyle == ClockStyle.RING) {
@@ -248,6 +270,10 @@ fun HomeClock(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(verticalAlignment = Alignment.Bottom) {
                     T(time, size = (ringSize.value * (if (compact) 0.215f else 0.235f)).sp, weight = FontWeight.Light, maxLines = 1)
+                    if (seconds != null) {
+                        HSpace(3.dp)
+                        T(seconds, Modifier.padding(bottom = (ringSize.value * 0.035f).dp), size = (ringSize.value * 0.09f).sp, color = c.dim, maxLines = 1)
+                    }
                     if (amPm != null) {
                         HSpace(4.dp)
                         T(amPm, Modifier.padding(bottom = (ringSize.value * 0.04f).dp), size = 12.sp, color = c.dim, maxLines = 1)
@@ -255,7 +281,7 @@ fun HomeClock(
                 }
                 if (settings.showDate) {
                     VSpace(if (compact) 0.dp else 2.dp)
-                    T(now.format(DATE_SHORT), size = if (compact) 13.sp else 14.sp, color = c.dim, maxLines = 1)
+                    T(now.format(rememberDateFormat(R.string.home_format_date_short)), size = if (compact) 13.sp else 14.sp, color = c.dim, maxLines = 1)
                 }
                 if (showBattery) {
                     VSpace(if (compact) 2.dp else 5.dp)
@@ -268,13 +294,17 @@ fun HomeClock(
         Column(modifier.then(tap), horizontalAlignment = settings.homeAlign.horizontal()) {
             Row(verticalAlignment = Alignment.Bottom) {
                 T(time, size = 68.sp, weight = FontWeight.Light, maxLines = 1)
+                if (seconds != null) {
+                    HSpace(6.dp)
+                    T(seconds, Modifier.padding(bottom = 12.dp), size = 26.sp, color = c.dim, maxLines = 1)
+                }
                 if (amPm != null) {
                     HSpace(6.dp)
                     T(amPm, Modifier.padding(bottom = 14.dp), size = 15.sp, color = c.dim, maxLines = 1)
                 }
             }
             val line = listOfNotNull(
-                now.format(DATE_LONG).takeIf { settings.showDate },
+                now.format(rememberDateFormat(R.string.home_format_date_long)).takeIf { settings.showDate },
                 batteryText.takeIf { showBattery },
             ).joinToString("   ·   ")
             if (line.isNotEmpty()) T(line, Modifier.padding(vertical = 4.dp), size = 17.sp, color = c.dim, maxLines = 1)
@@ -310,8 +340,11 @@ fun SplitClockRow(
         TimeFormat.H24 -> true
         TimeFormat.H12 -> false
     }
-    val time = now.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
-    val amPm = if (use24h) null else now.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
+    // With seconds on, the clock keeps its own once-a-second time, so only the clock redraws each second.
+    val shown = if (settings.showSeconds) rememberNow(everySecond = true).value else now
+    val time = shown.format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm"))
+    val seconds = if (settings.showSeconds) shown.format(SECONDS) else null
+    val amPm = if (use24h) null else shown.format(DateTimeFormatter.ofPattern("a", locale)).uppercase()
     val showBattery = settings.ringMode == RingMode.BATTERY
     val battery by rememberBattery()
 
@@ -335,6 +368,10 @@ fun SplitClockRow(
         ) {
             Row(verticalAlignment = Alignment.Bottom) {
                 T(time, size = timeSize, weight = FontWeight.Light, maxLines = 1)
+                if (seconds != null) {
+                    HSpace(4.dp)
+                    T(seconds, Modifier.padding(bottom = (timeSize.value * 0.15f).dp), size = (timeSize.value * 0.4f).sp, color = c.dim, maxLines = 1)
+                }
                 if (amPm != null) {
                     HSpace(5.dp)
                     T(amPm, Modifier.padding(bottom = (timeSize.value * 0.17f).dp), size = 12.sp, color = c.dim, maxLines = 1)
@@ -342,12 +379,12 @@ fun SplitClockRow(
             }
             if (settings.showDate) {
                 VSpace(2.dp)
-                T(now.format(DATE_SHORT), size = 14.sp, color = c.dim, maxLines = 1)
+                T(now.format(rememberDateFormat(R.string.home_format_date_short)), size = 14.sp, color = c.dim, maxLines = 1)
             }
             if (showBattery) {
                 VSpace(4.dp)
                 val urgent = battery.percent <= 15 && !battery.charging
-                T(batteryLine(battery, "  ·  "), size = 12.sp, color = if (urgent) c.fg else c.faint, maxLines = 1)
+                T(batteryLine(LocalResources.current, battery, "  ·  "), size = 12.sp, color = if (urgent) c.fg else c.faint, maxLines = 1)
             }
         }
         Box(Modifier.weight(1f)) { side() }
@@ -365,14 +402,14 @@ fun SplitScreenTime(today: DayUsage?, hasAccess: Boolean, onClick: () -> Unit, o
             .press(onLongClick = onLongPress, onClick = onClick)
             .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
     ) {
-        T("Screen Time", size = 13.sp, color = c.dim, maxLines = 1)
+        T(stringResource(R.string.home_screen_time_title), size = 13.sp, color = c.dim, maxLines = 1)
         VSpace(2.dp)
         if (hasAccess) {
             val total = today?.total ?: 0L
-            T(formatDuration(total), size = 28.sp, weight = FontWeight.Light, maxLines = 1)
-            T("${total * 100 / (24 * DayUsage.HOUR_MS)}% of today", size = 13.sp, color = c.dim, maxLines = 1)
+            T(formatDuration(LocalResources.current, total), size = 28.sp, weight = FontWeight.Light, maxLines = 1)
+            T(stringResource(R.string.home_share_of_today, total * 100 / (24 * DayUsage.HOUR_MS)), size = 13.sp, color = c.dim, maxLines = 1)
         } else {
-            T("Allow usage access  →", size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
+            T(stringResource(R.string.home_allow_usage_access), size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
         }
     }
 }
@@ -390,6 +427,7 @@ fun SplitCalendar(
     maxEvents: Int = 2,
 ) {
     val c = LocalFocusColors.current
+    val res = LocalResources.current
     Column(
         Modifier
             .fillMaxWidth()
@@ -397,21 +435,25 @@ fun SplitCalendar(
             .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
     ) {
         when {
-            !hasAccess -> T("Show upcoming events  →", size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
-            events.isEmpty() -> T("Nothing in the next 7 days", size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
+            !hasAccess -> T(stringResource(R.string.home_calendar_show_events), size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
+            events.isEmpty() -> T(stringResource(R.string.home_calendar_empty), size = 14.sp, color = c.dim, maxLines = 2, lineHeight = 20.sp)
             else -> events.take(maxEvents).forEachIndexed { i, event ->
                 if (i > 0) VSpace(8.dp)
-                T(eventWhen(event, today, use24h), size = 12.sp, color = c.dim, maxLines = 1)
+                T(eventWhen(res, event, today, use24h), size = 12.sp, color = c.dim, maxLines = 1)
                 T(event.title, size = 15.sp, maxLines = 1)
             }
         }
     }
 }
 
-private fun batteryLine(battery: BatteryState, separator: String): String = when {
-    battery.charging -> "${battery.percent}%${separator}charging"
-    battery.percent <= 15 -> "${battery.percent}%${separator}low"
-    else -> "${battery.percent}%"
+/** "85%", or with what it means after [separator]: "85%  ·  charging", "12%  ·  low". */
+private fun batteryLine(res: Resources, battery: BatteryState, separator: String): String {
+    val level = res.getString(R.string.home_battery_level, battery.percent)
+    return when {
+        battery.charging -> level + separator + res.getString(R.string.home_battery_charging)
+        battery.percent <= 15 -> level + separator + res.getString(R.string.home_battery_low)
+        else -> level
+    }
 }
 
 /**
@@ -453,15 +495,15 @@ fun HourScale(modifier: Modifier = Modifier) {
 fun ScreenTimeLine(today: DayUsage?, hasAccess: Boolean, align: Alignment.Horizontal, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val c = LocalFocusColors.current
     Column(modifier.press(onClick = onClick).padding(horizontal = 12.dp, vertical = 6.dp), horizontalAlignment = align) {
-        T("Screen Time", size = 15.sp, color = c.dim, maxLines = 1)
+        T(stringResource(R.string.home_screen_time_title), size = 15.sp, color = c.dim, maxLines = 1)
         VSpace(3.dp)
         if (hasAccess) {
             val total = today?.total ?: 0L
-            T(formatDuration(total), size = 24.sp, maxLines = 1)
+            T(formatDuration(LocalResources.current, total), size = 24.sp, maxLines = 1)
             // Of all 24 hours, sleep included: the same yardstick every day, at any time of day.
-            T("${total * 100 / (24 * DayUsage.HOUR_MS)}% of today", size = 13.sp, color = c.dim, maxLines = 1)
+            T(stringResource(R.string.home_share_of_today, total * 100 / (24 * DayUsage.HOUR_MS)), size = 13.sp, color = c.dim, maxLines = 1)
         } else {
-            T("Allow usage access  →", size = 14.sp, color = c.dim, maxLines = 1)
+            T(stringResource(R.string.home_allow_usage_access), size = 14.sp, color = c.dim, maxLines = 1)
         }
     }
 }
@@ -682,7 +724,7 @@ internal fun MusicSection(state: MusicState, onOpenDefault: () -> Unit, onChoose
     val open = { now?.let { openPlayer(context, it.controller) } ?: onOpenDefault() }
     Column(modifier.fillMaxWidth().press(onLongClick = onChoose, onClick = open).padding(horizontal = 12.dp, vertical = 6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Label("Music", Modifier.weight(1f), color = c.fg)
+            Label(stringResource(R.string.home_music_title), Modifier.weight(1f), color = c.fg)
             // Each button is a 48dp square with its sign in the middle: Android widens a smaller
             // touch target to 48dp without showing it, so the glow sat off to one side of where
             // the finger was. The row is pulled right by the last square's margin, so the "next"
@@ -697,11 +739,11 @@ internal fun MusicSection(state: MusicState, onOpenDefault: () -> Unit, onChoose
         }
         when {
             !hasAccess -> T(
-                "Show the song's name  →",
+                stringResource(R.string.home_music_show_song),
                 Modifier.press { Perms.start(context, Intent(AndroidSettings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }.padding(vertical = 3.dp),
                 size = 14.sp, color = c.dim, maxLines = 1,
             )
-            now?.title == null -> T("Nothing playing  ·  tap to open your music app", Modifier.padding(vertical = 3.dp), size = 14.sp, color = c.dim, maxLines = 1)
+            now?.title == null -> T(stringResource(R.string.home_music_nothing_playing), Modifier.padding(vertical = 3.dp), size = 14.sp, color = c.dim, maxLines = 1)
             else -> Row(Modifier.padding(vertical = 3.dp), verticalAlignment = Alignment.Bottom) {
                 val line = listOfNotNull(now.title, now.artist).joinToString("  ·  ")
                 // A title too long for the row ends in "…", a little short of the time. (A sliding
@@ -726,12 +768,12 @@ fun NoteSection(note: String, appLabel: String?, maxLines: Int, onEdit: () -> Un
     val c = LocalFocusColors.current
     Column(modifier.fillMaxWidth().press(onLongClick = onLongClick, onClick = onEdit).padding(horizontal = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Label("Note", Modifier.weight(1f).padding(vertical = 10.dp), color = c.fg)
+            Label(stringResource(R.string.home_note_title), Modifier.weight(1f).padding(vertical = 10.dp), color = c.fg)
             if (appLabel != null) {
                 T("$appLabel  →", Modifier.press(onLongClick = onLongClick, onClick = onOpenApp).padding(start = 14.dp, top = 10.dp, bottom = 10.dp), size = 13.sp, color = c.dim, maxLines = 1)
             }
         }
-        if (note.isBlank()) T("Tap to write a note", size = 14.sp, color = c.dim, maxLines = 1)
+        if (note.isBlank()) T(stringResource(R.string.home_note_empty), size = 14.sp, color = c.dim, maxLines = 1)
         else T(note, if (hasColourGlyphs(note)) Modifier.monochrome() else Modifier, size = 14.sp, color = c.dim, maxLines = maxLines, lineHeight = 20.sp)
         VSpace(8.dp)
     }
@@ -754,17 +796,19 @@ fun MusicAppPicker(apps: List<AppEntry>, subtitle: String?, onDismiss: () -> Uni
     LaunchedEffect(Unit) { players = withContext(Dispatchers.IO) { Graph.apps.musicPackages() } }
     val found = players
     AppPickerDialog(
-        title = "Music app",
+        title = stringResource(R.string.home_music_app),
         subtitle = subtitle,
         apps = if (all || found == null) (if (all) apps else emptyList()) else apps.filter { it.packageName in found },
         onDismiss = onDismiss,
-        more = if (all || found == null) null else "All apps…" to { all = true },
+        more = if (all || found == null) null else stringResource(R.string.home_all_apps_more) to { all = true },
         onPick = onPick,
     )
 }
 
 /** The only drawn signs besides the work badge, because words make poor buttons here. */
-private enum class Glyph(val says: String) { PREVIOUS("Previous"), PLAY("Play"), PAUSE("Pause"), NEXT("Next") }
+private enum class Glyph(@StringRes val says: Int) {
+    PREVIOUS(R.string.home_media_previous), PLAY(R.string.home_media_play), PAUSE(R.string.home_media_pause), NEXT(R.string.home_media_next),
+}
 
 /**
  * Play, pause, previous, next as the plain shapes they are everywhere: a triangle, two bars, a
@@ -773,7 +817,8 @@ private enum class Glyph(val says: String) { PREVIOUS("Previous"), PLAY("Play"),
  */
 @Composable
 private fun MediaGlyph(glyph: Glyph, side: Dp, color: Color, modifier: Modifier = Modifier) {
-    Canvas(modifier.size(side).semantics { contentDescription = glyph.says }) {
+    val says = stringResource(glyph.says)
+    Canvas(modifier.size(side).semantics { contentDescription = says }) {
         val w = size.width
         val h = size.height
         fun triangle(from: Float, to: Float) = drawPath(
@@ -831,9 +876,10 @@ fun CalendarWidget(
     showWeekStrip: Boolean = false,
 ) {
     val c = LocalFocusColors.current
+    val res = LocalResources.current
     Column(modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 12.dp, vertical = 6.dp)) {
         Row(verticalAlignment = Alignment.Bottom) {
-            Label("Calendar", Modifier.weight(1f), color = c.fg)
+            Label(stringResource(R.string.home_calendar_title), Modifier.weight(1f), color = c.fg)
             if (calendarName != null && hasAccess) T(calendarName, size = 12.sp, color = c.faint, maxLines = 1)
         }
         VSpace(10.dp)
@@ -842,11 +888,11 @@ fun CalendarWidget(
             VSpace(10.dp)
         }
         when {
-            !hasAccess -> T("Show upcoming events  →", Modifier.clickable(onClick = onRequestAccess).padding(vertical = 4.dp), size = 14.sp, color = c.dim)
-            events.isEmpty() -> T("Nothing in the next 7 days", size = 14.sp, color = c.dim)
+            !hasAccess -> T(stringResource(R.string.home_calendar_show_events), Modifier.clickable(onClick = onRequestAccess).padding(vertical = 4.dp), size = 14.sp, color = c.dim)
+            events.isEmpty() -> T(stringResource(R.string.home_calendar_empty), size = 14.sp, color = c.dim)
             else -> for (event in events.take(maxEvents)) {
                 Row(Modifier.padding(vertical = 3.dp)) {
-                    T(eventWhen(event, today, use24h), Modifier.width(118.dp), size = 14.sp, color = c.dim, maxLines = 1)
+                    T(eventWhen(res, event, today, use24h), Modifier.width(118.dp), size = 14.sp, color = c.dim, maxLines = 1)
                     T(event.title, Modifier.weight(1f), size = 14.sp, maxLines = 1)
                 }
             }
@@ -885,15 +931,16 @@ private fun WeekStrip(today: LocalDate, mondayStart: Boolean) {
     }
 }
 
-private fun eventWhen(event: CalEvent, today: LocalDate, use24h: Boolean): String {
+private fun eventWhen(res: Resources, event: CalEvent, today: LocalDate, use24h: Boolean): String {
+    val locale = res.appLocale()
     val date = event.date()
     val day = when (date) {
-        today -> "Today"
-        today.plusDays(1) -> "Tomorrow"
-        else -> date.format(DateTimeFormatter.ofPattern("EEE d"))
+        today -> res.getString(R.string.home_event_today)
+        today.plusDays(1) -> res.getString(R.string.home_event_tomorrow)
+        else -> date.format(DateTimeFormatter.ofPattern(res.getString(R.string.home_format_event_day), locale))
     }
-    if (event.allDay) return "$day · all day"
+    if (event.allDay) return res.getString(R.string.home_event_all_day, day)
     val time = Instant.ofEpochMilli(event.begin).atZone(ZoneId.systemDefault())
-        .format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else "h:mm a"))
-    return "$day $time"
+        .format(DateTimeFormatter.ofPattern(if (use24h) "HH:mm" else res.getString(R.string.home_format_time_12h), locale))
+    return res.getString(R.string.home_event_day_time, day, time)
 }

@@ -15,7 +15,9 @@ import android.os.UserHandle
 import android.os.UserManager
 import android.provider.Settings as SystemSettings
 import android.telecom.TelecomManager
+import androidx.annotation.StringRes
 import androidx.core.net.toUri
+import com.focus.launcher.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,18 +42,18 @@ import java.util.concurrent.ConcurrentHashMap
  * Communication and Dating under it), so Gmail, Chrome and WhatsApp carry the same label as
  * Instagram. [AppRepository.categorize] splits that label apart.
  */
-enum class AppCategory(val label: String) {
+enum class AppCategory(@StringRes val labelRes: Int) {
     /** Feeds, social networks, dating. Gets the automatic "social apps" limit. */
-    SOCIAL("social media"),
+    SOCIAL(R.string.category_social),
     /** Whatever Android lists as a game. Gets the automatic "games" limit. */
-    GAME("game"),
+    GAME(R.string.category_game),
     /** Video and streaming. Has its own automatic limit, which is off unless switched on. */
-    VIDEO("video"),
+    VIDEO(R.string.category_video),
     /** Browsers, mail, messaging, calls, contacts. Tools; never limited automatically. */
-    COMMUNICATION("communication"),
+    COMMUNICATION(R.string.category_communication),
     /** Android says "social" but Focus cannot tell feed from tool. Not limited; offered in settings. */
-    UNSURE("unsure"),
-    OTHER("other"),
+    UNSURE(R.string.category_unsure),
+    OTHER(R.string.category_other),
 }
 
 /** One launchable activity. Text only: the launcher never loads an icon. */
@@ -323,13 +325,14 @@ class AppRepository(
     }
 
     /** One sentence on how [pkg] was sorted and why, shown to the user next to its timer. */
-    fun describeCategory(pkg: String): String = when (categoryOf(pkg)) {
-        AppCategory.SOCIAL -> "Focus treats this as social media: it is on its list of feeds, social networks and dating apps."
-        AppCategory.GAME -> "Focus treats this as a game, because the Play Store lists it as one."
-        AppCategory.VIDEO -> "Focus treats this as a video app."
-        AppCategory.COMMUNICATION -> "Focus treats this as a communication tool (browser, mail, messenger, calls), so it never gets a limit by itself."
-        AppCategory.UNSURE -> "Android files this under “social”, a label it also gives to mail and messengers. Focus is not sure, so it gets no limit by itself."
-        AppCategory.OTHER -> "Not social media or a game, so it only gets a limit if you set one."
+    @StringRes
+    fun describeCategoryRes(pkg: String): Int = when (categoryOf(pkg)) {
+        AppCategory.SOCIAL -> R.string.category_explain_social
+        AppCategory.GAME -> R.string.category_explain_game
+        AppCategory.VIDEO -> R.string.category_explain_video
+        AppCategory.COMMUNICATION -> R.string.category_explain_communication
+        AppCategory.UNSURE -> R.string.category_explain_unsure
+        AppCategory.OTHER -> R.string.category_explain_other
     }
 
     /**
