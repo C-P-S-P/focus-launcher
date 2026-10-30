@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <!-- Swipe down on the home screen to open notifications. -->
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <!-- Tap on the clock opens the alarms. Some clock apps (Samsung's) refuse SHOW_ALARMS without it. -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:name=".FocusApp"
