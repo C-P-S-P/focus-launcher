@@ -661,7 +661,9 @@ private fun performClockTap(
     onOpenScreenTime: () -> Unit,
 ) {
     when (spec) {
-        TAP_ALARMS -> Perms.start(context, Intent(AlarmClock.ACTION_SHOW_ALARMS), options = launchOptions(context))
+        TAP_ALARMS -> if (!Perms.start(context, Intent(AlarmClock.ACTION_SHOW_ALARMS), options = launchOptions(context))) {
+            Toast.makeText(context, "Could not open alarms", Toast.LENGTH_SHORT).show()
+        }
         TAP_CALENDAR -> openCalendarApp(context)
         TAP_SCREEN_TIME -> onOpenScreenTime()
         TAP_BATTERY -> Perms.start(
