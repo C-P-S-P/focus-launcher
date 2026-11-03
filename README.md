@@ -88,6 +88,11 @@ Built with Kotlin and Jetpack Compose, without the Material library, in about 6,
   away as soon as you have done it, or when you tap it. Settings → About brings them back. There is
   no splash on later starts: a launcher is opened too often to put anything in front of it.
 
+**Backup**
+- Settings → About → Back up settings writes every setting (layout, sections, gestures, fast apps,
+  renames, hidden apps, timers, theme) to one small JSON file where you choose; Restore settings
+  reads one back. Screen-time history is not part of it.
+
 ## How apps are sorted into "social", "game" and the rest
 
 Android's own label cannot be used as is. Its `CATEGORY_SOCIAL` officially means *"messaging,
