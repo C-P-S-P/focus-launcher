@@ -116,6 +116,7 @@ decision is visible in "Limited apps" and can be overridden per app.
 | Default launcher | Being the home screen. |
 | Usage access | All screen-time numbers: day bar, timers, weekly review. |
 | Accessibility service ("Focus app timers") | Locking an app *while you are in it*. It only listens for window changes to learn the name of the app in front; `canRetrieveWindowContent` is false, so it cannot read the screen. |
+| Battery optimisation exemption (Setup → "Keep Focus running") | Some phones clear the home screen from memory many times a day and show their own launcher while Focus restarts. This asks, once, to be left out of that; on vivo, Xiaomi, Oppo, Huawei and Samsung Setup also opens the vendor's own allow list. No background work either way. |
 | Notifications (optional) | The weekly review reminder. |
 | Calendar (optional) | The calendar section. |
 | Notification access (optional, "Focus music section") | The song and artist in the music section. Android ties "which player is active" to this access. The service behind it reads no notification and drops its binding the moment it is connected. |

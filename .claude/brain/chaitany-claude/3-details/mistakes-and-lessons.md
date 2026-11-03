@@ -94,6 +94,12 @@ Each entry: symptom → cause → fix / rule. Add to this whenever something cos
   difficult (`brain-upkeep.md`).
 
 ## Android platform
+- **"Focus keeps switching back to the stock launcher."** Not a crash and not the HOME role
+  changing: `dumpsys activity exit-info com.focus.launcher` showed 15 `LOW_MEMORY` kills in two
+  days on a 7.6 GB vivo phone that was killing other apps 100+ times in 20 minutes. A killed home
+  app is restarted on the next Home press; the vendor shows its own launcher in that second. The
+  dropbox held 33 app crashes and 6 ANRs over days, none of them Focus's. Read `exit-info` and
+  `dumpsys dropbox --print` before theorising; the plain logcat reaches back minutes only.
 - A clickable smaller than 48dp gets a 48dp touch target that is *not drawn*: the press indication
   covers the layout bounds only, so taps near it light up "somewhere else". Make the element 48dp
   and centre its content instead of padding a small one unevenly.

@@ -74,6 +74,38 @@ class DayUsage(
 }
 
 /**
+ * Adds one foreground interval `[start, end)` to [target] as per-hour milliseconds within the day
+ * `[dayStart, dayEnd)`. Pure (no Android, no instance state) so the hour-splitting math can be
+ * unit-tested. [plainDay] skips the calendar on non-DST days; [zone] is read only when it is false.
+ * Returns false when the interval falls entirely outside the day.
+ */
+internal fun addForegroundMillis(
+    target: HashMap<String, LongArray>,
+    pkg: String,
+    start: Long,
+    end: Long,
+    dayStart: Long,
+    dayEnd: Long,
+    plainDay: Boolean,
+    zone: ZoneId,
+): Boolean {
+    var t = maxOf(start, dayStart)
+    val stop = minOf(end, dayEnd)
+    if (t >= stop) return false
+    val perHour = target.getOrPut(pkg) { LongArray(24) }
+    while (t < stop) {
+        val hour = if (plainDay) ((t - dayStart) / DayUsage.HOUR_MS).toInt().coerceIn(0, 23)
+            else Instant.ofEpochMilli(t).atZone(zone).hour
+        val hourEnd = if (plainDay) dayStart + (hour + 1) * DayUsage.HOUR_MS
+            else Instant.ofEpochMilli(t).atZone(zone).truncatedTo(ChronoUnit.HOURS).plusHours(1).toInstant().toEpochMilli()
+        val segmentEnd = minOf(stop, hourEnd)
+        perHour[hour] += segmentEnd - t
+        t = segmentEnd
+    }
+    return true
+}
+
+/**
  * Turns the system's raw usage events (activity resumed / paused, screen off, unlock) into
  * per-app, per-hour foreground time.
  *
@@ -316,22 +348,9 @@ class UsageRepository(private val context: Context, private val apps: () -> AppR
             return DayUsage(date, copy, unlocks)
         }
 
-        private fun add(target: HashMap<String, LongArray>, pkg: String, start: Long, end: Long): Boolean {
-            if (pkg in ignored) return false
-            var t = maxOf(start, dayStart)
-            val stop = minOf(end, dayEnd)
-            if (t >= stop) return false
-            val perHour = target.getOrPut(pkg) { LongArray(24) }
-            while (t < stop) {
-                val hour = if (plainDay) ((t - dayStart) / DayUsage.HOUR_MS).toInt().coerceIn(0, 23) else Instant.ofEpochMilli(t).atZone(zone).hour
-                val hourEnd = if (plainDay) dayStart + (hour + 1) * DayUsage.HOUR_MS else
-                    Instant.ofEpochMilli(t).atZone(zone).truncatedTo(ChronoUnit.HOURS).plusHours(1).toInstant().toEpochMilli()
-                val segmentEnd = minOf(stop, hourEnd)
-                perHour[hour] += segmentEnd - t
-                t = segmentEnd
-            }
-            return true
-        }
+        /** The hour-splitting itself is [addForegroundMillis], so that the code the app runs is what the tests run. */
+        private fun add(target: HashMap<String, LongArray>, pkg: String, start: Long, end: Long): Boolean =
+            pkg !in ignored && addForegroundMillis(target, pkg, start, end, dayStart, dayEnd, plainDay, zone)
     }
 
     /** Finished days, straight from the event log in one pass. Used for history, never for today. */

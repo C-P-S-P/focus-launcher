@@ -40,7 +40,7 @@ device or what is on his phone lives only in the git-ignored `private/` folder n
 | What | Where |
 | --- | --- |
 | App source | `app/src/main/java/com/focus/launcher/` (`data/`, `service/`, `ui/`) |
-| Unit tests | `app/src/test/…/` `data/` (tracker 13, emoji 6, settings 7) · `ui/home/` (music linger 7) |
+| Unit tests | `app/src/test/…/` `data/` (tracker 13, emoji 6, settings 7, DayUsage 5, bucketing 5, limit logic 8) · `ui/home/` (music linger 7) — 51 total |
 | Website source / output | `site/src/` → `site/public/` (generated, ignored) |
 | nginx rules for the site | `site/nginx-focusapp.conf` (installed on the server as a snippet) |
 | Signing key / its password | outside the repo / both named in `keystore.properties` (ignored) |
