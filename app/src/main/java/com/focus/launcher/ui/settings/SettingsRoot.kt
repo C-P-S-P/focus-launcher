@@ -1,5 +1,10 @@
 package com.focus.launcher.ui.settings
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.focus.launcher.data.SettingsBackup
+import java.time.LocalDate
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -181,8 +186,44 @@ private fun MainPage(settings: Settings, appCount: Int, status: SetupStatus, onB
 @Composable
 private fun AboutPage(onBack: () -> Unit, go: (String) -> Unit) {
     val c = LocalFocusColors.current
+    val context = LocalContext.current
+    // Both go through the system's file picker: no permission, and the user chooses where.
+    val backupTo = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        val ok = try {
+            context.contentResolver.openOutputStream(uri)?.use { it.write(SettingsBackup.write(Graph.settings.value).toByteArray()) } != null
+        } catch (_: Exception) {
+            false
+        }
+        Toast.makeText(context, if (ok) "Settings backed up" else "Could not write the file", Toast.LENGTH_SHORT).show()
+    }
+    val restoreFrom = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        val restored = try {
+            context.contentResolver.openInputStream(uri)?.use { it.readBytes().decodeToString() }?.let(SettingsBackup::read)
+        } catch (_: Exception) {
+            null
+        }
+        if (restored == null) {
+            Toast.makeText(context, "That is not a Focus settings file", Toast.LENGTH_SHORT).show()
+        } else {
+            Graph.settings.update { restored }
+            Toast.makeText(context, "Settings restored", Toast.LENGTH_SHORT).show()
+        }
+    }
     Page("About", onBack) {
         SettingRow("Welcome screen and tips", subtitle = "Shows the tips on the home screen again, one at a time.", onClick = { go(Routes.WELCOME) })
+        Section("Settings file")
+        SettingRow(
+            "Back up settings",
+            subtitle = "Everything you set up (layout, gestures, fast apps, renames, timers) as one small file, saved where you choose.",
+            onClick = { backupTo.launch("focus-settings-${LocalDate.now()}.json") },
+        )
+        SettingRow(
+            "Restore settings",
+            subtitle = "Replaces every setting with those in a backup file. Apps that are not installed here are skipped.",
+            onClick = { restoreFrom.launch(arrayOf("application/json", "text/plain", "*/*")) },
+        )
         Column(Modifier.padding(horizontal = 24.dp, vertical = 12.dp)) {
             T("Focus ${BuildConfig.VERSION_NAME}", size = 20.sp, weight = FontWeight.Medium)
             VSpace(12.dp)

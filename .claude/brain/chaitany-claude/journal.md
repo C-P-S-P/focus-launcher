@@ -843,3 +843,19 @@ by two more drags and re-read stable. No crash. Reading the order: `uiautomator 
 text nodes between the sections and the corners sorted by y; the user's app names were used for
 the comparison only and are not written anywhere.
 
+## 2026-11-04 · Settings backup and restore (a contributor, branch `settings-backup`)
+
+**Asked:** the wish in issue #31 ("a backup/restore system for all settings … also how apps are
+renamed"); build, test on an emulator, PR, merge.
+**Done:** `SettingsBackup` = the existing `settings_json` under an envelope (`app`, `format`,
+`settings`); `read` refuses anything else and goes through `Settings.fromJson`, so old files keep
+reading. About → "Settings file": Back up (`CreateDocument`, default name
+`focus-settings-<date>.json`) and Restore (`OpenDocument`); no permission, user picks the place.
+Left out on purpose: usage history and limit tallies. 4 unit tests (round trip, defaults, refusal,
+unknown keys).
+**Verified:** 37 unit tests, lint 0 errors; on the `sf35` emulator (Android 15, debug build):
+backup wrote a 1.4 KB file through the picker; a file edited to white theme / mono / a note
+restored through the picker and `shared_prefs` showed the new values (the emulator's default
+home is the stock launcher, so Focus's own screen was opened by intent: white theme, mono font
+and the restored note were all there).
+
