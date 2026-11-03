@@ -89,7 +89,8 @@ Code: `ui/home/HomeScreen.kt`, `ui/home/HomeWidgets.kt`, `ui/drawer/DrawerScreen
    Both are counted in `heightOf`.
 3. **Notices**, only when needed: "Finish setting up Focus →" and "Your weekly review is ready →".
 4. **Fast apps**: at most `MAX_FAVORITES = 5`, text only, aligned by `homeAlign`
-   (left / center / right). Long-press = the app menu.
+   (left / center / right). Hold = lift and drag into a new place (`Settings.favorites`), let go
+   without moving = the app menu. Settings → Fast apps keeps the ↑ / ↓ arrows and "Remove".
 5. **Corner shortcuts**: `leftShortcut` / `rightShortcut`. Defaults `auto:phone` → `ACTION_DIAL`
    and `auto:camera` → `INTENT_ACTION_STILL_IMAGE_CAMERA`, so they work whatever dialer or camera
    is installed; either can be any app. Long-press a corner to change it in place;
@@ -141,7 +142,7 @@ tutorial when using". So:
   from the gesture itself: drawer reached, app menu opened, swipe up / right / down, clock
   long-press, double tap, settings long-press) or when it is tapped (`nextTip()`; the "add a
   calendar, music or a note" tip opens Settings → Home screen on that tap). The app-menu tip also
-  shows under the search bar in the drawer, where it applies (full brightness, same wording). Twelve tips; a tip about something that is not on the screen (music/note long-press with
+  shows under the search bar in the drawer, where it applies (full brightness, same wording). Thirteen tips; a tip about something that is not on the screen (music/note long-press with
   both sections off, corners with shortcuts hidden) is passed over by itself. Deliberately *not*
   tips, because they are visible controls or settings, not hidden gestures: drawer sort and tabs,
   the A–Z scrubber, auto-open of a single match, the weekly review (it announces itself). The

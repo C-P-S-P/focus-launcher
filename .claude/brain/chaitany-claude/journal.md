@@ -817,3 +817,29 @@ td, th, figcaption, h2, summary`, the facts and the footer outside `.phone`:
 **Lesson kept:** he stopped a tool call that was only waiting for CI. Do not block a turn on a
 CI run he did not ask to wait for; start what he asked for and check CI afterwards.
 
+## 2026-10-05 · Fast apps arranged by dragging on the home screen (a contributor, branch `fast-apps-drag`)
+
+**Asked:** "rearrange the 5 apps like I want, the 2nd app on 1st etc., like done in phones".
+Settings → Fast apps already had ↑ / ↓ arrows; he wanted it in place.
+**Done** (`HomeScreen.kt` only): hold a fast app → it lifts (haptic, 85% alpha) and follows the
+finger; it changes places with the neighbour whose middle it passes (`Settings.favorites`
+rewritten per swap); let go without moving → the app menu, as before; tap → launch, as before.
+`rowTops` via `onPlaced`, the lifted row drawn at `dragStartTop + dragOffset − currentTop` in
+`graphicsLayer` (no recomposition per move), moves consumed in the Initial pass so the tap does
+not fire on release. Branched from `main`.
+**Verified:** 51 unit tests, lint 0 errors, release build, installed for user 0.
+**Not verified:** the gesture itself on the device.
+Also a tip for it, `Tip.FAST_APPS` ("Hold a fast app → drag to reorder"), ticked off by the first
+real swap and skipped while fewer than two apps are pinned. Thirteen tips now.
+Then, from the phone: "when I am dragging and swipe left or right nothing should happen". A drag
+with a sideways wobble had opened the web search (the swipe-right watcher reads the Initial pass
+on the pager, above the row). → `homeDragging` (a module-level `mutableStateOf` in
+`HomeScreen.kt`): while a fast app is lifted the watcher stands down and the pager has
+`userScrollEnabled = false`. **Tested on the device by injected touches**, at his request
+(`input motionevent` DOWN / MOVE / UP, guarded by "Focus home in front and focused" before and
+after): a drag with ±220px sideways wobble moved only the app (IWGFS → IWFSG), nothing else
+opened; hold-and-release without moving opened the app menu; the original order was restored
+by two more drags and re-read stable. No crash. Reading the order: `uiautomator dump`, the five
+text nodes between the sections and the corners sorted by y; the user's app names were used for
+the comparison only and are not written anywhere.
+

@@ -20,6 +20,7 @@ enum class Tip(val gesture: String, val result: String) {
     SWIPE_DOWN("Swipe down", "notifications"),
     CLOCK("Long-press the clock", "set its tap"),
     SCREEN_TIME("Tap screen time", "your day"),
+    FAST_APPS("Hold a fast app", "drag to reorder"),
     CORNERS("Long-press a bottom corner", "change it"),
     SECTIONS("Tap here", "add calendar, music, note"),
     /** Only shown while one of the two sections is on; see `HomeScreen`. */
