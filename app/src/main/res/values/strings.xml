@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Shared strings: the manifest, services, the data layer and the formatting helpers.
+    Each screen keeps its own text in strings_<area>.xml next to this file.
+    How to add a language: TRANSLATING.md in the repository root.
+-->
 <resources>
-    <string name="app_name">Focus</string>
+    <string name="app_name" translatable="false">Focus</string>
+    <!-- The language of this file as a BCP 47 tag (en, pl, de, pt-BR). Translators: set your own.
+         Dates and month names are formatted in this language, so they match the text around them. -->
+    <string name="resources_locale">en</string>
     <string name="settings_label">Focus Settings</string>
 
     <string name="accessibility_label">Focus app timers</string>
@@ -11,4 +19,109 @@
 
     <string name="channel_weekly">Weekly review</string>
     <string name="channel_weekly_desc">A reminder when your weekly screen-time review is ready.</string>
+
+    <!-- Weekly review notification. %1$s is a duration such as "12h 30m". -->
+    <string name="weekly_notification_title">Your week in review</string>
+    <string name="weekly_notification_text">%1$s on your phone this week. Take a minute to look at where it went.</string>
+    <string name="weekly_notification_text_empty">Take a minute to look at where your time went.</string>
+
+    <!-- Toasts. %1$s in toast_time_left_today is a duration, %2$s an app name. -->
+    <string name="toast_time_left_today">%1$s left on %2$s today</string>
+    <string name="toast_limit_back_on">The limit for %1$s is back on</string>
+    <!-- Stands in for an app name when the block screen is previewed from settings. -->
+    <string name="preview_app_label">Example app</string>
+
+    <!-- Durations, kept short: they sit next to app names and inside the clock. -->
+    <string name="duration_minutes">%1$dm</string>
+    <string name="duration_hours">%1$dh</string>
+    <string name="duration_hours_minutes">%1$dh %2$dm</string>
+    <string name="duration_under_minute">&lt;1m</string>
+
+    <!--
+        Date and time patterns (java.time DateTimeFormatter syntax). Translate them only to change
+        the order or the style for your language; month names are filled in by the system.
+    -->
+    <string name="format_hour_12h">h a</string>
+    <string name="format_month_short">MMM</string>
+    <string name="format_day_month">d MMM</string>
+    <!-- A week that spans two months: two dates made with format_day_month, e.g. "28 Sep – 4 Oct". -->
+    <string name="format_week_range">%1$s – %2$s</string>
+    <!-- A week inside one month: first day, last day, short month name, e.g. "14 – 20 Sep". -->
+    <string name="format_week_range_same_month">%1$d – %2$d %3$s</string>
+
+    <!-- Weekly review: how this week compares with the one before. -->
+    <string name="change_same_as_last_week">about the same as last week</string>
+    <string name="change_less_than_last_week">%1$d%% less than last week</string>
+    <string name="change_more_than_last_week">%1$d%% more than last week</string>
+
+    <!-- Home-screen tips: a gesture and what it does. Two or three words each, one line on any phone. -->
+    <!-- Quoted so that Android keeps the double spaces around the arrow. -->
+    <string name="tip_hint">"%1$s  →  %2$s"</string>
+    <string name="tip_swipe_left">Swipe left</string>
+    <string name="tip_swipe_left_result">all apps</string>
+    <string name="tip_app_menu">Long-press an app</string>
+    <string name="tip_app_menu_result">pin, timer, hide</string>
+    <string name="tip_swipe_up">Swipe up</string>
+    <string name="tip_swipe_up_result">search apps</string>
+    <string name="tip_swipe_right">Swipe right</string>
+    <string name="tip_swipe_right_result">web search</string>
+    <string name="tip_swipe_down">Swipe down</string>
+    <string name="tip_swipe_down_result">notifications</string>
+    <string name="tip_clock">Long-press the clock</string>
+    <string name="tip_clock_result">set its tap</string>
+    <string name="tip_screen_time">Tap screen time</string>
+    <string name="tip_screen_time_result">your day</string>
+    <string name="tip_corners">Long-press a bottom corner</string>
+    <string name="tip_corners_result">change it</string>
+    <string name="tip_sections">Tap here</string>
+    <string name="tip_sections_result">add calendar, music, note</string>
+    <string name="tip_section_apps">Long-press music or note</string>
+    <string name="tip_section_apps_result">pick its app</string>
+    <string name="tip_settings">Long-press empty space</string>
+    <string name="tip_settings_result">settings</string>
+    <string name="tip_double_tap">Double tap empty space</string>
+    <string name="tip_double_tap_result">lock</string>
+
+    <!-- Choices in settings. -->
+    <string name="font_sans">Sans</string>
+    <string name="font_serif">Serif</string>
+    <string name="font_mono">Mono</string>
+    <string name="clock_style_split">Split</string>
+    <string name="clock_style_ring">Ring</string>
+    <string name="clock_style_plain">Plain</string>
+    <string name="split_side_calendar">Calendar</string>
+    <string name="split_side_screen_time">Screen time</string>
+    <string name="ring_mode_battery">Battery level</string>
+    <string name="ring_mode_day">Day passed</string>
+    <string name="launch_animation_fast">Fast</string>
+    <string name="launch_animation_system">System default</string>
+    <string name="align_left">Left</string>
+    <string name="align_center">Center</string>
+    <string name="align_right">Right</string>
+    <string name="sort_alpha">A–Z</string>
+    <string name="sort_most_used">Most used</string>
+    <string name="sort_recent">Recent</string>
+    <string name="time_format_system">Follow system</string>
+    <string name="time_format_24h">24-hour</string>
+    <string name="time_format_12h">12-hour</string>
+
+    <!-- How Focus sorted an app for the automatic timers. -->
+    <string name="category_social">social media</string>
+    <string name="category_game">game</string>
+    <string name="category_video">video</string>
+    <string name="category_communication">communication</string>
+    <string name="category_unsure">unsure</string>
+    <string name="category_other">other</string>
+    <string name="category_explain_social">Focus treats this as social media: it is on its list of feeds, social networks and dating apps.</string>
+    <string name="category_explain_game">Focus treats this as a game, because the Play Store lists it as one.</string>
+    <string name="category_explain_video">Focus treats this as a video app.</string>
+    <string name="category_explain_communication">Focus treats this as a communication tool (browser, mail, messenger, calls), so it never gets a limit by itself.</string>
+    <string name="category_explain_unsure">Android files this under “social”, a label it also gives to mail and messengers. Focus is not sure, so it gets no limit by itself.</string>
+    <string name="category_explain_other">Not social media or a game, so it only gets a limit if you set one.</string>
+
+    <!-- Calendars from the work profile have no readable name. %1$d numbers them. -->
+    <string name="calendar_work">Work calendar</string>
+    <string name="calendar_work_numbered">Work calendar %1$d</string>
+    <string name="calendar_work_profile">Work profile</string>
+    <string name="calendar_no_title">(No title)</string>
 </resources>

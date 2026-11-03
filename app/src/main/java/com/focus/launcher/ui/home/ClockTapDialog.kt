@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.data.Settings
 import com.focus.launcher.data.TAP_ALARMS
@@ -28,7 +30,7 @@ fun ClockTapDialog(settings: Settings, apps: List<AppEntry>, onDismiss: () -> Un
 
     if (pickingApp) {
         AppPickerDialog(
-            title = "Tap on the clock opens",
+            title = stringResource(R.string.home_clock_tap_picker_title),
             apps = apps.filter { it.key !in settings.hidden },
             onDismiss = onDismiss,
             onPick = { set(it.key) },
@@ -37,8 +39,8 @@ fun ClockTapDialog(settings: Settings, apps: List<AppEntry>, onDismiss: () -> Un
     }
 
     val opensApp = !settings.clockTap.startsWith("tap:")
-    FocusDialog(onDismiss, title = "Tap on the clock", subtitle = "Long-press the clock any time to change this.") {
-        MenuRow("Open an app…", detail = if (opensApp) clockTapLabel(settings.clockTap, apps) else null, selected = opensApp) {
+    FocusDialog(onDismiss, title = stringResource(R.string.home_clock_tap_title), subtitle = stringResource(R.string.home_clock_tap_subtitle)) {
+        MenuRow(stringResource(R.string.home_clock_tap_open_app), detail = if (opensApp) clockTapLabel(settings.clockTap, apps) else null, selected = opensApp) {
             pickingApp = true
         }
         for (spec in listOf(TAP_ALARMS, TAP_CALENDAR, TAP_SCREEN_TIME, TAP_BATTERY, TAP_NOTHING)) {

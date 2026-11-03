@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import com.focus.launcher.BlockActivity
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.data.LaunchAnimation
 import com.focus.launcher.util.Perms
@@ -110,7 +111,7 @@ fun openWebSearch(context: Context) {
         add(Intent(Intent.ACTION_VIEW, "https://www.google.com/".toUri()))
     }
     val ok = Perms.start(context, *candidates.toTypedArray(), options = launchOptions(context))
-    if (!ok) Toast.makeText(context, "No search app found", Toast.LENGTH_SHORT).show()
+    if (!ok) Toast.makeText(context, context.getString(R.string.launching_no_search_app), Toast.LENGTH_SHORT).show()
 }
 
 /** Opens [entry] right now, no questions asked. Used once the gate (or the wall) has said yes. */
@@ -120,5 +121,5 @@ fun start(context: Context, entry: AppEntry) {
     // One line per launch: how long the launcher itself took to hand the request to Android.
     // `adb logcat -s FocusLaunch` shows it next to the system's own "Displayed ... +NNNms".
     Log.i("FocusLaunch", "${entry.packageName} requested in ${SystemClock.uptimeMillis() - began} ms")
-    if (!ok) Toast.makeText(context, "Couldn't open ${entry.label}", Toast.LENGTH_SHORT).show()
+    if (!ok) Toast.makeText(context, context.getString(R.string.launching_cannot_open, entry.label), Toast.LENGTH_SHORT).show()
 }

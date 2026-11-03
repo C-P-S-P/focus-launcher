@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.focus.launcher.R
 import com.focus.launcher.data.Settings
 import com.focus.launcher.ui.components.FocusButton
 import com.focus.launcher.ui.components.T
@@ -31,17 +33,17 @@ internal fun WelcomePage(settings: Settings, onDone: (toSetup: Boolean) -> Unit)
     val c = LocalFocusColors.current
     Column(Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal = 28.dp, vertical = 24.dp)) {
         VSpace(96.dp)
-        T("Focus", size = 56.sp, weight = FontWeight.Light)
+        T(stringResource(R.string.app_name), size = 56.sp, weight = FontWeight.Light)
         VSpace(10.dp)
-        T("Reclaim your time.\nSpend it touching some grass.", size = 20.sp, lineHeight = 28.sp)
+        T(stringResource(R.string.settings_welcome_tagline), size = 20.sp, lineHeight = 28.sp)
         VSpace(22.dp)
-        T("No icons. No colour. No feed.\nTips on the home screen show you around.", size = 15.sp, color = c.dim, lineHeight = 23.sp)
+        T(stringResource(R.string.settings_welcome_intro), size = 15.sp, color = c.dim, lineHeight = 23.sp)
         VSpace(36.dp)
-        T("Swipe right opens. Which app?", size = 15.sp, color = c.dim, lineHeight = 23.sp)
+        T(stringResource(R.string.settings_welcome_swipe_right), size = 15.sp, color = c.dim, lineHeight = 23.sp)
         SwipeRightRow(settings)
         VSpace(36.dp)
-        FocusButton("Start", Modifier.fillMaxWidth(), primary = true) { onDone(false) }
+        FocusButton(stringResource(R.string.settings_welcome_start), Modifier.fillMaxWidth(), primary = true) { onDone(false) }
         VSpace(12.dp)
-        FocusButton("Set up Focus first", Modifier.fillMaxWidth()) { onDone(true) }
+        FocusButton(stringResource(R.string.settings_welcome_setup_first), Modifier.fillMaxWidth()) { onDone(true) }
     }
 }

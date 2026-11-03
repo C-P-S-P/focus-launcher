@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.ui.theme.LocalFocusColors
 
@@ -136,7 +138,7 @@ fun <V> MultiChoiceDialog(
                 }
             }
         }
-        DialogButtons(onDismiss, confirmLabel = "Done") {
+        DialogButtons(onDismiss, confirmLabel = stringResource(R.string.common_done)) {
             onConfirm(current)
             onDismiss()
         }
@@ -161,7 +163,7 @@ fun ConfirmDialog(
 }
 
 @Composable
-fun DialogButtons(onDismiss: () -> Unit, confirmLabel: String, cancelLabel: String = "Cancel", onConfirm: () -> Unit) {
+fun DialogButtons(onDismiss: () -> Unit, confirmLabel: String, cancelLabel: String = stringResource(R.string.common_cancel), onConfirm: () -> Unit) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.End,
@@ -178,7 +180,7 @@ fun TextInputDialog(
     placeholder: String,
     onDismiss: () -> Unit,
     subtitle: String? = null,
-    confirmLabel: String = "Save",
+    confirmLabel: String = stringResource(R.string.common_save),
     numeric: Boolean = false,
     /** Several lines: Enter makes a new line, "Save" is the only way to confirm. */
     multiline: Boolean = false,
@@ -267,21 +269,21 @@ fun AppPickerDialog(
         UnderlinedField(
             value = query,
             onValueChange = { query = it },
-            placeholder = "Search",
+            placeholder = stringResource(R.string.common_search),
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp),
             imeAction = ImeAction.Search,
         )
         LazyColumn(Modifier.weight(1f)) {
             if (query.text.isBlank()) {
                 items(leading, key = { "leading:" + it.first }) { (label, action) ->
-                    MenuRow(label, detail = "default") {
+                    MenuRow(label, detail = stringResource(R.string.common_default_choice)) {
                         action()
                         onDismiss()
                     }
                 }
             }
             items(shown, key = { it.key }) { app ->
-                MenuRow(app.label, detail = if (app.isWorkProfile) "work" else null) {
+                MenuRow(app.label, detail = if (app.isWorkProfile) stringResource(R.string.common_work_app) else null) {
                     onPick(app)
                     onDismiss()
                 }

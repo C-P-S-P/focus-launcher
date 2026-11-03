@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -229,7 +230,9 @@ private fun Launcher(settings: Settings, homePresses: Flow<Unit>) {
                     onSearchFocusHandled = { wantsSearchFocus = false },
                     onLaunch = launch,
                     onAppMenu = { Graph.state.did(Tip.APP_MENU); menuApp = it },
-                    hint = tip?.takeIf { it == Tip.APP_MENU }?.let { it.gesture + "  →  " + it.result },
+                    hint = tip?.takeIf { it == Tip.APP_MENU }?.let {
+                        stringResource(R.string.tip_hint, stringResource(it.gestureRes), stringResource(it.resultRes))
+                    },
                 )
             }
         }

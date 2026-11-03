@@ -19,10 +19,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.focus.launcher.R
 import com.focus.launcher.data.CALENDAR_ALL
 import com.focus.launcher.data.CalendarInfo
 import com.focus.launcher.ui.components.FocusDialog
@@ -54,11 +57,16 @@ internal fun CalendarPickerDialog(
         else calendars.filter { it.name.contains(q, ignoreCase = true) || it.account.contains(q, ignoreCase = true) }
     }
 
-    FocusDialog(onDismiss, title = "Calendar to show", subtitle = "One calendar at a time. Search by calendar or account name.", tall = true) {
+    FocusDialog(
+        onDismiss,
+        title = stringResource(R.string.settings_calendar_to_show),
+        subtitle = stringResource(R.string.settings_calendar_picker_subtitle),
+        tall = true,
+    ) {
         UnderlinedField(
             value = query,
             onValueChange = { query = it },
-            placeholder = "Search calendars",
+            placeholder = stringResource(R.string.settings_calendar_search),
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp),
             imeAction = ImeAction.Search,
         )
@@ -67,9 +75,7 @@ internal fun CalendarPickerDialog(
                 item(key = "work-note") {
                     Column {
                         T(
-                            "Looking for your work calendar? This phone has a Work profile, and the organisation that manages " +
-                                "it does not allow other apps to read its calendars, so they cannot be listed here. If you share " +
-                                "your work calendar with one of your personal Google accounts, it appears in this list.",
+                            stringResource(R.string.settings_calendar_picker_work_note),
                             Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
                             size = 13.sp, color = c.dim, lineHeight = 19.sp,
                         )
@@ -82,7 +88,7 @@ internal fun CalendarPickerDialog(
                 CalendarRow(
                     name = calendar.name,
                     account = calendar.account.takeIf { it.isNotEmpty() && it != calendar.name },
-                    detail = if (count > 0) "$count upcoming" else "empty",
+                    detail = if (count > 0) pluralStringResource(R.plurals.settings_calendar_upcoming, count, count) else stringResource(R.string.settings_calendar_empty),
                     selected = calendar.key == selectedKey,
                 ) {
                     onPick(calendar.key)
@@ -91,12 +97,12 @@ internal fun CalendarPickerDialog(
             }
             if (shown.isEmpty()) {
                 item(key = "none") {
-                    T("No calendar matches “${query.text.trim()}”.", Modifier.padding(horizontal = 24.dp, vertical = 16.dp), size = 15.sp, color = c.dim)
+                    T(stringResource(R.string.settings_calendar_no_match, query.text.trim()), Modifier.padding(horizontal = 24.dp, vertical = 16.dp), size = 15.sp, color = c.dim)
                 }
             }
             if (query.text.isBlank()) {
                 item(key = "all") {
-                    CalendarRow("All calendars together", account = null, detail = null, selected = selectedKey == CALENDAR_ALL) {
+                    CalendarRow(stringResource(R.string.settings_calendar_all_together), account = null, detail = null, selected = selectedKey == CALENDAR_ALL) {
                         onPick(CALENDAR_ALL)
                         onDismiss()
                     }

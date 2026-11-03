@@ -85,6 +85,12 @@ android {
         buildConfig = true
     }
 
+    // Lists every values-xx folder as a supported language (see res/resources.properties), so
+    // Android 13+ offers each translation in the system's per-app language setting.
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }

@@ -48,13 +48,16 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.AppEntry
 import com.focus.launcher.data.DayUsage
 import com.focus.launcher.data.DrawerSort
@@ -214,13 +217,13 @@ fun DrawerScreen(
                 keyboardActions = KeyboardActions(onAny = { results.firstOrNull()?.takeIf { searching }?.let(onLaunch) }),
                 decorationBox = { inner ->
                     Box {
-                        if (query.isEmpty()) T("Search", size = 18.sp, color = c.faint, maxLines = 1)
+                        if (query.isEmpty()) T(stringResource(R.string.drawer_search_hint), size = 18.sp, color = c.faint, maxLines = 1)
                         inner()
                     }
                 },
             )
             if (query.isNotEmpty()) {
-                T("Clear", Modifier.clickable { onQueryChange("") }.padding(start = 12.dp, top = 8.dp, bottom = 8.dp), size = 14.sp, color = c.dim)
+                T(stringResource(R.string.drawer_search_clear), Modifier.clickable { onQueryChange("") }.padding(start = 12.dp, top = 8.dp, bottom = 8.dp), size = 14.sp, color = c.dim)
             }
         }
 
@@ -228,12 +231,12 @@ fun DrawerScreen(
         if (!searching) {
             Row(Modifier.fillMaxWidth().padding(start = 14.dp, end = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                 if (hasWork) {
-                    TabChip("Personal", !workTab) { showWork = false }
-                    TabChip("Work", workTab) { showWork = true }
+                    TabChip(stringResource(R.string.drawer_tab_personal), !workTab) { showWork = false }
+                    TabChip(stringResource(R.string.drawer_tab_work), workTab) { showWork = true }
                 }
                 Spacer(Modifier.weight(1f))
                 T(
-                    "Sort: ${sort.label}",
+                    stringResource(R.string.drawer_sort_current, stringResource(sort.labelRes)),
                     Modifier.press { sortDialog = true }.padding(horizontal = 12.dp, vertical = 8.dp),
                     size = 13.sp, color = c.dim, maxLines = 1,
                 )
@@ -251,11 +254,11 @@ fun DrawerScreen(
 
             LazyColumn(Modifier.fillMaxSize(), state = listState) {
                 if (!searching && recent.isNotEmpty()) {
-                    item(key = "label:recent") { SectionLabel("Installed in the last 24 hours") }
+                    item(key = "label:recent") { SectionLabel(stringResource(R.string.drawer_recent_installs)) }
                     items(recent, key = { "recent:" + it.key }) { app ->
                         AppRow(app, settings, today, showIndex, onLaunch, onAppMenu)
                     }
-                    item(key = "label:all") { SectionLabel("All apps", top = 22) }
+                    item(key = "label:all") { SectionLabel(stringResource(R.string.drawer_all_apps), top = 22) }
                 }
                 items(results, key = { it.key }) { app ->
                     AppRow(app, settings, today, showIndex, onLaunch, onAppMenu)
@@ -263,7 +266,9 @@ fun DrawerScreen(
                 if (results.isEmpty()) {
                     item(key = "empty") {
                         T(
-                            if (!loaded) "Loading…" else if (searching) "No app matches “${query.trim()}”" else "No apps",
+                            if (!loaded) stringResource(R.string.drawer_loading)
+                            else if (searching) stringResource(R.string.drawer_no_match, query.trim())
+                            else stringResource(R.string.drawer_no_apps),
                             Modifier.padding(horizontal = 30.dp, vertical = 20.dp), size = 16.sp, color = c.dim,
                         )
                     }
@@ -336,7 +341,7 @@ fun DrawerScreen(
     }
 
     if (sortDialog) {
-        ChoiceDialog("Sort apps", DrawerSort.entries.map { it to it.label }, sort, { sortDialog = false }) { v ->
+        ChoiceDialog(stringResource(R.string.drawer_sort_title), DrawerSort.entries.map { it to stringResource(it.labelRes) }, sort, { sortDialog = false }) { v ->
             Graph.settings.update { it.copy(drawerSort = v) }
         }
     }
@@ -357,6 +362,7 @@ private fun AppRow(
     onAppMenu: (AppEntry) -> Unit,
 ) {
     val c = LocalFocusColors.current
+    val res = LocalResources.current
     val limit = remember(app.packageName, settings.appLimits, settings.timersEnabled, settings.socialDefaultMin, settings.gameDefaultMin) {
         Graph.limits.limitFor(app.packageName, settings)
     }
@@ -375,7 +381,7 @@ private fun AppRow(
         T(app.label, name, size = 20.sp, color = if (spent) c.faint else c.fg, maxLines = 1)
         if (app.isWorkProfile) WorkBadge()
         if (limit != null && settings.showUsageInDrawer) {
-            T("${formatDuration(used)} / ${formatMinutes(limit.minutes)}", size = 13.sp, color = if (spent) c.faint else c.dim, maxLines = 1)
+            T(stringResource(R.string.drawer_usage_of_limit, formatDuration(res, used), formatMinutes(res, limit.minutes)), size = 13.sp, color = if (spent) c.faint else c.dim, maxLines = 1)
         }
     }
 }

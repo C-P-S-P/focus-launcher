@@ -1,31 +1,47 @@
 package com.focus.launcher.data
 
+import androidx.annotation.StringRes
+import com.focus.launcher.R
 import org.json.JSONArray
 import org.json.JSONObject
 
-enum class FontChoice(val label: String) { SANS("Sans"), SERIF("Serif"), MONO("Mono") }
+enum class FontChoice(@StringRes val labelRes: Int) {
+    SANS(R.string.font_sans), SERIF(R.string.font_serif), MONO(R.string.font_mono),
+}
 
 /**
  * SPLIT: the clock on the left, one section on the right, a single vertical line between them and
  * no frame around it. RING: the clock inside a circle whose arc is the battery (or the day).
  */
-enum class ClockStyle(val label: String) { SPLIT("Split"), RING("Ring"), PLAIN("Plain") }
+enum class ClockStyle(@StringRes val labelRes: Int) {
+    SPLIT(R.string.clock_style_split), RING(R.string.clock_style_ring), PLAIN(R.string.clock_style_plain),
+}
 
 /** What the right half of the split clock shows. The section shown there is not repeated below. */
-enum class SplitSide(val label: String) { CALENDAR("Calendar"), SCREEN_TIME("Screen time") }
+enum class SplitSide(@StringRes val labelRes: Int) {
+    CALENDAR(R.string.split_side_calendar), SCREEN_TIME(R.string.split_side_screen_time),
+}
 
 /** What the arc of the clock ring stands for. */
-enum class RingMode(val label: String) { BATTERY("Battery level"), DAY("Day passed") }
+enum class RingMode(@StringRes val labelRes: Int) { BATTERY(R.string.ring_mode_battery), DAY(R.string.ring_mode_day) }
 
 /** How an app appears when it is opened from the launcher. */
-enum class LaunchAnimation(val label: String) { FAST("Fast"), SYSTEM("System default") }
+enum class LaunchAnimation(@StringRes val labelRes: Int) {
+    FAST(R.string.launch_animation_fast), SYSTEM(R.string.launch_animation_system),
+}
 
-enum class HomeAlign(val label: String) { LEFT("Left"), CENTER("Center"), RIGHT("Right") }
+enum class HomeAlign(@StringRes val labelRes: Int) {
+    LEFT(R.string.align_left), CENTER(R.string.align_center), RIGHT(R.string.align_right),
+}
 
 /** Order of the app list in the drawer. */
-enum class DrawerSort(val label: String) { ALPHA("A–Z"), MOST_USED("Most used"), RECENT("Recent") }
+enum class DrawerSort(@StringRes val labelRes: Int) {
+    ALPHA(R.string.sort_alpha), MOST_USED(R.string.sort_most_used), RECENT(R.string.sort_recent),
+}
 
-enum class TimeFormat(val label: String) { SYSTEM("Follow system"), H24("24-hour"), H12("12-hour") }
+enum class TimeFormat(@StringRes val labelRes: Int) {
+    SYSTEM(R.string.time_format_system), H24(R.string.time_format_24h), H12(R.string.time_format_12h),
+}
 
 const val MAX_FAVORITES = 5
 

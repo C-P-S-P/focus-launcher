@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lista aplikacji -->
+    <string name="drawer_search_hint">Szukaj</string>
+    <string name="drawer_search_clear">Wyczyść</string>
+    <string name="drawer_tab_personal">Osobiste</string>
+    <string name="drawer_tab_work">Służbowe</string>
+    <string name="drawer_sort_current">Sortuj: %1$s</string>
+    <string name="drawer_sort_title">Sortuj aplikacje</string>
+    <string name="drawer_recent_installs">Zainstalowane w ciągu doby</string>
+    <string name="drawer_all_apps">Wszystkie aplikacje</string>
+    <string name="drawer_loading">Wczytywanie…</string>
+    <string name="drawer_no_match">Żadna aplikacja nie pasuje do „%1$s”</string>
+    <string name="drawer_no_apps">Brak aplikacji</string>
+    <string name="drawer_usage_of_limit">%1$s / %2$s</string>
+
+    <!-- Menu aplikacji -->
+    <string name="menu_status_used_today">%1$s dziś</string>
+    <string name="menu_status_limit">limit %1$s</string>
+    <string name="menu_uninstall">Odinstaluj</string>
+    <string name="menu_app_info">Informacje o aplikacji</string>
+    <string name="menu_fast_apps_add">Dodaj do szybkich aplikacji</string>
+    <string name="menu_fast_apps_remove">Usuń z szybkich aplikacji</string>
+    <string name="menu_toast_on_home_screen">%1$s jest na ekranie głównym</string>
+    <string name="menu_app_timer">Minutnik aplikacji</string>
+    <string name="menu_timer_per_day">%1$s dziennie</string>
+    <string name="menu_timer_off">Wyłączony</string>
+    <string name="menu_rename">Zmień nazwę</string>
+    <string name="menu_rename_subtitle">Zmienia nazwę tylko w Focus. Zostaw puste, żeby przywrócić „%1$s”.</string>
+    <string name="menu_hide">Ukryj aplikację</string>
+    <string name="menu_unhide">Pokaż aplikację</string>
+    <string name="menu_toast_hidden">Ukryto. Przywrócisz ją w: Ustawienia → Lista aplikacji</string>
+    <string name="menu_fast_apps_full">Brak miejsca w szybkich aplikacjach</string>
+    <string name="menu_fast_apps_replace">Wybierz aplikację, którą zastąpi %1$s.</string>
+
+    <!-- Minutnik jednej aplikacji -->
+    <string name="menu_timer_title">Minutnik · %1$s</string>
+    <string name="menu_timer_subtitle_used_today">Użycie dziś: %1$s. %2$s</string>
+    <string name="menu_timer_default_social">Domyślny dla mediów społ.</string>
+    <string name="menu_timer_default_games">Domyślny dla gier</string>
+    <string name="menu_timer_default_video">Domyślny dla wideo</string>
+    <string name="menu_timer_no_limit">Bez limitu</string>
+    <string name="menu_timer_custom">Własny…</string>
+    <string name="menu_timer_setup_needed">"Minutniki blokują aplikacje dopiero po włączeniu dostępu do danych o użyciu i usługi minutników Focus.  Dokończ konfigurację  →"</string>
+    <string name="menu_timer_custom_title">Własny limit</string>
+    <string name="menu_timer_custom_subtitle">Minuty dziennie dla aplikacji %1$s.</string>
+    <string name="menu_timer_custom_hint">Minuty</string>
+    <string name="menu_timer_custom_set">Ustaw</string>
+
+    <!-- Ekran „Czas minął” -->
+    <string name="block_label_time_up">Czas minął</string>
+    <string name="block_label_preview">"Podgląd  ·  Czas minął"</string>
+    <string name="block_label_over_limit">Limit na dziś przekroczony</string>
+    <string name="block_usage_today">"%1$s dziś  ·  limit %2$s"</string>
+    <plurals name="block_past_limit_this_week">
+        <item quantity="one">W tym tygodniu przekroczono ten limit %1$d raz.</item>
+        <item quantity="few">W tym tygodniu przekroczono ten limit %1$d razy.</item>
+        <item quantity="many">W tym tygodniu przekroczono ten limit %1$d razy.</item>
+        <item quantity="other">W tym tygodniu przekroczono ten limit %1$d razy.</item>
+    </plurals>
+    <string name="block_consent_note">Dziś pomijasz ten limit. Focus i tak pyta przed każdym otwarciem.</string>
+    <string name="block_not_now">Nie teraz</string>
+    <string name="block_open_anyway">Otwórz mimo to: %1$s</string>
+    <string name="block_restore_limit">Przywróć limit na dziś</string>
+    <string name="block_close_app">Zamknij aplikację %1$s</string>
+    <string name="block_or_continue_for">Albo kontynuuj przez</string>
+    <string name="block_or_continue_in">Albo kontynuuj za %1$d s</string>
+    <string name="block_continue_minutes">%1$d min</string>
+    <string name="block_ignore_today">Pomiń limit na dziś</string>
+    <string name="block_ignore_today_countdown">Pomiń limit na dziś (%1$d s)</string>
+    <string name="block_strict_mode">Tryb ścisły jest włączony: ta aplikacja jest zamknięta do jutra.</string>
+
+    <!-- Uruchamianie -->
+    <string name="launching_no_search_app">Nie znaleziono aplikacji do wyszukiwania</string>
+    <string name="launching_cannot_open">Nie udało się otworzyć aplikacji %1$s</string>
+</resources>

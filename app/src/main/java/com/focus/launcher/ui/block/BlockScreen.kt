@@ -24,10 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.data.Settings
 import com.focus.launcher.data.WeekSummary
 import com.focus.launcher.ui.components.FocusButton
@@ -68,6 +72,7 @@ fun BlockScreen(
     onRestoreLimit: () -> Unit = {},
 ) {
     val c = LocalFocusColors.current
+    val res = LocalResources.current
     BackHandler(onBack = onClose)
 
     var wait by remember(request) { mutableIntStateOf(settings.frictionSeconds.coerceAtLeast(0)) }
@@ -101,9 +106,9 @@ fun BlockScreen(
 
         Label(
             when {
-                request.preview -> "Preview  ·  Time's up"
-                request.consent -> "Over today's limit"
-                else -> "Time's up"
+                request.preview -> stringResource(R.string.block_label_preview)
+                request.consent -> stringResource(R.string.block_label_over_limit)
+                else -> stringResource(R.string.block_label_time_up)
             },
         )
         VSpace(14.dp)
@@ -114,32 +119,32 @@ fun BlockScreen(
         Box(Modifier.fillMaxWidth().height(3.dp).background(c.fg))
         VSpace(14.dp)
         T(
-            "${formatDuration(request.usedMs)} today  ·  limit ${formatMinutes(request.limitMinutes)}",
+            stringResource(R.string.block_usage_today, formatDuration(res, request.usedMs), formatMinutes(res, request.limitMinutes)),
             size = 16.sp, color = c.dim,
         )
         val past = (weekStats?.continued ?: 0) + (weekStats?.bypassed ?: 0)
         if (past > 0) {
             VSpace(6.dp)
             T(
-                "You have gone past this limit $past ${if (past == 1) "time" else "times"} this week.",
+                pluralStringResource(R.plurals.block_past_limit_this_week, past, past),
                 size = 14.sp, color = c.faint, lineHeight = 20.sp,
             )
         }
 
         if (request.consent) {
             VSpace(6.dp)
-            T("You chose to ignore this limit for today. Focus still asks before every visit.", size = 14.sp, color = c.faint, lineHeight = 20.sp)
+            T(stringResource(R.string.block_consent_note), size = 14.sp, color = c.faint, lineHeight = 20.sp)
         }
 
         Spacer(Modifier.weight(1f))
 
         if (request.consent) {
             // Saying no is the big button; going ahead takes a deliberate second look.
-            FocusButton("Not now", Modifier.fillMaxWidth(), primary = true, onClick = onClose)
+            FocusButton(stringResource(R.string.block_not_now), Modifier.fillMaxWidth(), primary = true, onClick = onClose)
             VSpace(12.dp)
-            FocusButton("Open ${request.label} anyway", Modifier.fillMaxWidth(), onClick = onConsent)
+            FocusButton(stringResource(R.string.block_open_anyway, request.label), Modifier.fillMaxWidth(), onClick = onConsent)
             T(
-                "Bring the limit back for today",
+                stringResource(R.string.block_restore_limit),
                 Modifier.fillMaxWidth().clickable(onClick = onRestoreLimit).padding(vertical = 16.dp),
                 size = 15.sp, color = c.dim,
             )
@@ -147,30 +152,30 @@ fun BlockScreen(
             return@Column
         }
 
-        FocusButton("Close ${request.label}", Modifier.fillMaxWidth(), primary = true, onClick = onClose)
+        FocusButton(stringResource(R.string.block_close_app, request.label), Modifier.fillMaxWidth(), primary = true, onClick = onClose)
 
         val canContinue = settings.allowContinue && settings.continueOptions.isNotEmpty()
         if (canContinue) {
             VSpace(26.dp)
-            Label(if (unlocked) "Or continue for" else "Or continue in ${wait}s", color = if (unlocked) c.dim else c.faint)
+            Label(if (unlocked) stringResource(R.string.block_or_continue_for) else stringResource(R.string.block_or_continue_in, wait), color = if (unlocked) c.dim else c.faint)
             VSpace(10.dp)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 for (minutes in settings.continueOptions.sorted().take(4)) {
-                    FocusButton("$minutes min", Modifier.weight(1f), enabled = unlocked) { onContinue(minutes) }
+                    FocusButton(stringResource(R.string.block_continue_minutes, minutes), Modifier.weight(1f), enabled = unlocked) { onContinue(minutes) }
                 }
             }
         }
         if (settings.allowBypass) {
             VSpace(if (canContinue) 8.dp else 22.dp)
             T(
-                if (unlocked || canContinue) "Ignore the limit for today" else "Ignore the limit for today (${wait}s)",
+                if (unlocked || canContinue) stringResource(R.string.block_ignore_today) else stringResource(R.string.block_ignore_today_countdown, wait),
                 Modifier.fillMaxWidth().clickable(enabled = unlocked, onClick = onBypass).padding(vertical = 14.dp),
                 size = 15.sp, color = if (unlocked) c.dim else c.faint,
             )
         }
         if (!canContinue && !settings.allowBypass) {
             VSpace(18.dp)
-            T("Strict mode is on: this app is closed until tomorrow.", size = 14.sp, color = c.faint)
+            T(stringResource(R.string.block_strict_mode), size = 14.sp, color = c.faint)
         }
         VSpace(20.dp)
     }

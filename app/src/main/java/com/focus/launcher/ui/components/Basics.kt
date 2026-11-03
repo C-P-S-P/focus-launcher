@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.focus.launcher.R
 import com.focus.launcher.ui.theme.LocalFocusColors
 import com.focus.launcher.ui.theme.LocalFocusFont
 import com.focus.launcher.ui.theme.LocalTextScale
@@ -234,7 +236,8 @@ fun ToggleRow(
  */
 @Composable
 fun WorkBadge(modifier: Modifier = Modifier, side: Dp = 14.dp, color: Color = LocalFocusColors.current.dim) {
-    Canvas(modifier.size(side).semantics { contentDescription = "Work profile" }) {
+    val description = stringResource(R.string.common_work_profile_badge)
+    Canvas(modifier.size(side).semantics { contentDescription = description }) {
         val w = this.size.width
         val h = this.size.height
         val stroke = Stroke(width = w * 0.09f)

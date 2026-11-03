@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_format_date_long">EEEE, d MMMM</string>
+    <string name="home_format_date_short">EEE, d MMM</string>
+    <string name="home_format_event_day">EEE d</string>
+    <string name="home_format_time_12h">h:mm a</string>
+
+    <string name="home_clock_tap_title">Kliknięcie zegara</string>
+    <string name="home_clock_tap_subtitle">Przytrzymaj zegar w dowolnej chwili, by to zmienić.</string>
+    <string name="home_clock_tap_open_app">Otwórz aplikację…</string>
+    <string name="home_clock_tap_picker_title">Kliknięcie zegara otwiera</string>
+    <string name="home_clock_tap_alarms">Alarmy</string>
+    <string name="home_clock_tap_calendar">Kalendarz</string>
+    <string name="home_clock_tap_screen_time">Czas przed ekranem</string>
+    <string name="home_clock_tap_battery">Bateria</string>
+    <string name="home_clock_tap_nothing">Nic</string>
+    <string name="home_not_set">Nie ustawiono</string>
+
+    <string name="home_battery_level">%1$d%%</string>
+    <string name="home_battery_charging">ładowanie</string>
+    <string name="home_battery_low">niski</string>
+
+    <string name="home_screen_time_title">Czas przed ekranem</string>
+    <string name="home_share_of_today">%1$d%% doby</string>
+    <string name="home_allow_usage_access">Włącz dostęp do danych o użyciu  →</string>
+
+    <string name="home_notice_review_ready">Podsumowanie tygodnia jest gotowe  →</string>
+    <string name="home_notice_finish_setup">Dokończ konfigurację Focus  →</string>
+    <string name="home_tip_counter">WSKAZÓWKA %1$d / %2$d</string>
+    <string name="home_toast_double_tap_lock">Włącz usługę minutników Focus, by blokować ekran dwukrotnym kliknięciem</string>
+
+    <string name="home_favorites_empty">Przesuń w lewo do swoich aplikacji.\nPrzytrzymaj jedną, by ją tu przypiąć.</string>
+
+    <string name="home_calendar_title">Kalendarz</string>
+    <string name="home_calendar_show_events">Pokaż nadchodzące wydarzenia  →</string>
+    <string name="home_calendar_empty">Nic w najbliższych 7 dniach</string>
+    <string name="home_event_today">Dziś</string>
+    <string name="home_event_tomorrow">Jutro</string>
+    <string name="home_event_all_day">%1$s · cały dzień</string>
+    <string name="home_event_day_time">%1$s %2$s</string>
+    <string name="home_next_to_clock">Obok zegara</string>
+
+    <string name="home_music_title">Muzyka</string>
+    <string name="home_music_show_song">Pokaż tytuł utworu  →</string>
+    <string name="home_music_nothing_playing">Nic nie gra  ·  kliknij, by otworzyć odtwarzacz</string>
+    <string name="home_music_app">Aplikacja muzyczna</string>
+    <string name="home_music_app_subtitle">Otwiera się po kliknięciu sekcji muzyki, gdy nic nie gra. Przytrzymaj sekcję, by to zmienić.</string>
+    <string name="home_all_apps_more">Wszystkie aplikacje…</string>
+    <string name="home_media_previous">Poprzedni</string>
+    <string name="home_media_play">Odtwórz</string>
+    <string name="home_media_pause">Wstrzymaj</string>
+    <string name="home_media_next">Następny</string>
+
+    <string name="home_note_title">Notatka</string>
+    <string name="home_note_empty">Kliknij, by napisać notatkę</string>
+    <string name="home_note_placeholder">Napisz coś</string>
+    <string name="home_notes_app">Aplikacja do notatek</string>
+    <string name="home_notes_app_subtitle">Wyświetla się jako słowo obok tytułu notatki; kliknięcie w nie otwiera aplikację. Twój własny tekst zostaje na miejscu.</string>
+    <string name="home_notes_app_none">Brak</string>
+    <string name="home_notes_app_detail_none">brak</string>
+    <string name="home_note_open_page">Otwórz stronę zamiast aplikacji</string>
+    <string name="home_note_link_detail_set">ustawiono</string>
+    <string name="home_note_link_title">Link do strony</string>
+    <string name="home_note_link_subtitle">W aplikacji %1$s otwórz stronę, wybierz Udostępnij lub Kopiuj link i wklej go tutaj. Zostaw puste, by otwierać samą aplikację.</string>
+    <string name="home_note_link_subtitle_generic">W aplikacji do notatek otwórz stronę, wybierz Udostępnij lub Kopiuj link i wklej go tutaj. Zostaw puste, by otwierać samą aplikację.</string>
+
+    <string name="home_shortcut_left">Lewy skrót</string>
+    <string name="home_shortcut_right">Prawy skrót</string>
+    <string name="home_shortcut_subtitle">Otwiera się z dolnego rogu ekranu głównego.</string>
+    <string name="home_shortcut_phone">Telefon</string>
+    <string name="home_shortcut_camera">Aparat</string>
+</resources>

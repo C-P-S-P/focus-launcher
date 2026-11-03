@@ -1,5 +1,6 @@
 package com.focus.launcher.ui.settings
 
+import android.content.res.Resources
 import android.text.format.DateFormat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,9 +8,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.focus.launcher.BlockActivity
 import com.focus.launcher.Graph
+import com.focus.launcher.R
 import com.focus.launcher.ReviewActivity
 import com.focus.launcher.data.AppCategory
 import com.focus.launcher.data.AppEntry
@@ -25,12 +30,9 @@ import com.focus.launcher.ui.components.MultiChoiceDialog
 import com.focus.launcher.ui.components.SettingRow
 import com.focus.launcher.ui.components.ToggleRow
 import com.focus.launcher.ui.drawer.TimerDialog
-import com.focus.launcher.ui.home.currentLocale
 import com.focus.launcher.util.formatHour
 import com.focus.launcher.util.formatMinutes
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.TextStyle
 
 /** Timer settings change what the service should be doing right now, so poke it after each edit. */
 private fun updateTimers(transform: (Settings) -> Settings) {
@@ -38,7 +40,8 @@ private fun updateTimers(transform: (Settings) -> Settings) {
     FocusAccessibilityService.recheck()
 }
 
-private fun dailyLabel(minutes: Int) = if (minutes > 0) "${formatMinutes(minutes)} a day" else "Off"
+private fun dailyLabel(res: Resources, minutes: Int) =
+    if (minutes > 0) res.getString(R.string.settings_per_day, formatMinutes(res, minutes)) else res.getString(R.string.settings_off)
 
 // ---- App timers ------------------------------------------------------------------------------
 
@@ -49,63 +52,84 @@ private val DEFAULT_CHOICES = listOf(0, 10, 15, 20, 30, 45, 60, 90, 120)
 @Composable
 internal fun TimersPage(settings: Settings, apps: List<AppEntry>, status: SetupStatus, onBack: () -> Unit, go: (String) -> Unit) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var dialog by remember { mutableStateOf(TimerDialogKind.NONE) }
     val close = { dialog = TimerDialogKind.NONE }
     val on = settings.timersEnabled
     val limited = remember(apps, settings) { apps.map { it.packageName }.distinct().count { Graph.limits.limitFor(it, settings) != null } }
 
-    Page("App timers", onBack) {
+    Page(stringResource(R.string.settings_app_timers), onBack) {
         ToggleRow(
-            "App timers", on,
-            subtitle = "Give distracting apps a daily allowance. When it is used up, Focus locks the app for the rest of the day.",
+            stringResource(R.string.settings_app_timers), on,
+            subtitle = stringResource(R.string.settings_app_timers_toggle_summary),
         ) { v -> updateTimers { it.copy(timersEnabled = v) } }
 
         if (on && !(status.usageAccess && status.timerService)) {
             Note(
                 when {
-                    !status.usageAccess -> "Timers cannot count anything until usage access is allowed.  Open setup  →"
-                    else -> "The Focus timer service is off: apps are only locked when opened from Focus, not while you are inside them.  Open setup  →"
+                    !status.usageAccess -> stringResource(R.string.settings_timers_no_usage_access)
+                    else -> stringResource(R.string.settings_timers_service_off)
                 },
             ) { go(Routes.SETUP) }
         }
 
-        Section("Automatic limits")
-        SettingRow("Social media", subtitle = "Feeds, social networks and dating apps. Not mail, browsers or messengers.", value = dailyLabel(settings.socialDefaultMin), enabled = on, onClick = { dialog = TimerDialogKind.SOCIAL })
-        SettingRow("Games", subtitle = "Every app the Play Store lists as a game.", value = dailyLabel(settings.gameDefaultMin), enabled = on, onClick = { dialog = TimerDialogKind.GAMES })
-        SettingRow("Video & streaming", subtitle = "YouTube, Netflix and other video apps.", value = dailyLabel(settings.videoDefaultMin), enabled = on, onClick = { dialog = TimerDialogKind.VIDEO })
-        SettingRow("Limited apps", subtitle = "See exactly which apps these cover, change one, or add your own.", value = limited.toString(), enabled = on, onClick = { go(Routes.TIMER_APPS) })
-        Note("An automatic limit only applies to apps without a limit of their own. Browsers, mail, messengers and other tools are never limited unless you add a timer yourself.")
-
-        Section("When time is up")
-        ToggleRow("Allow “continue for a few minutes”", settings.allowContinue, enabled = on) { v -> updateTimers { it.copy(allowContinue = v) } }
+        Section(stringResource(R.string.settings_automatic_limits))
         SettingRow(
-            "Continue options",
-            value = settings.continueOptions.sorted().joinToString(", ") + " min",
+            stringResource(R.string.settings_social_media),
+            subtitle = stringResource(R.string.settings_social_media_summary),
+            value = dailyLabel(res, settings.socialDefaultMin),
+            enabled = on, onClick = { dialog = TimerDialogKind.SOCIAL },
+        )
+        SettingRow(
+            stringResource(R.string.settings_games),
+            subtitle = stringResource(R.string.settings_games_summary),
+            value = dailyLabel(res, settings.gameDefaultMin),
+            enabled = on, onClick = { dialog = TimerDialogKind.GAMES },
+        )
+        SettingRow(
+            stringResource(R.string.settings_video),
+            subtitle = stringResource(R.string.settings_video_summary),
+            value = dailyLabel(res, settings.videoDefaultMin),
+            enabled = on, onClick = { dialog = TimerDialogKind.VIDEO },
+        )
+        SettingRow(
+            stringResource(R.string.settings_limited_apps),
+            subtitle = stringResource(R.string.settings_limited_apps_summary),
+            value = limited.toString(),
+            enabled = on, onClick = { go(Routes.TIMER_APPS) },
+        )
+        Note(stringResource(R.string.settings_automatic_limits_note))
+
+        Section(stringResource(R.string.settings_when_time_is_up))
+        ToggleRow(stringResource(R.string.settings_allow_continue), settings.allowContinue, enabled = on) { v -> updateTimers { it.copy(allowContinue = v) } }
+        SettingRow(
+            stringResource(R.string.settings_continue_options),
+            value = stringResource(R.string.settings_continue_options_value, settings.continueOptions.sorted().joinToString(", ")),
             enabled = on && settings.allowContinue,
             onClick = { dialog = TimerDialogKind.CONTINUE },
         )
         ToggleRow(
-            "Allow “ignore the limit for today”", settings.allowBypass, enabled = on,
-            subtitle = if (!settings.allowContinue && !settings.allowBypass) "Strict mode: with both off, a locked app stays locked until midnight." else null,
+            stringResource(R.string.settings_allow_bypass), settings.allowBypass, enabled = on,
+            subtitle = if (!settings.allowContinue && !settings.allowBypass) stringResource(R.string.settings_strict_mode) else null,
         ) { v -> updateTimers { it.copy(allowBypass = v) } }
         ToggleRow(
-            "Ask before every open after ignoring", settings.askAfterBypass, enabled = on && settings.allowBypass,
-            subtitle = "Ignoring a limit does not make the app free for the day: Focus still asks “open anyway?” each time.",
+            stringResource(R.string.settings_ask_after_bypass), settings.askAfterBypass, enabled = on && settings.allowBypass,
+            subtitle = stringResource(R.string.settings_ask_after_bypass_summary),
         ) { v -> updateTimers { it.copy(askAfterBypass = v) } }
         SettingRow(
-            "Pause before continuing",
-            subtitle = "A short wait before the continue choices unlock. Time to change your mind.",
-            value = if (settings.frictionSeconds > 0) "${settings.frictionSeconds} s" else "None",
+            stringResource(R.string.settings_pause),
+            subtitle = stringResource(R.string.settings_pause_summary),
+            value = if (settings.frictionSeconds > 0) stringResource(R.string.settings_pause_value, settings.frictionSeconds) else stringResource(R.string.settings_none),
             enabled = on, onClick = { dialog = TimerDialogKind.PAUSE },
         )
         SettingRow(
-            "Heads-up before the limit",
-            value = if (settings.warnMinutes > 0) formatMinutes(settings.warnMinutes) else "Off",
+            stringResource(R.string.settings_heads_up),
+            value = if (settings.warnMinutes > 0) formatMinutes(res, settings.warnMinutes) else stringResource(R.string.settings_off),
             enabled = on, onClick = { dialog = TimerDialogKind.WARN },
         )
 
         Section("")
-        SettingRow("Preview the lock screen", onClick = {
+        SettingRow(stringResource(R.string.settings_preview_lock), onClick = {
             context.startActivity(
                 BlockActivity.intent(context, context.packageName, usedMs = 31 * 60_000L, limitMinutes = 30, midSession = false, preview = true),
             )
@@ -115,27 +139,35 @@ internal fun TimersPage(settings: Settings, apps: List<AppEntry>, status: SetupS
     when (dialog) {
         TimerDialogKind.NONE -> Unit
         TimerDialogKind.SOCIAL -> ChoiceDialog(
-            "Social media", DEFAULT_CHOICES.map { it to dailyLabel(it) }, settings.socialDefaultMin, close,
-            subtitle = "Instagram, X, Reddit, Snapchat, LinkedIn, dating apps and the like.",
+            stringResource(R.string.settings_social_media), DEFAULT_CHOICES.map { it to dailyLabel(res, it) }, settings.socialDefaultMin, close,
+            subtitle = stringResource(R.string.settings_social_media_dialog),
         ) { v -> updateTimers { it.copy(socialDefaultMin = v) } }
         TimerDialogKind.VIDEO -> ChoiceDialog(
-            "Video & streaming", DEFAULT_CHOICES.map { it to dailyLabel(it) }, settings.videoDefaultMin, close,
-            subtitle = "YouTube, Netflix, Prime Video and anything else Android lists as a video app.",
+            stringResource(R.string.settings_video), DEFAULT_CHOICES.map { it to dailyLabel(res, it) }, settings.videoDefaultMin, close,
+            subtitle = stringResource(R.string.settings_video_dialog),
         ) { v -> updateTimers { it.copy(videoDefaultMin = v) } }
         TimerDialogKind.GAMES -> ChoiceDialog(
-            "Games", DEFAULT_CHOICES.map { it to dailyLabel(it) }, settings.gameDefaultMin, close,
-            subtitle = "Every app Android lists as a game.",
+            stringResource(R.string.settings_games), DEFAULT_CHOICES.map { it to dailyLabel(res, it) }, settings.gameDefaultMin, close,
+            subtitle = stringResource(R.string.settings_games_dialog),
         ) { v -> updateTimers { it.copy(gameDefaultMin = v) } }
         TimerDialogKind.CONTINUE -> MultiChoiceDialog(
-            "Continue options", listOf(1, 2, 5, 10, 15, 20, 30).map { it to "$it min" }, settings.continueOptions.toSet(), close,
-            subtitle = "Up to four are shown on the lock screen.",
+            stringResource(R.string.settings_continue_options),
+            listOf(1, 2, 5, 10, 15, 20, 30).map { it to stringResource(R.string.settings_continue_option, it) },
+            settings.continueOptions.toSet(), close,
+            subtitle = stringResource(R.string.settings_continue_options_subtitle),
         ) { picked -> updateTimers { it.copy(continueOptions = picked.sorted().take(4).ifEmpty { listOf(5) }) } }
         TimerDialogKind.PAUSE -> ChoiceDialog(
-            "Pause before continuing", listOf(0, 3, 5, 10, 20, 30, 60).map { it to if (it == 0) "None" else "$it seconds" },
+            stringResource(R.string.settings_pause),
+            listOf(0, 3, 5, 10, 20, 30, 60).map {
+                it to if (it == 0) stringResource(R.string.settings_none) else pluralStringResource(R.plurals.settings_pause_seconds, it, it)
+            },
             settings.frictionSeconds, close,
         ) { v -> updateTimers { it.copy(frictionSeconds = v) } }
         TimerDialogKind.WARN -> ChoiceDialog(
-            "Heads-up before the limit", listOf(0, 1, 2, 5, 10).map { it to if (it == 0) "Off" else "${formatMinutes(it)} before" },
+            stringResource(R.string.settings_heads_up),
+            listOf(0, 1, 2, 5, 10).map {
+                it to if (it == 0) stringResource(R.string.settings_off) else stringResource(R.string.settings_heads_up_before, formatMinutes(res, it))
+            },
             settings.warnMinutes, close,
         ) { v -> updateTimers { it.copy(warnMinutes = v) } }
     }
@@ -143,6 +175,7 @@ internal fun TimersPage(settings: Settings, apps: List<AppEntry>, status: SetupS
 
 @Composable
 internal fun TimerAppsPage(settings: Settings, apps: List<AppEntry>, onBack: () -> Unit, go: (String) -> Unit) {
+    val res = LocalResources.current
     val today by Graph.usage.today.collectAsStateWithLifecycle()
     var editing by remember { mutableStateOf<AppEntry?>(null) }
     var adding by remember { mutableStateOf(false) }
@@ -160,36 +193,36 @@ internal fun TimerAppsPage(settings: Settings, apps: List<AppEntry>, onBack: () 
         packages.filter { it.category == AppCategory.UNSURE && it.packageName !in settings.appLimits && Graph.apps.canLimit(it.packageName) }
     }
 
-    Page("Limited apps", onBack) {
-        SettingRow("Add a timer", subtitle = "Any app can have one, not just social apps and games.", onClick = { adding = true })
+    Page(stringResource(R.string.settings_limited_apps), onBack) {
+        SettingRow(stringResource(R.string.settings_add_timer), subtitle = stringResource(R.string.settings_add_timer_summary), onClick = { adding = true })
 
-        if (limited.isNotEmpty()) Section("With a daily limit")
+        if (limited.isNotEmpty()) Section(stringResource(R.string.settings_with_daily_limit))
         for ((app, limit) in limited) {
             SettingRow(
                 app.label,
                 subtitle = when (limit.source) {
-                    LimitSource.APP -> "Own limit"
-                    LimitSource.SOCIAL_DEFAULT -> "Social media, automatic"
-                    LimitSource.GAME_DEFAULT -> "Game, automatic"
-                    LimitSource.VIDEO_DEFAULT -> "Video, automatic"
+                    LimitSource.APP -> stringResource(R.string.settings_limit_own)
+                    LimitSource.SOCIAL_DEFAULT -> stringResource(R.string.settings_limit_social)
+                    LimitSource.GAME_DEFAULT -> stringResource(R.string.settings_limit_game)
+                    LimitSource.VIDEO_DEFAULT -> stringResource(R.string.settings_limit_video)
                 },
-                value = formatMinutes(limit.minutes),
+                value = formatMinutes(res, limit.minutes),
                 onClick = { editing = app },
             )
         }
         if (limited.isEmpty()) {
-            Note("No app is limited right now. Add a timer above, or set automatic limits for social apps and games on the previous page.")
+            Note(stringResource(R.string.settings_no_limited_apps))
         }
 
         if (exempt.isNotEmpty()) {
-            Section("Excluded from the automatic limits")
-            for (app in exempt) SettingRow(app.label, value = "No limit", onClick = { editing = app })
+            Section(stringResource(R.string.settings_excluded))
+            for (app in exempt) SettingRow(app.label, value = stringResource(R.string.settings_no_limit), onClick = { editing = app })
         }
 
         if (unsure.isNotEmpty()) {
-            Section("Not sure about these")
-            Note("Android files these under “social”, a label it also gives to mail, browsers and messengers. Focus leaves them alone; tap one to give it a timer.")
-            for (app in unsure) SettingRow(app.label, value = "Add", onClick = { editing = app })
+            Section(stringResource(R.string.settings_unsure))
+            Note(stringResource(R.string.settings_unsure_note))
+            for (app in unsure) SettingRow(app.label, value = stringResource(R.string.settings_add), onClick = { editing = app })
         }
     }
 
@@ -205,7 +238,7 @@ internal fun TimerAppsPage(settings: Settings, apps: List<AppEntry>, onBack: () 
     }
     if (adding) {
         AppPickerDialog(
-            title = "Add a timer",
+            title = stringResource(R.string.settings_add_timer),
             apps = packages.filter { Graph.apps.canLimit(it.packageName) },
             onDismiss = { adding = false },
             onPick = { editing = it },
@@ -228,42 +261,55 @@ internal fun WeeklyPage(settings: Settings, status: SetupStatus, onBack: () -> U
         TimeFormat.H24 -> true
         TimeFormat.H12 -> false
     }
-    val lastDay = (if (settings.weekStartsMonday) DayOfWeek.SUNDAY else DayOfWeek.SATURDAY)
-        .getDisplayName(TextStyle.FULL, currentLocale())
+    val res = LocalResources.current
+    // Only ever one of two days, so both are resources: a language can pick the form its sentences need.
+    val lastDay = stringResource(if (settings.weekStartsMonday) R.string.settings_last_day_sunday else R.string.settings_last_day_saturday)
 
     fun change(transform: (Settings) -> Settings) {
         Graph.settings.update(transform)
         WeeklyReview.schedule(context)
     }
 
-    Page("Weekly review", onBack) {
+    Page(stringResource(R.string.settings_weekly_review), onBack) {
         ToggleRow(
-            "Weekly review", on,
-            subtitle = "At the end of each week Focus adds it all up: total time, which apps, which hours of the day, " +
-                "how often you went past a limit. Then it asks what you want to change.",
+            stringResource(R.string.settings_weekly_review), on,
+            subtitle = stringResource(R.string.settings_weekly_review_toggle_summary),
         ) { v -> change { it.copy(weeklyEnabled = v) } }
 
-        Section("Schedule")
-        SettingRow("Week starts on", value = if (settings.weekStartsMonday) "Monday" else "Sunday", onClick = { dialog = WeeklyDialog.WEEK_START })
-        SettingRow("Review is ready", subtitle = "A line on the home screen, plus a notification if allowed.", value = "$lastDay, ${formatHour(settings.reviewHour, use24h)}", enabled = on, onClick = { dialog = WeeklyDialog.HOUR })
+        Section(stringResource(R.string.settings_schedule))
+        SettingRow(
+            stringResource(R.string.settings_week_starts_on),
+            value = stringResource(if (settings.weekStartsMonday) R.string.settings_week_starts_monday else R.string.settings_week_starts_sunday),
+            onClick = { dialog = WeeklyDialog.WEEK_START },
+        )
+        SettingRow(
+            stringResource(R.string.settings_review_ready),
+            subtitle = stringResource(R.string.settings_review_ready_summary),
+            value = stringResource(R.string.settings_review_ready_value, lastDay, formatHour(res, settings.reviewHour, use24h)),
+            enabled = on, onClick = { dialog = WeeklyDialog.HOUR },
+        )
         if (on && !status.notifications) {
-            Note("Notifications are off, so the reminder will only show on the home screen.  Open setup  →") { go(Routes.SETUP) }
+            Note(stringResource(R.string.settings_review_notifications_off)) { go(Routes.SETUP) }
         }
 
         Section("")
-        SettingRow("Open this week so far", onClick = {
+        SettingRow(stringResource(R.string.settings_open_this_week), onClick = {
             context.startActivity(ReviewActivity.intent(context, WeekSummary.weekStartOf(LocalDate.now(), settings.weekStartsMonday)))
         })
     }
 
     when (dialog) {
         WeeklyDialog.NONE -> Unit
-        WeeklyDialog.WEEK_START -> ChoiceDialog("Week starts on", listOf(true to "Monday", false to "Sunday"), settings.weekStartsMonday, close) { v ->
+        WeeklyDialog.WEEK_START -> ChoiceDialog(
+            stringResource(R.string.settings_week_starts_on),
+            listOf(true to stringResource(R.string.settings_week_starts_monday), false to stringResource(R.string.settings_week_starts_sunday)),
+            settings.weekStartsMonday, close,
+        ) { v ->
             change { it.copy(weekStartsMonday = v) }
         }
         WeeklyDialog.HOUR -> ChoiceDialog(
-            "Review is ready at", (6..23).map { it to formatHour(it, use24h) }, settings.reviewHour, close,
-            subtitle = "On $lastDay, the last day of your week.",
+            stringResource(R.string.settings_review_ready_at), (6..23).map { it to formatHour(res, it, use24h) }, settings.reviewHour, close,
+            subtitle = stringResource(R.string.settings_review_ready_at_subtitle, lastDay),
         ) { v -> change { it.copy(reviewHour = v) } }
     }
 }
