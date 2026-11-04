@@ -9,7 +9,7 @@ little as possible. No icons, no colour: black and white, the time, up to five a
 and an honest picture of where the day went. It locks social apps and games when their daily time
 is up, and once a week it shows you the week you actually had.
 
-**[Website](https://how2me.me/focusapp/)** · **[Download the APK](https://github.com/patelchaitany/focus-launcher/releases/latest)** (1.3 MB, Android 8.0+) · **[All releases](https://github.com/patelchaitany/focus-launcher/releases)** · free software (GPL-3.0-or-later) · no ads, no account, **no internet permission**
+**[Website](https://how2me.me/focusapp/)** · **[Download the APK](https://github.com/patelchaitany/focus-launcher/releases/latest)** (1.3 MB, Android 8.0+) · **[All releases](https://github.com/patelchaitany/focus-launcher/releases)** · free software (GPL-3.0-or-later) · no ads, no account, **no internet permission** · **[Buy me a coffee](https://buymeacoffee.com/MasterPushers)**
 
 [![Build](https://github.com/patelchaitany/focus-launcher/actions/workflows/build.yml/badge.svg)](https://github.com/patelchaitany/focus-launcher/actions/workflows/build.yml)
 
@@ -364,6 +364,11 @@ source, following a recipe in its own repository; nothing is uploaded to it. The
 F-Droid's own tools are explained in [`fdroid/README.md`](fdroid/README.md). The build is
 reproducible, so F-Droid can ship the very APK that is on the website, signed with the project's
 key, after checking that its own build is identical.
+
+## Support
+
+Focus is free. If it gives you time back, you can
+[buy me a coffee](https://buymeacoffee.com/MasterPushers).
 
 ## License
 
